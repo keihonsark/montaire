@@ -7,12 +7,13 @@ export default function CustomCursor() {
   const [isTouch, setIsTouch] = useState(true);
   const [hoverText, setHoverText] = useState("");
   const [isHovering, setIsHovering] = useState(false);
-  const mouse = useRef({ x: 0, y: 0 });
-  const pos = useRef({ x: 0, y: 0 });
+  const mouse = useRef({ x: -100, y: -100 });
+  const pos = useRef({ x: -100, y: -100 });
   const rafId = useRef<number>(0);
 
   useEffect(() => {
-    const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    const isTouchDevice =
+      "ontouchstart" in window || navigator.maxTouchPoints > 0;
     setIsTouch(isTouchDevice);
     if (isTouchDevice) return;
 
@@ -22,13 +23,19 @@ export default function CustomCursor() {
 
     const onMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
+      const cursorTextEl = target.closest(
+        "[data-cursor-text]"
+      ) as HTMLElement | null;
       const cursorEl = target.closest("[data-cursor]") as HTMLElement | null;
-      const cursorTextEl = target.closest("[data-cursor-text]") as HTMLElement | null;
+      const interactive = target.closest("a, button");
 
       if (cursorTextEl) {
         setIsHovering(true);
         setHoverText(cursorTextEl.getAttribute("data-cursor-text") || "");
-      } else if (cursorEl?.getAttribute("data-cursor") === "pointer") {
+      } else if (
+        cursorEl?.getAttribute("data-cursor") === "pointer" ||
+        interactive
+      ) {
         setIsHovering(true);
         setHoverText("");
       } else {
@@ -38,8 +45,8 @@ export default function CustomCursor() {
     };
 
     const animate = () => {
-      pos.current.x += (mouse.current.x - pos.current.x) * 0.15;
-      pos.current.y += (mouse.current.y - pos.current.y) * 0.15;
+      pos.current.x += (mouse.current.x - pos.current.x) * 0.12;
+      pos.current.y += (mouse.current.y - pos.current.y) * 0.12;
 
       if (cursorRef.current) {
         cursorRef.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0) translate(-50%, -50%)`;
@@ -66,13 +73,13 @@ export default function CustomCursor() {
       ref={cursorRef}
       className="fixed top-0 left-0 z-[9999] pointer-events-none"
       style={{
-        width: isHovering ? 60 : 8,
-        height: isHovering ? 60 : 8,
+        width: isHovering ? 56 : 8,
+        height: isHovering ? 56 : 8,
         borderRadius: "50%",
-        border: `1px solid ${isHovering ? "var(--montaire-gold)" : "var(--montaire-gold)"}`,
-        backgroundColor: isHovering ? "rgba(201, 168, 76, 0.1)" : "transparent",
-        transition: "width 0.3s ease, height 0.3s ease, background-color 0.3s ease",
-        mixBlendMode: "difference",
+        border: "1px solid #C9A84C",
+        backgroundColor: isHovering ? "rgba(201, 168, 76, 0.08)" : "transparent",
+        transition:
+          "width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), height 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), background-color 0.3s ease",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -80,8 +87,9 @@ export default function CustomCursor() {
     >
       {hoverText && (
         <span
-          className="font-outfit text-[11px] uppercase tracking-[0.15em] text-montaire-gold"
+          className="font-outfit text-[10px] uppercase tracking-[0.15em]"
           style={{
+            color: "#C9A84C",
             opacity: isHovering ? 1 : 0,
             transition: "opacity 0.2s ease",
           }}

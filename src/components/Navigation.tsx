@@ -1,109 +1,158 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { NAV_ITEMS } from "@/lib/constants";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
-  const itemsRef = useRef<HTMLAnchorElement[]>([]);
-  const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const itemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
+  const isAnimating = useRef(false);
 
-  useEffect(() => {
-    if (!overlayRef.current) return;
+  const openMenu = useCallback(() => {
+    if (isAnimating.current) return;
+    isAnimating.current = true;
+    setIsOpen(true);
 
-    const tl = gsap.timeline({ paused: true });
+    const overlay = overlayRef.current;
+    if (!overlay) return;
+
+    overlay.style.visibility = "visible";
+    overlay.style.pointerEvents = "auto";
+    document.body.style.overflow = "hidden";
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        isAnimating.current = false;
+      },
+    });
 
     tl.fromTo(
-      overlayRef.current,
+      overlay,
       { xPercent: 100 },
       { xPercent: 0, duration: 0.6, ease: "power3.inOut" }
     ).fromTo(
-      itemsRef.current,
+      itemsRef.current.filter(Boolean),
       { x: 60, opacity: 0 },
       { x: 0, opacity: 1, duration: 0.5, stagger: 0.08, ease: "power2.out" },
       "-=0.2"
     );
-
-    tlRef.current = tl;
-
-    return () => {
-      tl.kill();
-    };
   }, []);
 
-  useEffect(() => {
-    if (!tlRef.current) return;
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      tlRef.current.play();
-    } else {
-      tlRef.current.reverse();
-      document.body.style.overflow = "";
-    }
-  }, [isOpen]);
+  const closeMenu = useCallback(() => {
+    if (isAnimating.current) return;
+    isAnimating.current = true;
 
-  const handleNavClick = (href: string) => {
-    setIsOpen(false);
-    setTimeout(() => {
-      const el = document.querySelector(href);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 600);
-  };
+    const overlay = overlayRef.current;
+    if (!overlay) return;
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        isAnimating.current = false;
+        setIsOpen(false);
+        overlay.style.visibility = "hidden";
+        overlay.style.pointerEvents = "none";
+        document.body.style.overflow = "";
+      },
+    });
+
+    tl.to(itemsRef.current.filter(Boolean), {
+      x: 60,
+      opacity: 0,
+      duration: 0.3,
+      stagger: 0.04,
+      ease: "power2.in",
+    }).to(
+      overlay,
+      { xPercent: 100, duration: 0.5, ease: "power3.inOut" },
+      "-=0.1"
+    );
+  }, []);
+
+  const handleNavClick = useCallback(
+    (href: string) => {
+      closeMenu();
+      setTimeout(() => {
+        const el = document.querySelector(href);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 700);
+    },
+    [closeMenu]
+  );
+
+  // Initialize overlay as hidden
+  useEffect(() => {
+    if (overlayRef.current) {
+      overlayRef.current.style.visibility = "hidden";
+      overlayRef.current.style.pointerEvents = "none";
+      gsap.set(overlayRef.current, { xPercent: 100 });
+    }
+  }, []);
 
   return (
     <>
-      {/* Hamburger Button */}
+      {/* Hamburger / Close Button */}
       <button
-        onClick={() => setIsOpen(true)}
-        className="fixed top-8 right-8 z-[100] flex flex-col gap-[6px] items-end"
+        onClick={isOpen ? closeMenu : openMenu}
+        className="fixed top-8 right-8 z-[300] w-8 h-8 flex flex-col items-end justify-center"
         data-cursor="pointer"
-        aria-label="Open menu"
-        style={{ display: isOpen ? "none" : "flex" }}
+        aria-label={isOpen ? "Close menu" : "Open menu"}
       >
-        <span className="block w-8 h-[1px] bg-montaire-gold" />
-        <span className="block w-6 h-[1px] bg-montaire-gold" />
-        <span className="block w-4 h-[1px] bg-montaire-gold" />
+        {/* Line 1: rotates to form X top stroke */}
+        <span
+          className="block h-[1px] bg-montaire-gold transition-all duration-300 origin-center"
+          style={{
+            width: isOpen ? "100%" : "100%",
+            transform: isOpen
+              ? "translateY(3.5px) rotate(45deg)"
+              : "translateY(0) rotate(0)",
+          }}
+        />
+        {/* Line 2: fades out */}
+        <span
+          className="block h-[1px] bg-montaire-gold transition-all duration-300 mt-[6px]"
+          style={{
+            width: isOpen ? 0 : "75%",
+            opacity: isOpen ? 0 : 1,
+          }}
+        />
+        {/* Line 3: rotates to form X bottom stroke */}
+        <span
+          className="block h-[1px] bg-montaire-gold transition-all duration-300 origin-center mt-[6px]"
+          style={{
+            width: isOpen ? "100%" : "50%",
+            transform: isOpen
+              ? "translateY(-9.5px) rotate(-45deg)"
+              : "translateY(0) rotate(0)",
+          }}
+        />
       </button>
 
       {/* Fullscreen Overlay */}
       <div
         ref={overlayRef}
-        className="fixed inset-0 z-[200] bg-montaire-black flex items-center justify-center"
-        style={{ transform: "translateX(100%)" }}
+        className="fixed inset-0 z-[200]"
+        style={{ backgroundColor: "#0A0A0A" }}
       >
-        {/* Close Button */}
-        <button
-          onClick={() => setIsOpen(false)}
-          className="absolute top-8 right-8 w-8 h-8 flex items-center justify-center"
-          data-cursor="pointer"
-          aria-label="Close menu"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <line x1="4" y1="4" x2="20" y2="20" stroke="#C9A84C" strokeWidth="1" />
-            <line x1="20" y1="4" x2="4" y2="20" stroke="#C9A84C" strokeWidth="1" />
-          </svg>
-        </button>
-
         {/* Nav Items */}
-        <nav className="flex flex-col items-center gap-8 md:gap-10">
+        <nav className="flex flex-col items-center justify-center h-full gap-8 md:gap-10">
           {NAV_ITEMS.map((item, i) => (
             <a
               key={item.label}
               ref={(el) => {
-                if (el) itemsRef.current[i] = el;
+                itemsRef.current[i] = el;
               }}
               href={item.href}
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick(item.href);
               }}
-              className="group relative font-cormorant text-4xl md:text-[56px] text-montaire-white hover:text-montaire-gold transition-colors duration-300"
+              className="group relative font-cormorant text-4xl md:text-[56px] hover:text-montaire-gold transition-colors duration-300"
               data-cursor="pointer"
-              style={{ opacity: 0 }}
+              style={{ color: "#F5F5F0", opacity: 0 }}
             >
               {item.label}
               <span className="absolute -bottom-1 left-0 h-[1px] w-0 bg-montaire-gold transition-all duration-500 group-hover:w-full" />

@@ -53,12 +53,7 @@ body {
   animation: shimmer 4s linear infinite;
 }
 
-/* Custom cursor - hide default on desktop */
-@media (pointer: fine) {
-  * {
-    cursor: none !important;
-  }
-}
+/* System cursor stays visible — custom gold dot follows alongside it */
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
