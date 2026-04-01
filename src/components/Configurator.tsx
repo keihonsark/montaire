@@ -4,6 +4,13 @@ import { useState, useRef, useEffect, useCallback, type FormEvent } from "react"
 import gsap from "gsap";
 
 const PIECE_TYPES = ["Ring", "Necklace", "Bracelet", "Earrings", "Other"];
+const PIECE_IMAGES: Record<string, string> = {
+  Ring: "/images/gallery/ring1.jpg",
+  Necklace: "/images/gallery/necklace1.jpg",
+  Bracelet: "/images/gallery/bracelet1.jpg",
+  Earrings: "/images/gallery/earrings1.jpg",
+  Other: "/images/gallery/jewelry1.jpg",
+};
 const METALS = [
   { name: "14K Yellow Gold", gradient: "linear-gradient(135deg, #D4A437, #C9963C)" },
   { name: "18K Yellow Gold", gradient: "linear-gradient(135deg, #E8BF4A, #D4A437)" },
@@ -317,7 +324,7 @@ Respond ONLY in JSON format with no markdown or backticks:
                     <button
                       key={type}
                       onClick={() => { update("type", type); setTimeout(next, 400); }}
-                      className="flex flex-col items-center gap-3 p-6 border transition-all duration-300 hover:scale-[1.02]"
+                      className="relative flex flex-col items-center justify-end gap-3 p-6 border transition-all duration-300 hover:scale-[1.02] overflow-hidden"
                       style={{
                         aspectRatio: "1/1.2",
                         borderColor: sel.type === type ? "#C9A84C" : "rgba(255,255,255,0.06)",
@@ -327,7 +334,10 @@ Respond ONLY in JSON format with no markdown or backticks:
                       }}
                       data-cursor="pointer"
                     >
-                      <span className="font-outfit text-[13px] uppercase" style={{ letterSpacing: "0.15em", color: sel.type === type ? "#C9A84C" : "rgba(255,255,255,0.5)" }}>
+                      <div className="absolute inset-0">
+                        <img src={PIECE_IMAGES[type]} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.3 }} />
+                      </div>
+                      <span className="relative z-10 font-outfit text-[13px] uppercase" style={{ letterSpacing: "0.15em", color: sel.type === type ? "#C9A84C" : "rgba(255,255,255,0.5)" }}>
                         {type}
                       </span>
                     </button>

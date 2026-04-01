@@ -1,7 +1,6 @@
 import Intro from "@/components/Intro";
 import Hero from "@/components/Hero";
 import Philosophy from "@/components/Philosophy";
-import FlyingGallery from "@/components/FlyingGallery";
 import Collection from "@/components/Collection";
 import Configurator from "@/components/Configurator";
 import Diamonds from "@/components/Diamonds";
@@ -22,7 +21,6 @@ export default function Home() {
         <Philosophy />
       </section>
 
-      <FlyingGallery />
       <Collection />
       <Configurator />
       <Diamonds />
