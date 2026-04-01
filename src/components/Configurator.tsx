@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback, type FormEvent } from "react";
 import gsap from "gsap";
+import BlueprintBackground from "./BlueprintBackground";
 
 const PIECE_TYPES = ["Ring", "Necklace", "Bracelet", "Earrings", "Other"];
 const PIECE_IMAGES: Record<string, string> = {
@@ -98,30 +99,6 @@ export default function Configurator() {
     setAiResult(null);
     setAiLoading(false);
     setSubmitted(false);
-  }, []);
-
-  // Load UnicornStudio for blueprint background
-  useEffect(() => {
-    const embedScript = document.createElement('script');
-    embedScript.type = 'text/javascript';
-    embedScript.textContent = `
-      !function(){
-        if(!window.UnicornStudio){
-          window.UnicornStudio={isInitialized:!1};
-          var i=document.createElement("script");
-          i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.33/dist/unicornStudio.umd.js";
-          i.onload=function(){
-            window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)
-          };
-          (document.head || document.body).appendChild(i)
-        }
-      }();
-    `;
-    document.head.appendChild(embedScript);
-
-    return () => {
-      try { document.head.removeChild(embedScript); } catch(e) { /* noop */ }
-    };
   }, []);
 
   // Expose open function globally so CTAs can trigger it
@@ -251,19 +228,14 @@ Respond ONLY in JSON format with no markdown or backticks:
     // Render the Build Your Own section inline
     return (
       <section id="custom" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 overflow-hidden">
-        {/* UnicornStudio blueprint background */}
-        <div className="absolute inset-0 w-full h-full opacity-15 pointer-events-none">
-          <div
-            data-us-project="whwOGlfJ5Rz2rHaEUgHl"
-            style={{ width: '100%', height: '100%' }}
-          />
-        </div>
+        {/* SVG blueprint background */}
+        <BlueprintBackground />
 
         {/* Corner accents */}
-        <div className="absolute top-4 left-4 w-8 h-8 border-t border-l border-[#C9A84C]/20 pointer-events-none" />
-        <div className="absolute top-4 right-4 w-8 h-8 border-t border-r border-[#C9A84C]/20 pointer-events-none" />
-        <div className="absolute bottom-4 left-4 w-8 h-8 border-b border-l border-[#C9A84C]/20 pointer-events-none" />
-        <div className="absolute bottom-4 right-4 w-8 h-8 border-b border-r border-[#C9A84C]/20 pointer-events-none" />
+        <div className="absolute top-6 left-6 w-10 h-10 border-t border-l border-[#C9A84C]/15 pointer-events-none z-10" />
+        <div className="absolute top-6 right-6 w-10 h-10 border-t border-r border-[#C9A84C]/15 pointer-events-none z-10" />
+        <div className="absolute bottom-6 left-6 w-10 h-10 border-b border-l border-[#C9A84C]/15 pointer-events-none z-10" />
+        <div className="absolute bottom-6 right-6 w-10 h-10 border-b border-r border-[#C9A84C]/15 pointer-events-none z-10" />
 
         {/* Content */}
         <h2 className="relative z-10 font-bodoni text-[36px] md:text-[56px] font-normal text-center leading-tight" style={{ color: "#F5F5F0" }}>
