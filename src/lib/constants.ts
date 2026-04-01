@@ -22,7 +22,7 @@ export const COLLECTION_ITEMS = [
     description: "Round brilliant solitaire on a classic yellow gold band — timeless elegance, bold presence.",
     specs: "18K Yellow Gold · 2.0ct Round Brilliant · VS1 Clarity",
     price: "From $8,400",
-    image: "/images/gallery/ring1.png",
+    image: "/images/gallery/solitaire2.png",
   },
   {
     name: "Lumière",
