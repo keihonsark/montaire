@@ -8,14 +8,14 @@ const InfiniteGallery = dynamic(
 );
 
 const jewelryImages = [
-  { src: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80', alt: 'Diamond ring' },
-  { src: 'https://images.unsplash.com/photo-1515562141589-67f0d569b6fc?w=800&auto=format&fit=crop&q=80', alt: 'Gold necklace' },
-  { src: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=80', alt: 'Engagement ring' },
-  { src: 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=800&auto=format&fit=crop&q=80', alt: 'Jewelry collection' },
-  { src: 'https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?w=800&auto=format&fit=crop&q=80', alt: 'Diamond earrings' },
-  { src: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800&auto=format&fit=crop&q=80', alt: 'Luxury bracelet' },
-  { src: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=800&auto=format&fit=crop&q=80', alt: 'Wedding rings' },
-  { src: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&auto=format&fit=crop&q=80', alt: 'Pearl necklace' },
+  { src: '/images/gallery/ring1.jpg', alt: 'Diamond ring' },
+  { src: '/images/gallery/necklace1.jpg', alt: 'Gold necklace' },
+  { src: '/images/gallery/ring2.jpg', alt: 'Engagement ring' },
+  { src: '/images/gallery/jewelry1.jpg', alt: 'Jewelry collection' },
+  { src: '/images/gallery/earrings1.jpg', alt: 'Diamond earrings' },
+  { src: '/images/gallery/bracelet1.jpg', alt: 'Luxury bracelet' },
+  { src: '/images/gallery/rings3.jpg', alt: 'Wedding rings' },
+  { src: '/images/gallery/necklace2.jpg', alt: 'Pearl necklace' },
 ];
 
 export default function FlyingGallery() {

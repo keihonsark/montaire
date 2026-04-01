@@ -93,6 +93,30 @@ export default function Configurator() {
     setSubmitted(false);
   }, []);
 
+  // Load UnicornStudio for blueprint background
+  useEffect(() => {
+    const embedScript = document.createElement('script');
+    embedScript.type = 'text/javascript';
+    embedScript.textContent = `
+      !function(){
+        if(!window.UnicornStudio){
+          window.UnicornStudio={isInitialized:!1};
+          var i=document.createElement("script");
+          i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.33/dist/unicornStudio.umd.js";
+          i.onload=function(){
+            window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)
+          };
+          (document.head || document.body).appendChild(i)
+        }
+      }();
+    `;
+    document.head.appendChild(embedScript);
+
+    return () => {
+      try { document.head.removeChild(embedScript); } catch(e) { /* noop */ }
+    };
+  }, []);
+
   // Expose open function globally so CTAs can trigger it
   useEffect(() => {
     (window as unknown as Record<string, unknown>).__openConfigurator = open;
@@ -219,22 +243,37 @@ Respond ONLY in JSON format with no markdown or backticks:
   if (!isOpen) {
     // Render the Build Your Own section inline
     return (
-      <section id="custom" className="min-h-screen flex flex-col items-center justify-center px-6 py-24">
-        <h2 className="font-bodoni text-[36px] md:text-[56px] font-normal text-center leading-tight" style={{ color: "#F5F5F0" }}>
+      <section id="custom" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 overflow-hidden">
+        {/* UnicornStudio blueprint background */}
+        <div className="absolute inset-0 w-full h-full opacity-15 pointer-events-none">
+          <div
+            data-us-project="whwOGlfJ5Rz2rHaEUgHl"
+            style={{ width: '100%', height: '100%' }}
+          />
+        </div>
+
+        {/* Corner accents */}
+        <div className="absolute top-4 left-4 w-8 h-8 border-t border-l border-[#C9A84C]/20 pointer-events-none" />
+        <div className="absolute top-4 right-4 w-8 h-8 border-t border-r border-[#C9A84C]/20 pointer-events-none" />
+        <div className="absolute bottom-4 left-4 w-8 h-8 border-b border-l border-[#C9A84C]/20 pointer-events-none" />
+        <div className="absolute bottom-4 right-4 w-8 h-8 border-b border-r border-[#C9A84C]/20 pointer-events-none" />
+
+        {/* Content */}
+        <h2 className="relative z-10 font-bodoni text-[36px] md:text-[56px] font-normal text-center leading-tight" style={{ color: "#F5F5F0" }}>
           Your vision. Our craft.
         </h2>
-        <p className="font-outfit text-[15px] md:text-[16px] font-light leading-relaxed mt-6 max-w-[500px] mx-auto text-center" style={{ color: "rgba(255,255,255,0.45)" }}>
+        <p className="relative z-10 font-outfit text-[15px] md:text-[16px] font-light leading-relaxed mt-6 max-w-[500px] mx-auto text-center" style={{ color: "rgba(255,255,255,0.45)" }}>
           From a sketch on a napkin to a Pinterest board to a dream you can&apos;t quite describe — we&apos;ll bring it to life.
         </p>
         <button
           onClick={open}
-          className={`${btnPrimary} mt-10`}
+          className={`relative z-10 ${btnPrimary} mt-10`}
           style={{ letterSpacing: "0.15em" }}
           data-cursor="pointer"
         >
           Start Your Design
         </button>
-        <p className="font-outfit text-[13px] mt-4" style={{ color: "rgba(255,255,255,0.3)" }}>
+        <p className="relative z-10 font-outfit text-[13px] mt-4" style={{ color: "rgba(255,255,255,0.3)" }}>
           Or call us at (559) 555-0100
         </p>
       </section>
