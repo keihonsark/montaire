@@ -3,7 +3,6 @@ export const NAV_ITEMS = [
   { label: "Collection", href: "#collection" },
   { label: "Build Your Own", href: "#custom" },
   { label: "Diamonds", href: "#diamonds" },
-  { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
 ] as const;
 
@@ -13,7 +12,6 @@ export const SCENE_IDS = [
   "collection",
   "custom",
   "diamonds",
-  "about",
   "contact",
 ] as const;
 

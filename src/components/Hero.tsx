@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import LightCaustics from "./LightCaustics";
+import dynamic from "next/dynamic";
+
+const HeroDiamond = dynamic(() => import("./HeroDiamond"), { ssr: false });
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,6 +13,11 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const taglineRef = useRef<HTMLParagraphElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -53,7 +60,7 @@ export default function Hero() {
       ref={sectionRef}
       className="relative h-screen flex flex-col items-center justify-center overflow-hidden"
     >
-      {/* Background radial gradient */}
+      {/* Background */}
       <div
         className="absolute inset-0"
         style={{
@@ -62,10 +69,10 @@ export default function Hero() {
         }}
       />
 
-      {/* Light caustics */}
-      <LightCaustics />
+      {/* Three.js diamond — desktop only */}
+      {!isMobile && <HeroDiamond />}
 
-      {/* Vignette overlay */}
+      {/* Vignette */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -79,7 +86,7 @@ export default function Hero() {
       <div className="relative text-center" style={{ zIndex: 3 }}>
         <h1
           ref={titleRef}
-          className="gradient-text font-cormorant text-[48px] md:text-[80px] lg:text-[100px] font-normal"
+          className="gradient-text font-bodoni text-[48px] md:text-[80px] lg:text-[100px] font-normal"
           style={{
             letterSpacing: "0.1em",
             willChange: "transform, opacity",

@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
-import LightCaustics from "./LightCaustics";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,20 +14,19 @@ export default function Philosophy() {
   const ruleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const headline = headlineRef.current;
+    const body = bodyRef.current;
+    const rule = ruleRef.current;
+    if (!headline || !body || !rule) return;
+
+    // SplitType needs DOM access — run after mount
+    const split = new SplitType(headline, { types: "words" });
+
     const ctx = gsap.context(() => {
-      const headline = headlineRef.current;
-      const body = bodyRef.current;
-      const rule = ruleRef.current;
-      if (!headline || !body || !rule) return;
-
-      // Split headline into words
-      const split = new SplitType(headline, { types: "words" });
-
-      // Animate words in
       const wordsTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 80%",
+          start: "top 75%",
           toggleActions: "play none none none",
         },
       });
@@ -36,10 +34,11 @@ export default function Philosophy() {
       if (split.words) {
         wordsTl.fromTo(
           split.words,
-          { y: 30, opacity: 0 },
+          { y: 25, opacity: 0, filter: "blur(4px)" },
           {
             y: 0,
             opacity: 1,
+            filter: "blur(0px)",
             duration: 0.6,
             stagger: 0.08,
             ease: "power2.out",
@@ -62,29 +61,27 @@ export default function Philosophy() {
         { scaleX: 1, duration: 0.8, ease: "power2.out" },
         ">-0.2"
       );
-
-      return () => {
-        split.revert();
-      };
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      split.revert();
+    };
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center px-6"
+      className="min-h-screen flex items-center justify-center px-6"
       style={{ paddingTop: 100, paddingBottom: 100 }}
     >
-      <LightCaustics opacity={0.4} />
-      <div className="max-w-[800px] w-full text-center relative" style={{ zIndex: 2 }}>
+      <div className="max-w-[800px] w-full text-center">
         <h2
           ref={headlineRef}
-          className="font-cormorant text-[28px] md:text-[44px] font-normal leading-[1.2]"
+          className="font-bodoni text-[28px] md:text-[44px] font-normal leading-[1.2]"
           style={{
             color: "var(--montaire-white)",
-            willChange: "transform, opacity",
+            willChange: "transform, opacity, filter",
           }}
         >
           Every piece begins with a conversation.
