@@ -121,7 +121,7 @@ export default function Collection() {
               <div key={i} className="flex-shrink-0 w-screen px-6 py-12 flex flex-col gap-8" style={{ scrollSnapAlign: "start" }}>
                 <div
                   className="w-full overflow-hidden transition-transform duration-600 hover:scale-[1.02]"
-                  style={{ aspectRatio: "3/4", maxHeight: "50vh", backgroundColor: "#1A1A1A", border: "0.5px solid rgba(255,255,255,0.06)" }}
+                  style={{ aspectRatio: "3/4", maxHeight: "50vh", backgroundColor: "transparent" }}
                 >
                   <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                 </div>
@@ -167,7 +167,7 @@ export default function Collection() {
                     className="overflow-hidden transition-transform duration-[600ms] hover:scale-[1.02]"
                     style={{
                       width: "100%", maxWidth: 500, aspectRatio: "3/4", maxHeight: "70vh",
-                      backgroundColor: "#1A1A1A", border: "0.5px solid rgba(255,255,255,0.06)",
+                      backgroundColor: "transparent",
                     }}
                     data-cursor="pointer"
                   >
