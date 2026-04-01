@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-montaire-black: #0A0A0A;
+  --color-montaire-dark: #111111;
+  --color-montaire-card: #1A1A1A;
+  --color-montaire-gold: #C9A84C;
+  --color-montaire-gold-light: #D4B96A;
+  --color-montaire-white: #F5F5F0;
+  --font-cormorant: "Cormorant Garamond", serif;
+  --font-outfit: "Outfit", sans-serif;
+}
+
+:root {
+  --montaire-black: #0A0A0A;
+  --montaire-dark: #111111;
+  --montaire-card: #1A1A1A;
+  --montaire-gold: #C9A84C;
+  --montaire-gold-light: #D4B96A;
+  --montaire-gold-dim: rgba(201, 168, 76, 0.15);
+  --montaire-white: #F5F5F0;
+  --montaire-white-dim: rgba(245, 245, 240, 0.5);
+  --montaire-gray: rgba(255, 255, 255, 0.35);
+  --montaire-border: rgba(255, 255, 255, 0.06);
+}
+
+/* Base styles */
+body {
+  background: var(--montaire-black);
+  color: var(--montaire-white);
+  font-family: var(--font-outfit);
+  overflow-x: hidden;
+}
+
+/* Selection */
+::selection {
+  background: rgba(201, 168, 76, 0.3);
+  color: var(--montaire-white);
+}
+
+/* Gradient text shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #C9A84C, #F5F5F0, #C9A84C);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+/* Custom cursor - hide default on desktop */
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--montaire-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--montaire-gold);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--montaire-gold-light);
+}
+
+/* Firefox scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--montaire-gold) var(--montaire-black);
+}
+
+/* Scroll indicator animation */
+@keyframes scrollLine {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+.scroll-indicator-line {
+  animation: scrollLine 2s ease-in-out infinite;
+}
