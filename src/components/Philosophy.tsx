@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
+import LightCaustics from "./LightCaustics";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -73,10 +74,11 @@ export default function Philosophy() {
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen flex items-center justify-center px-6"
+      className="relative min-h-screen flex items-center justify-center px-6"
       style={{ paddingTop: 100, paddingBottom: 100 }}
     >
-      <div className="max-w-[800px] w-full text-center">
+      <LightCaustics opacity={0.4} />
+      <div className="max-w-[800px] w-full text-center relative" style={{ zIndex: 2 }}>
         <h2
           ref={headlineRef}
           className="font-cormorant text-[28px] md:text-[44px] font-normal leading-[1.2]"

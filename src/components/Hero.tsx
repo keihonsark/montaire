@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import LightCaustics from "./LightCaustics";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,14 +14,12 @@ export default function Hero() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Tagline fade in
       gsap.fromTo(
         taglineRef.current,
         { opacity: 0, y: 10 },
         { opacity: 1, y: 0, duration: 0.8, delay: 0.5, ease: "power2.out" }
       );
 
-      // Parallax scroll-out for title
       gsap.to(titleRef.current, {
         y: -150,
         opacity: 0,
@@ -33,7 +32,6 @@ export default function Hero() {
         },
       });
 
-      // Tagline fade out on scroll
       gsap.to(taglineRef.current, {
         y: -80,
         opacity: 0,
@@ -64,33 +62,21 @@ export default function Hero() {
         }}
       />
 
-      {/* Subtle gold ambient particles */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(6)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              width: 2,
-              height: 2,
-              backgroundColor: "rgba(201, 168, 76, 0.3)",
-              left: `${15 + i * 14}%`,
-              top: `${20 + (i % 3) * 25}%`,
-              animation: `float ${3 + i * 0.5}s ease-in-out infinite alternate`,
-              animationDelay: `${i * 0.4}s`,
-            }}
-          />
-        ))}
-        <style jsx>{`
-          @keyframes float {
-            0% { transform: translateY(0px) scale(1); opacity: 0.2; }
-            100% { transform: translateY(-30px) scale(1.5); opacity: 0.5; }
-          }
-        `}</style>
-      </div>
+      {/* Light caustics */}
+      <LightCaustics />
+
+      {/* Vignette overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%)",
+          zIndex: 2,
+        }}
+      />
 
       {/* Content */}
-      <div className="relative z-10 text-center">
+      <div className="relative text-center" style={{ zIndex: 3 }}>
         <h1
           ref={titleRef}
           className="gradient-text font-cormorant text-[48px] md:text-[80px] lg:text-[100px] font-normal"
@@ -116,7 +102,7 @@ export default function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2" style={{ zIndex: 3 }}>
         <div
           className="w-[1px] h-[40px] overflow-hidden"
           style={{ backgroundColor: "rgba(201, 168, 76, 0.15)" }}
