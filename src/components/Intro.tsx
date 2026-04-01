@@ -2,9 +2,6 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
-import dynamic from "next/dynamic";
-
-const IntroDiamond = dynamic(() => import("./IntroDiamond"), { ssr: false });
 
 const LETTERS = "MONTAIRE".split("");
 
@@ -58,27 +55,24 @@ export default function Intro() {
     const tl = gsap.timeline({ onComplete: dismiss });
     tlRef.current = tl;
 
-    // 0.0s - 1.0s: Darkness. Diamond starts fading in via its own animation.
+    // 0.0s - 1.0s: Pure black darkness
     tl.to({}, { duration: 1.0 });
 
     // Show skip at 1.0s
     tl.to(skip, { opacity: 0.2, pointerEvents: "auto", duration: 0.3 }, 1.0);
 
-    // 1.0s - 2.5s: Diamond materializes (handled by IntroDiamond component)
-    tl.to({}, { duration: 1.5 }, 1.0);
-
-    // 2.5s - 3.5s: Text fades in over the diamond
-    tl.to(text, { opacity: 1, duration: 0.3 }, 2.5);
+    // 1.5s - 3.0s: Text fades in letter by letter
+    tl.to(text, { opacity: 1, duration: 0.3 }, 1.5);
 
     letters.forEach((letter, i) => {
       tl.to(
         letter,
         { opacity: 1, duration: 0.4, ease: "power2.out" },
-        2.5 + i * 0.1
+        1.5 + i * 0.12
       );
     });
 
-    // 3.5s - 4.5s: Hold — everything visible, diamond rotating
+    // 3.5s - 4.5s: Hold
     tl.to({}, { duration: 1.0 }, 3.5);
 
     // 4.5s - 5.5s: Fade out
@@ -99,13 +93,11 @@ export default function Intro() {
       className="fixed inset-0 z-[9999] overflow-hidden"
       style={{ backgroundColor: "#0A0A0A" }}
     >
-      <IntroDiamond />
-
-      {/* Text overlay */}
+      {/* Text */}
       <div
         ref={textRef}
         className="absolute inset-0 flex items-center justify-center"
-        style={{ zIndex: 10, opacity: 0 }}
+        style={{ opacity: 0 }}
       >
         <h1
           className="font-bodoni text-[52px] md:text-[100px] font-normal uppercase select-none whitespace-nowrap"

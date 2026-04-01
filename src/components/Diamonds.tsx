@@ -3,9 +3,6 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import dynamic from "next/dynamic";
-
-const DiamondsDiamond = dynamic(() => import("./DiamondsDiamond"), { ssr: false });
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,11 +18,6 @@ export default function Diamonds() {
   const contentRef = useRef<HTMLDivElement>(null);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-  }, []);
 
   useEffect(() => {
     if (!contentRef.current) return;
@@ -56,9 +48,7 @@ export default function Diamonds() {
 
   return (
     <section ref={sectionRef} id="diamonds" className="relative min-h-screen flex items-center justify-center px-6">
-      {!isMobile && <DiamondsDiamond />}
-
-      <div ref={contentRef} className="text-center max-w-lg relative" style={{ zIndex: 2, opacity: 0 }}>
+      <div ref={contentRef} className="text-center max-w-lg relative" style={{ opacity: 0 }}>
         <h2 className="gradient-text font-bodoni text-[36px] md:text-[48px] font-normal">
           Your Perfect Stone
         </h2>

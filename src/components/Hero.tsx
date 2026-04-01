@@ -1,11 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import dynamic from "next/dynamic";
-
-const HeroDiamond = dynamic(() => import("./HeroDiamond"), { ssr: false });
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,11 +10,6 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const taglineRef = useRef<HTMLParagraphElement>(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -67,15 +59,6 @@ export default function Hero() {
           background:
             "radial-gradient(ellipse at center, rgba(26, 26, 26, 0.5) 0%, #0A0A0A 70%)",
         }}
-      />
-
-      {/* Three.js diamond — desktop only */}
-      {!isMobile && <HeroDiamond />}
-
-      {/* Dark overlay between diamond and text for readability */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: "rgba(10,10,10,0.3)", zIndex: 2 }}
       />
 
       {/* Vignette */}
