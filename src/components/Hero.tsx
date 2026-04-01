@@ -72,6 +72,12 @@ export default function Hero() {
       {/* Three.js diamond — desktop only */}
       {!isMobile && <HeroDiamond />}
 
+      {/* Dark overlay between diamond and text for readability */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "rgba(10,10,10,0.3)", zIndex: 2 }}
+      />
+
       {/* Vignette */}
       <div
         className="absolute inset-0 pointer-events-none"
