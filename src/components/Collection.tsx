@@ -7,6 +7,15 @@ import { COLLECTION_ITEMS } from "@/lib/constants";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const PANEL_IMAGES = [
+  "/images/gallery/ring1.jpg",
+  "/images/gallery/necklace1.jpg",
+  "/images/gallery/rings3.jpg",
+  "/images/gallery/bracelet1.jpg",
+  "/images/gallery/ring2.jpg",
+  "/images/gallery/earrings1.jpg",
+];
+
 export default function Collection() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
@@ -120,12 +129,10 @@ export default function Collection() {
             {COLLECTION_ITEMS.map((item, i) => (
               <div key={i} className="flex-shrink-0 w-screen px-6 py-12 flex flex-col gap-8" style={{ scrollSnapAlign: "start" }}>
                 <div
-                  className="w-full flex items-center justify-center transition-transform duration-600 hover:scale-[1.02]"
+                  className="w-full overflow-hidden transition-transform duration-600 hover:scale-[1.02]"
                   style={{ aspectRatio: "3/4", maxHeight: "50vh", backgroundColor: "#1A1A1A", border: "0.5px solid rgba(255,255,255,0.06)" }}
                 >
-                  <p className="font-outfit text-[12px] uppercase" style={{ color: "rgba(255,255,255,0.15)", letterSpacing: "0.15em" }}>
-                    Product Photo {i + 1}
-                  </p>
+                  <img src={PANEL_IMAGES[i]} alt={item.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="flex flex-col gap-3">
                   <p className="font-outfit text-[11px] uppercase" style={{ letterSpacing: "0.2em", color: "#C9A84C" }}>{item.category}</p>
@@ -166,16 +173,14 @@ export default function Collection() {
                 {/* Left: Image */}
                 <div className="w-[55%] flex justify-center pr-[3vw]">
                   <div
-                    className="flex items-center justify-center transition-transform duration-[600ms] hover:scale-[1.02]"
+                    className="overflow-hidden transition-transform duration-[600ms] hover:scale-[1.02]"
                     style={{
                       width: "100%", maxWidth: 500, aspectRatio: "3/4", maxHeight: "70vh",
                       backgroundColor: "#1A1A1A", border: "0.5px solid rgba(255,255,255,0.06)",
                     }}
                     data-cursor="pointer"
                   >
-                    <p className="font-outfit text-[13px] uppercase" style={{ color: "rgba(255,255,255,0.12)", letterSpacing: "0.15em" }}>
-                      Product Photo {i + 1}
-                    </p>
+                    <img src={PANEL_IMAGES[i]} alt={item.name} className="w-full h-full object-cover" />
                   </div>
                 </div>
 
