@@ -100,7 +100,7 @@ export default function Collection() {
   };
 
   return (
-    <section ref={sectionRef} id="collection" className="relative">
+    <section ref={sectionRef} id="collection" className="relative" style={{ backgroundColor: "#000000" }}>
       {/* Title */}
       <div ref={titleRef} className="py-24 md:py-32 text-center" style={{ opacity: 0 }}>
         <p className="font-outfit text-[11px] uppercase mb-4" style={{ letterSpacing: "0.25em", color: "#C9A84C" }}>
@@ -140,7 +140,7 @@ export default function Collection() {
           </div>
         </div>
       ) : (
-        <div ref={pinRef} className="relative overflow-hidden">
+        <div ref={pinRef} className="relative overflow-hidden" style={{ backgroundColor: "#000000" }}>
           <div ref={trackRef} className="flex h-screen" style={{ width: `${COLLECTION_ITEMS.length * 100}vw` }}>
             {COLLECTION_ITEMS.map((item, i) => (
               <div
@@ -150,7 +150,7 @@ export default function Collection() {
                 style={{
                   paddingLeft: "5vw",
                   paddingRight: "5vw",
-                  background: "radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.02) 0%, transparent 60%)",
+                  backgroundColor: "#000000",
                 }}
               >
                 {/* Large dim panel number */}
