@@ -3,7 +3,7 @@ import Hero from "@/components/Hero";
 import Philosophy from "@/components/Philosophy";
 import Collection from "@/components/Collection";
 import Configurator from "@/components/Configurator";
-import Diamonds from "@/components/Diamonds";
+import DiamondSearch from "@/components/DiamondSearch";
 import Contact from "@/components/Contact";
 import ScrollProgress from "@/components/ScrollProgress";
 
@@ -23,7 +23,9 @@ export default function Home() {
 
       <Collection />
       <Configurator />
-      <Diamonds />
+      <section id="diamonds">
+        <DiamondSearch />
+      </section>
       <Contact />
     </>
   );

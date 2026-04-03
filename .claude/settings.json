@@ -32,7 +32,8 @@
       "Bash(ls public/images/gallery/*.jpg)"
     ],
     "additionalDirectories": [
-      "C:\\Users\\SS\\Desktop\\clientwebsites\\jewelry\\montaire\\src\\components"
+      "C:\\Users\\SS\\Desktop\\clientwebsites\\jewelry\\montaire\\src\\components",
+      "C:\\Users\\SS\\Desktop\\clientwebsites\\jewelry\\montaire\\src\\app\\api"
     ]
   }
 }
