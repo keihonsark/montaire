@@ -67,7 +67,8 @@ function formatPrice(price: number | null | undefined): string {
 }
 
 const selectClass =
-  "bg-transparent border-b border-white/15 py-2 font-outfit text-[13px] text-montaire-white focus:outline-none focus:border-montaire-gold transition-colors appearance-none";
+  "border-b border-white/15 py-2 font-outfit text-[13px] text-montaire-white focus:outline-none focus:border-montaire-gold transition-colors appearance-none [&>option]:bg-[#111] [&>option]:text-[#F5F5F0]";
+const selectStyle = { backgroundColor: "#111", color: "#F5F5F0", colorScheme: "dark" as const };
 const inputClass =
   "bg-transparent border-b border-white/15 py-2 font-outfit text-[13px] text-montaire-white placeholder:text-white/25 focus:outline-none focus:border-montaire-gold transition-colors w-full";
 
@@ -97,7 +98,7 @@ export default function DiamondSearch() {
     setLoading(true);
     const p = new URLSearchParams();
     p.set("type", filters.type);
-    p.set("page_size", "4");
+    p.set("page_size", "20");
     p.set("page_number", "1");
     if (filters.shapes.length > 0) p.set("shapes", filters.shapes.join(","));
     if (filters.sizeFrom) p.set("size_from", filters.sizeFrom);
@@ -150,6 +151,10 @@ export default function DiamondSearch() {
 
   return (
     <div className="py-20 md:py-28 px-4 md:px-8" style={{ backgroundColor: "#000000" }}>
+      <style jsx>{`
+        .diamond-scroll::-webkit-scrollbar { display: none; }
+        @keyframes loadSlide { 0% { transform:translateX(-100%); } 100% { transform:translateX(400%); } }
+      `}</style>
       {/* Header */}
       <div className="text-center mb-12">
         <h2 className="gradient-text font-bodoni text-[36px] md:text-[48px] font-normal">
@@ -226,14 +231,14 @@ export default function DiamondSearch() {
           <div className="flex gap-2 items-end">
             <div className="flex-1">
               <label className="font-outfit text-[10px] uppercase block mb-1" style={{ color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>Color</label>
-              <select value={filters.colorFrom} onChange={(e) => setFilters((f) => ({ ...f, colorFrom: e.target.value }))} className={`${selectClass} w-full`} style={{ colorScheme: "dark" }}>
+              <select value={filters.colorFrom} onChange={(e) => setFilters((f) => ({ ...f, colorFrom: e.target.value }))} className={`${selectClass} w-full`} style={selectStyle}>
                 <option value="">Any</option>
                 {COLORS.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             <div className="flex-1">
               <label className="font-outfit text-[10px] uppercase block mb-1" style={{ color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>To</label>
-              <select value={filters.colorTo} onChange={(e) => setFilters((f) => ({ ...f, colorTo: e.target.value }))} className={`${selectClass} w-full`} style={{ colorScheme: "dark" }}>
+              <select value={filters.colorTo} onChange={(e) => setFilters((f) => ({ ...f, colorTo: e.target.value }))} className={`${selectClass} w-full`} style={selectStyle}>
                 <option value="">Any</option>
                 {COLORS.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -244,14 +249,14 @@ export default function DiamondSearch() {
           <div className="flex gap-2 items-end">
             <div className="flex-1">
               <label className="font-outfit text-[10px] uppercase block mb-1" style={{ color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>Clarity</label>
-              <select value={filters.clarityFrom} onChange={(e) => setFilters((f) => ({ ...f, clarityFrom: e.target.value }))} className={`${selectClass} w-full`} style={{ colorScheme: "dark" }}>
+              <select value={filters.clarityFrom} onChange={(e) => setFilters((f) => ({ ...f, clarityFrom: e.target.value }))} className={`${selectClass} w-full`} style={selectStyle}>
                 <option value="">Any</option>
                 {CLARITIES.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             <div className="flex-1">
               <label className="font-outfit text-[10px] uppercase block mb-1" style={{ color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>To</label>
-              <select value={filters.clarityTo} onChange={(e) => setFilters((f) => ({ ...f, clarityTo: e.target.value }))} className={`${selectClass} w-full`} style={{ colorScheme: "dark" }}>
+              <select value={filters.clarityTo} onChange={(e) => setFilters((f) => ({ ...f, clarityTo: e.target.value }))} className={`${selectClass} w-full`} style={selectStyle}>
                 <option value="">Any</option>
                 {CLARITIES.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -261,7 +266,7 @@ export default function DiamondSearch() {
           {/* Cut */}
           <div>
             <label className="font-outfit text-[10px] uppercase block mb-1" style={{ color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>Cut</label>
-            <select value={filters.cut} onChange={(e) => setFilters((f) => ({ ...f, cut: e.target.value }))} className={`${selectClass} w-full`} style={{ colorScheme: "dark" }}>
+            <select value={filters.cut} onChange={(e) => setFilters((f) => ({ ...f, cut: e.target.value }))} className={`${selectClass} w-full`} style={selectStyle}>
               {CUTS.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
@@ -294,7 +299,6 @@ export default function DiamondSearch() {
         {loading && (
           <div className="h-[1px] mb-4 overflow-hidden" style={{ backgroundColor: "rgba(255,255,255,0.04)" }}>
             <div className="h-full w-1/3 bg-montaire-gold" style={{ animation: "loadSlide 1s ease-in-out infinite" }} />
-            <style jsx>{`@keyframes loadSlide { 0% { transform:translateX(-100%) } 100% { transform:translateX(400%) } }`}</style>
           </div>
         )}
 
@@ -302,16 +306,16 @@ export default function DiamondSearch() {
         {diamonds.length > 0 && (
           <div
             ref={gridRef}
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 transition-opacity duration-300"
-            style={{ opacity: loading ? 0.4 : 1 }}
+            className="diamond-scroll flex flex-row gap-4 overflow-x-auto transition-opacity duration-300"
+            style={{ opacity: loading ? 0.4 : 1, scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
           >
             {diamonds.map((d) => {
               const img = getDiamondImage(d);
               return (
                 <div
                   key={d.id}
-                  className="diamond-card group flex flex-col border transition-all duration-300 hover:scale-[1.02] hover:border-[rgba(201,168,76,0.2)]"
-                  style={{ backgroundColor: "#111", borderColor: "rgba(255,255,255,0.04)", borderWidth: "0.5px", opacity: 0 }}
+                  className="diamond-card group flex flex-col border transition-all duration-300 hover:scale-[1.02] hover:border-[rgba(201,168,76,0.2)] flex-shrink-0"
+                  style={{ backgroundColor: "#111", borderColor: "rgba(255,255,255,0.04)", borderWidth: "0.5px", opacity: 0, width: 280 }}
                 >
                   {/* Image */}
                   <div className="aspect-square overflow-hidden flex items-center justify-center" style={{ backgroundColor: "#0A0A0A" }}>
@@ -371,18 +375,6 @@ export default function DiamondSearch() {
           </div>
         )}
 
-        {/* View All */}
-        {!loading && diamonds.length > 0 && totalFound > 4 && (
-          <div className="flex justify-center mt-10">
-            <button
-              className="px-9 py-3.5 font-outfit text-[12px] uppercase border border-montaire-gold text-montaire-gold transition-all duration-300 hover:bg-[rgba(201,168,76,0.1)] active:scale-[0.98]"
-              style={{ letterSpacing: "0.15em" }}
-              data-cursor="pointer"
-            >
-              View All Diamonds
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Detail Modal */}
