@@ -88,18 +88,17 @@ export default function DiamondSearch() {
 
   const [diamonds, setDiamonds] = useState<Diamond[]>([]);
   const [totalFound, setTotalFound] = useState(0);
-  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [detail, setDetail] = useState<Diamond | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
-  const fetchDiamonds = useCallback(async (pageNum: number = 1) => {
+  const fetchDiamonds = useCallback(async () => {
     setLoading(true);
     const p = new URLSearchParams();
     p.set("type", filters.type);
-    p.set("page_size", "20");
-    p.set("page_number", String(pageNum));
+    p.set("page_size", "4");
+    p.set("page_number", "1");
     if (filters.shapes.length > 0) p.set("shapes", filters.shapes.join(","));
     if (filters.sizeFrom) p.set("size_from", filters.sizeFrom);
     if (filters.sizeTo) p.set("size_to", filters.sizeTo);
@@ -117,7 +116,6 @@ export default function DiamondSearch() {
       const body = data.response?.body;
       setDiamonds(body?.diamonds || []);
       setTotalFound(body?.total_diamonds_found || 0);
-      setPage(pageNum);
       setHasSearched(true);
     } catch {
       setDiamonds([]);
@@ -127,11 +125,13 @@ export default function DiamondSearch() {
     }
   }, [filters]);
 
-  // Initial load
+  // Auto-search on any filter change (debounced)
   useEffect(() => {
-    fetchDiamonds(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const timer = setTimeout(() => {
+      fetchDiamonds();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [fetchDiamonds]);
 
   // Animate cards on load
   useEffect(() => {
@@ -147,8 +147,6 @@ export default function DiamondSearch() {
     }));
   };
 
-  const handleSearch = () => fetchDiamonds(1);
-  const totalPages = Math.ceil(totalFound / 20);
 
   return (
     <div className="py-20 md:py-28 px-4 md:px-8" style={{ backgroundColor: "#000000" }}>
@@ -211,7 +209,7 @@ export default function DiamondSearch() {
         </div>
 
         {/* Filter row */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-x-4 gap-y-4 max-w-5xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-x-4 gap-y-4 max-w-5xl mx-auto">
           {/* Carat */}
           <div className="flex gap-2 items-end">
             <div className="flex-1">
@@ -280,18 +278,6 @@ export default function DiamondSearch() {
             </div>
           </div>
 
-          {/* Search button */}
-          <div className="flex items-end">
-            <button
-              onClick={handleSearch}
-              disabled={loading}
-              className="w-full py-2.5 font-outfit text-[11px] uppercase border border-montaire-gold text-montaire-gold transition-all duration-300 hover:bg-[rgba(201,168,76,0.1)] active:scale-[0.98] disabled:opacity-50"
-              style={{ letterSpacing: "0.12em" }}
-              data-cursor="pointer"
-            >
-              {loading ? "Searching..." : "Search"}
-            </button>
-          </div>
         </div>
       </div>
 
@@ -304,21 +290,21 @@ export default function DiamondSearch() {
           </p>
         )}
 
-        {/* Loading */}
+        {/* Loading bar */}
         {loading && (
-          <div className="flex justify-center py-20">
-            <div className="flex gap-2">
-              {[0, 1, 2].map((i) => (
-                <div key={i} className="w-1.5 h-1.5 rounded-full bg-montaire-gold" style={{ animation: `pulse 1.2s ease-in-out ${i * 0.2}s infinite` }} />
-              ))}
-            </div>
-            <style jsx>{`@keyframes pulse { 0%,100% { opacity:0.2;transform:scale(0.8) } 50% { opacity:1;transform:scale(1.2) } }`}</style>
+          <div className="h-[1px] mb-4 overflow-hidden" style={{ backgroundColor: "rgba(255,255,255,0.04)" }}>
+            <div className="h-full w-1/3 bg-montaire-gold" style={{ animation: "loadSlide 1s ease-in-out infinite" }} />
+            <style jsx>{`@keyframes loadSlide { 0% { transform:translateX(-100%) } 100% { transform:translateX(400%) } }`}</style>
           </div>
         )}
 
         {/* Grid */}
-        {!loading && diamonds.length > 0 && (
-          <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+        {diamonds.length > 0 && (
+          <div
+            ref={gridRef}
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 transition-opacity duration-300"
+            style={{ opacity: loading ? 0.4 : 1 }}
+          >
             {diamonds.map((d) => {
               const img = getDiamondImage(d);
               return (
@@ -385,29 +371,15 @@ export default function DiamondSearch() {
           </div>
         )}
 
-        {/* Pagination */}
-        {!loading && totalPages > 1 && (
-          <div className="flex items-center justify-center gap-6 mt-10">
+        {/* View All */}
+        {!loading && diamonds.length > 0 && totalFound > 4 && (
+          <div className="flex justify-center mt-10">
             <button
-              onClick={() => fetchDiamonds(page - 1)}
-              disabled={page <= 1}
-              className="font-outfit text-[12px] uppercase transition-colors hover:text-montaire-gold disabled:opacity-25"
-              style={{ letterSpacing: "0.1em", color: "rgba(255,255,255,0.5)" }}
+              className="px-9 py-3.5 font-outfit text-[12px] uppercase border border-montaire-gold text-montaire-gold transition-all duration-300 hover:bg-[rgba(201,168,76,0.1)] active:scale-[0.98]"
+              style={{ letterSpacing: "0.15em" }}
               data-cursor="pointer"
             >
-              ← Previous
-            </button>
-            <span className="font-outfit text-[12px] tabular-nums" style={{ color: "rgba(255,255,255,0.4)" }}>
-              Page {page} of {totalPages}
-            </span>
-            <button
-              onClick={() => fetchDiamonds(page + 1)}
-              disabled={page >= totalPages}
-              className="font-outfit text-[12px] uppercase transition-colors hover:text-montaire-gold disabled:opacity-25"
-              style={{ letterSpacing: "0.1em", color: "rgba(255,255,255,0.5)" }}
-              data-cursor="pointer"
-            >
-              Next →
+              View All Diamonds
             </button>
           </div>
         )}
