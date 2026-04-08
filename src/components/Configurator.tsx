@@ -175,7 +175,6 @@ export default function Configurator() {
   const [linkInput, setLinkInput] = useState("");
   const [aiResult, setAiResult] = useState<AiResult | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
-  const [aiError, setAiError] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const [sel, setSel] = useState<Selections>({
@@ -210,12 +209,21 @@ export default function Configurator() {
     return () => { delete (window as unknown as Record<string, unknown>).__openConfigurator; };
   }, [open]);
 
-  const animateStep = useCallback((dir: 1 | -1) => {
-    if (!contentRef.current) return;
-    const tl = gsap.timeline();
-    tl.to(contentRef.current, { opacity: 0, x: dir * -30, duration: 0.2, ease: "power2.in" })
-      .set(contentRef.current, { x: dir * 30 })
-      .to(contentRef.current, { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" });
+  const changeStep = useCallback((targetStep: number, dir: 1 | -1) => {
+    if (!contentRef.current) { setStep(targetStep); return; }
+    gsap.to(contentRef.current, {
+      opacity: 0, x: dir * -20, duration: 0.2, ease: "power2.in",
+      onComplete: () => {
+        setStep(targetStep);
+        setTimeout(() => {
+          if (!contentRef.current) return;
+          gsap.fromTo(contentRef.current,
+            { opacity: 0, x: dir * 20 },
+            { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" }
+          );
+        }, 50);
+      },
+    });
   }, []);
 
   const next = () => {
@@ -223,8 +231,7 @@ export default function Configurator() {
     if (step === 1 && (sel.type === "Earrings" || sel.type === "Other")) nextStep = 3;
     if (step === 2 && sel.type !== "Ring") nextStep = 3;
     if (step === 3 && sel.type !== "Ring") nextStep = 6;
-    setStep(nextStep);
-    animateStep(1);
+    changeStep(nextStep, 1);
   };
 
   const back = () => {
@@ -233,60 +240,17 @@ export default function Configurator() {
     if (step === 6 && sel.type !== "Ring") prevStep = 3;
     if (step === 3 && (sel.type === "Necklace" || sel.type === "Bracelet")) prevStep = 2;
     if (prevStep < 1) prevStep = 1;
-    setStep(prevStep);
-    animateStep(-1);
+    changeStep(prevStep, -1);
   };
 
-  const generateAiSummary = async () => {
+  const generateDesignSummary = () => {
     setAiLoading(true);
-    setAiError(false);
-
-    const prompt = `You are a luxury jewelry concierge at Montaire, an exclusive custom jewelry house. A client has just completed their design consultation. Based on their selections below, generate a personalized design summary.
-
-Your tone should be: warm, flattering, knowledgeable, and make the client feel like they have exquisite taste. Compliment their choices genuinely. Be specific about why their combination works well together.
-
-Client selections:
-- Piece type: ${sel.type}
-- Metal: ${sel.metal || "Not specified"}
-- Stone type: ${sel.stoneType || "Not specified"}
-- Stone shape: ${sel.stoneShape || "Not specified"}
-- Stone size: ${sel.stoneSize || "Not specified"}
-- Setting style: ${sel.settingStyle || "Not specified"}
-- Ring size: ${sel.ringSize || "Not specified"}
-- Band width: ${sel.bandWidth}
-- Engraving: ${sel.engraving || "None"}
-- Budget range: $${sel.budget.toLocaleString()}
-- Timeline: ${sel.timeline}
-- Special requests: ${sel.specialRequests || "None"}
-- Inspiration notes: ${sel.links.length > 0 ? sel.links.join(", ") : "None provided"}
-
-Respond ONLY in JSON format with no markdown or backticks:
-{"greeting":"A warm, personalized one-line greeting","taste_compliment":"A 2-3 sentence genuine compliment about their specific combination of choices.","design_summary":"A detailed 3-4 sentence description of their piece as if it already exists.","expert_recommendation":"A 2-sentence suggestion from our master jeweler.","estimated_range":"A price range string","next_steps":"A 1-2 sentence description of what happens next."}`;
-
-    try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          messages: [{ role: "user", content: prompt }],
-        }),
-      });
-
-      if (!res.ok) throw new Error("API error");
-
-      const data = await res.json();
-      const text = data.content?.[0]?.text || "";
-      const parsed: AiResult = JSON.parse(text);
-      setAiResult(parsed);
-    } catch {
-      setAiError(true);
-    } finally {
+    changeStep(9, 1);
+    setTimeout(() => {
+      const result = getDesignResponse(sel);
+      setAiResult(result);
       setAiLoading(false);
-      setStep(9);
-      animateStep(1);
-    }
+    }, 2500);
   };
 
   const submitToFormspree = async () => {
@@ -397,7 +361,7 @@ Respond ONLY in JSON format with no markdown or backticks:
                     {PIECE_TYPES.slice(0, 3).map((type) => (
                       <button
                         key={type}
-                        onClick={() => { update("type", type); setTimeout(next, 400); }}
+                        onClick={() => { update("type", type); setTimeout(() => { const target = (type === "Earrings" || type === "Other") ? 3 : 2; changeStep(target, 1); }, 400); }}
                         className="flex flex-col items-center justify-end p-6 transition-all duration-300 hover:scale-[1.04]"
                         style={{
                           aspectRatio: "3/4",
@@ -419,7 +383,7 @@ Respond ONLY in JSON format with no markdown or backticks:
                     {PIECE_TYPES.slice(3).map((type) => (
                       <button
                         key={type}
-                        onClick={() => { update("type", type); setTimeout(next, 400); }}
+                        onClick={() => { update("type", type); setTimeout(() => { const target = (type === "Earrings" || type === "Other") ? 3 : 2; changeStep(target, 1); }, 400); }}
                         className="flex flex-col items-center justify-end p-6 transition-all duration-300 hover:scale-[1.04]"
                         style={{
                           aspectRatio: "3/4",
@@ -740,7 +704,7 @@ Respond ONLY in JSON format with no markdown or backticks:
                 <div className="flex justify-center gap-4 mt-10">
                   <button onClick={back} className={btnSecondary} style={{ letterSpacing: "0.15em", borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.5)" }} data-cursor="pointer">Back</button>
                   <button
-                    onClick={generateAiSummary}
+                    onClick={generateDesignSummary}
                     className={btnPrimary}
                     style={{ letterSpacing: "0.15em" }}
                     data-cursor="pointer"
