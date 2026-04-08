@@ -48,7 +48,7 @@ export default function Hero() {
     <section
       ref={sectionRef}
       className="relative h-screen flex flex-col items-center justify-center overflow-hidden"
-      style={{ background: "#0A0A0A" }}
+      style={{ background: "#000000" }}
     >
       <div ref={contentRef} className="flex flex-col items-center" style={{ willChange: "transform, opacity" }}>
         {/* Wordmark + Reflection container */}

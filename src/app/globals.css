@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-montaire-black: #0A0A0A;
+  --color-montaire-black: #000000;
   --color-montaire-dark: #111111;
   --color-montaire-card: #1A1A1A;
   --color-montaire-gold: #C9A84C;
@@ -12,7 +12,7 @@
 }
 
 :root {
-  --montaire-black: #0A0A0A;
+  --montaire-black: #000000;
   --montaire-dark: #111111;
   --montaire-card: #1A1A1A;
   --montaire-gold: #C9A84C;
