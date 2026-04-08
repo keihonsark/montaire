@@ -73,21 +73,34 @@ export default function CustomCursor() {
       ref={cursorRef}
       className="fixed top-0 left-0 z-[9999] pointer-events-none"
       style={{
-        width: isHovering ? 56 : 8,
-        height: isHovering ? 56 : 8,
+        width: isHovering ? 48 : 6,
+        height: isHovering ? 48 : 6,
         borderRadius: "50%",
-        border: "1px solid #C9A84C",
-        backgroundColor: isHovering ? "rgba(201, 168, 76, 0.08)" : "transparent",
+        border: isHovering ? "1px solid rgba(201, 168, 76, 0.4)" : "none",
+        backgroundColor: "transparent",
         transition:
-          "width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), height 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), background-color 0.3s ease",
+          "width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), height 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), border 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
       }}
     >
+      {/* Inner diamond shape */}
+      <div
+        style={{
+          width: isHovering ? 4 : 6,
+          height: isHovering ? 4 : 6,
+          borderRadius: 1,
+          transform: "rotate(45deg)",
+          animation: "prismatic 4s ease-in-out infinite",
+          transition:
+            "width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), height 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)",
+        }}
+      />
+
       {hoverText && (
         <span
-          className="font-outfit text-[10px] uppercase tracking-[0.15em]"
+          className="font-outfit text-[10px] uppercase tracking-[0.15em] absolute"
           style={{
             color: "#C9A84C",
             opacity: isHovering ? 1 : 0,
