@@ -11,6 +11,7 @@ export default function Hero() {
   const contentRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const taglineRef = useRef<HTMLParagraphElement>(null);
+  const btnsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -25,6 +26,12 @@ export default function Hero() {
         taglineRef.current,
         { opacity: 0 },
         { opacity: 0.7, duration: 0.8, delay: 1.2, ease: "power2.out" }
+      );
+
+      gsap.fromTo(
+        btnsRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.8, delay: 1.4, ease: "power2.out" }
       );
 
       // Scroll parallax
@@ -116,6 +123,26 @@ export default function Hero() {
         >
           Fine Jewelry, Made Yours
         </p>
+
+        {/* CTA Buttons */}
+        <div ref={btnsRef} className="flex gap-4 mt-8" style={{ opacity: 0 }}>
+          <button
+            onClick={() => (window as unknown as Record<string, (() => void) | undefined>).__openConfigurator?.()}
+            className="font-outfit text-[11px] uppercase transition-all duration-300 hover:bg-[rgba(201,168,76,0.1)]"
+            style={{ letterSpacing: "0.2em", padding: "12px 32px", border: "1px solid #C9A84C", color: "#C9A84C", backgroundColor: "transparent" }}
+            data-cursor="pointer"
+          >
+            Start Your Design
+          </button>
+          <button
+            onClick={() => document.getElementById("collection")?.scrollIntoView({ behavior: "smooth" })}
+            className="font-outfit text-[11px] uppercase transition-all duration-300 hover:border-[#C9A84C] hover:text-[#C9A84C]"
+            style={{ letterSpacing: "0.2em", padding: "12px 32px", border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.5)", backgroundColor: "transparent" }}
+            data-cursor="pointer"
+          >
+            View Collection
+          </button>
+        </div>
       </div>
 
       {/* Scroll indicator */}
