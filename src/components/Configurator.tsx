@@ -295,31 +295,27 @@ Respond ONLY in JSON format with no markdown or backticks:
             {step === 1 && (
               <div className="text-center">
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-12" style={{ color: "#F5F5F0" }}>What are we creating?</h2>
-                <div className="w-full max-w-[700px] mx-auto">
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-5 max-w-[900px] mx-auto">
                   {PIECE_TYPES.map((type) => (
                     <button
                       key={type}
                       onClick={() => { update("type", type); setTimeout(next, 400); }}
-                      className="relative flex flex-col items-center justify-end gap-3 p-6 border transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_40px_rgba(255,255,255,0.04)] overflow-hidden"
+                      className="flex flex-col items-center justify-between p-4 border transition-all duration-300 hover:scale-[1.03]"
                       style={{
-                        aspectRatio: "1/1.4",
+                        aspectRatio: "3/4",
                         borderColor: sel.type === type ? "#C9A84C" : "transparent",
                         borderWidth: sel.type === type ? 2 : 1,
-                        backgroundColor: "#000000",
-                        boxShadow: sel.type === type ? "0 4px 30px rgba(201,168,76,0.2), 0 0 0 1px #C9A84C" : "0 0 0 0.5px rgba(255,255,255,0.08)",
+                        backgroundColor: "#0A0A0A",
+                        boxShadow: sel.type === type ? "0 0 30px rgba(201,168,76,0.15)" : "none",
                       }}
                       data-cursor="pointer"
                     >
-                      <div className="absolute inset-0">
-                        <img src={PIECE_IMAGES[type]} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.6 }} />
-                      </div>
-                      <span className="relative z-10 font-outfit text-[13px] uppercase" style={{ letterSpacing: "0.15em", color: sel.type === type ? "#C9A84C" : "rgba(255,255,255,0.5)" }}>
+                      <img src={PIECE_IMAGES[type]} alt={type} className="w-full flex-1 object-contain max-h-[180px] md:max-h-[220px]" />
+                      <span className="font-outfit text-[12px] uppercase mt-3" style={{ letterSpacing: "0.15em", color: sel.type === type ? "#C9A84C" : "rgba(255,255,255,0.6)" }}>
                         {type}
                       </span>
                     </button>
                   ))}
-                </div>
                 </div>
               </div>
             )}
