@@ -172,6 +172,7 @@ export default function Configurator() {
   const [step, setStep] = useState(1);
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
   const [linkInput, setLinkInput] = useState("");
   const [aiResult, setAiResult] = useState<AiResult | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
@@ -208,6 +209,67 @@ export default function Configurator() {
     (window as unknown as Record<string, unknown>).__openConfigurator = open;
     return () => { delete (window as unknown as Record<string, unknown>).__openConfigurator; };
   }, [open]);
+
+  // Step 9 cinematic reveal animation
+  useEffect(() => {
+    if (step !== 9 || !aiResult || aiLoading || submitted || !resultRef.current) return;
+    const container = resultRef.current;
+    const els = container.querySelectorAll("[data-reveal]");
+    const tags = container.querySelectorAll("[data-reveal-tag]");
+    const buttons = container.querySelectorAll("[data-reveal-btn]");
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline();
+
+      // Sparkle burst
+      const sparkles: HTMLDivElement[] = [];
+      for (let i = 0; i < 14; i++) {
+        const dot = document.createElement("div");
+        const size = 3 + Math.random() * 4;
+        Object.assign(dot.style, {
+          position: "absolute", top: "50%", left: "50%",
+          width: `${size}px`, height: `${size}px`,
+          borderRadius: "50%", backgroundColor: "#C9A84C",
+          zIndex: "0", pointerEvents: "none", opacity: "0",
+        });
+        container.appendChild(dot);
+        sparkles.push(dot);
+        const angle = (Math.PI * 2 * i) / 14 + (Math.random() - 0.5) * 0.5;
+        const dist = 80 + Math.random() * 120;
+        tl.to(dot, {
+          x: Math.cos(angle) * dist, y: Math.sin(angle) * dist,
+          opacity: 0.8, duration: 0.4, ease: "power2.out",
+        }, 0).to(dot, { opacity: 0, duration: 1.0, ease: "power2.in" }, 0.4);
+      }
+
+      // Sequential reveal
+      els.forEach((el) => {
+        const delay = parseFloat((el as HTMLElement).dataset.reveal || "0");
+        const fromY = parseFloat((el as HTMLElement).dataset.revealY || "0");
+        const fromScale = parseFloat((el as HTMLElement).dataset.revealScale || "1");
+        const isLine = (el as HTMLElement).dataset.revealLine === "true";
+        if (isLine) {
+          tl.fromTo(el, { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.out" }, delay);
+        } else {
+          tl.fromTo(el, { opacity: 0, y: fromY, scale: fromScale }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power2.out" }, delay);
+        }
+      });
+
+      // Tags stagger
+      if (tags.length > 0) {
+        tl.fromTo(tags, { opacity: 0, y: 10 }, { opacity: 1, y: 0, stagger: 0.1, duration: 0.3, ease: "power2.out" }, 2.2);
+      }
+
+      // Buttons
+      if (buttons.length > 0) {
+        tl.fromTo(buttons, { opacity: 0, y: 10 }, { opacity: 1, y: 0, stagger: 0.1, duration: 0.4, ease: "power2.out" }, 5.2);
+      }
+
+      return () => { sparkles.forEach((s) => s.remove()); };
+    }, container);
+
+    return () => ctx.revert();
+  }, [step, aiResult, aiLoading, submitted]);
 
   const changeStep = useCallback((targetStep: number, dir: 1 | -1) => {
     if (!contentRef.current) { setStep(targetStep); return; }
@@ -721,35 +783,71 @@ export default function Configurator() {
                 )}
 
                 {!aiLoading && !submitted && (
-                  <div className="text-left max-w-xl mx-auto">
-                    <p className="font-outfit text-[11px] uppercase text-center mb-8" style={{ letterSpacing: "0.2em", color: "#C9A84C" }}>Your Design Consultation</p>
+                  <div ref={resultRef} className="relative max-w-[600px] mx-auto text-center">
 
                     {aiResult ? (
-                      <>
-                        <p className="font-bodoni text-[24px] md:text-[28px] text-center" style={{ color: "#C9A84C" }}>{aiResult.greeting}</p>
-                        <p className="font-outfit text-[15px] leading-relaxed mt-4 text-center" style={{ color: "rgba(255,255,255,0.6)" }}>{aiResult.taste_compliment}</p>
+                      <div className="flex flex-col items-center gap-0">
+                        {/* Diamond accent */}
+                        <p data-reveal="0.0" data-reveal-y="0" className="text-[8px] mb-6" style={{ opacity: 0, color: "#C9A84C" }}>◆</p>
 
-                        <div className="w-16 h-[1px] mx-auto my-8" style={{ backgroundColor: "#C9A84C" }} />
+                        {/* Header label */}
+                        <p data-reveal="0.0" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-10" style={{ opacity: 0, letterSpacing: "0.2em", color: "#C9A84C" }}>Your Design Consultation</p>
 
-                        <p className="font-outfit text-[11px] uppercase mb-3" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>Your Piece</p>
-                        <p className="font-outfit text-[15px] leading-[1.7]" style={{ color: "rgba(255,255,255,0.8)" }}>{aiResult.design_summary}</p>
+                        {/* Exclusive watermark */}
+                        <p data-reveal="0.3" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-4" style={{ opacity: 0, letterSpacing: "0.3em", color: "rgba(201,168,76,0.2)" }}>Designed exclusively for {sel.name || "you"}</p>
 
-                        <div className="flex flex-wrap gap-2 mt-4">
+                        {/* Greeting — hero text with shimmer */}
+                        <p data-reveal="0.5" data-reveal-y="20" className="gradient-text font-bodoni text-[28px] md:text-[36px] font-normal mb-12" style={{ opacity: 0 }}>{aiResult.greeting}</p>
+
+                        {/* Gold line 1 */}
+                        <div data-reveal="1.0" data-reveal-line="true" className="mx-auto mb-12" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "#C9A84C", transformOrigin: "center" }} />
+
+                        {/* Taste compliment */}
+                        <p data-reveal="1.3" data-reveal-y="15" className="font-outfit text-[15px] leading-relaxed mb-12" style={{ opacity: 0, color: "rgba(255,255,255,0.6)" }}>{aiResult.taste_compliment}</p>
+
+                        {/* Gold line 2 */}
+                        <div data-reveal="1.8" data-reveal-line="true" className="mx-auto mb-12" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "#C9A84C", transformOrigin: "center" }} />
+
+                        {/* Your Piece label */}
+                        <p data-reveal="2.0" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-4" style={{ opacity: 0, letterSpacing: "0.15em", color: "#C9A84C" }}>Your Piece</p>
+
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-2 justify-center mb-6">
                           {[sel.type, sel.metal, sel.stoneType, sel.stoneShape, sel.stoneSize, sel.settingStyle].filter(Boolean).map((tag, i) => (
-                            <span key={i} className="px-3 py-1 font-outfit text-[11px] border" style={{ borderColor: "rgba(201,168,76,0.2)", color: "#C9A84C", borderRadius: 12 }}>{tag}</span>
+                            <span key={i} data-reveal-tag className="px-3 py-1 font-outfit text-[11px] border" style={{ opacity: 0, borderColor: "rgba(201,168,76,0.2)", color: "#C9A84C", borderRadius: 12 }}>{tag}</span>
                           ))}
                         </div>
 
-                        <p className="font-outfit text-[11px] uppercase mt-8 mb-3" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>Expert Recommendation</p>
-                        <p className="font-outfit text-[15px] italic leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>{aiResult.expert_recommendation}</p>
+                        {/* Design summary */}
+                        <p data-reveal="2.6" data-reveal-y="15" className="font-outfit text-[15px] leading-[1.7] mb-12 text-left" style={{ opacity: 0, color: "rgba(255,255,255,0.8)" }}>{aiResult.design_summary}</p>
 
-                        <p className="font-outfit text-[11px] uppercase mt-8 mb-3" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>Estimated Investment</p>
-                        <p className="font-bodoni text-[28px] md:text-[32px]" style={{ color: "#C9A84C" }}>{aiResult.estimated_range}</p>
+                        {/* Gold line 3 */}
+                        <div data-reveal="3.0" data-reveal-line="true" className="mx-auto mb-12" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "#C9A84C", transformOrigin: "center" }} />
 
-                        <div className="w-16 h-[1px] mx-auto my-8" style={{ backgroundColor: "rgba(255,255,255,0.06)" }} />
+                        {/* Expert recommendation */}
+                        <p data-reveal="3.2" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-3" style={{ opacity: 0, letterSpacing: "0.15em", color: "#C9A84C" }}>Expert Recommendation</p>
+                        <p data-reveal="3.3" data-reveal-y="10" className="font-outfit text-[15px] italic leading-relaxed mb-12" style={{ opacity: 0, color: "rgba(255,255,255,0.5)" }}>{aiResult.expert_recommendation}</p>
 
-                        <p className="font-outfit text-[14px] text-center" style={{ color: "rgba(255,255,255,0.5)" }}>{aiResult.next_steps}</p>
-                      </>
+                        {/* Estimated investment */}
+                        <p data-reveal="3.6" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-3" style={{ opacity: 0, letterSpacing: "0.15em", color: "#C9A84C" }}>Estimated Investment</p>
+                        <p data-reveal="3.8" data-reveal-y="0" data-reveal-scale="0.95" className="font-bodoni text-[24px] md:text-[28px] mb-2" style={{ opacity: 0, color: "#C9A84C" }}>{aiResult.estimated_range}</p>
+                        <p data-reveal="3.9" data-reveal-y="0" className="font-outfit text-[11px] italic mb-12" style={{ opacity: 0, color: "rgba(255,255,255,0.2)" }}>Final pricing confirmed during your personal consultation</p>
+
+                        {/* Gold line 4 */}
+                        <div data-reveal="4.2" data-reveal-line="true" className="mx-auto mb-12" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "rgba(255,255,255,0.06)", transformOrigin: "center" }} />
+
+                        {/* Next steps */}
+                        <p data-reveal="4.4" data-reveal-y="10" className="font-outfit text-[14px] leading-relaxed mb-10" style={{ opacity: 0, color: "rgba(255,255,255,0.5)" }}>{aiResult.next_steps}</p>
+
+                        {/* Personal sign-off */}
+                        <p data-reveal="4.8" data-reveal-y="10" className="font-bodoni text-[18px] md:text-[22px] italic mb-12" style={{ opacity: 0, color: "#C9A84C" }}>We can&apos;t wait to create this with you, {sel.name || "friend"}.</p>
+
+                        {/* Action buttons */}
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                          <button data-reveal-btn onClick={submitToFormspree} className={btnPrimary} style={{ opacity: 0, letterSpacing: "0.15em" }} data-cursor="pointer">Submit &amp; Book Consultation</button>
+                          <button data-reveal-btn onClick={() => { setAiResult(null); changeStep(1, -1); }} className={btnSecondary} style={{ opacity: 0, letterSpacing: "0.15em", borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.5)" }} data-cursor="pointer">Refine My Choices</button>
+                        </div>
+                      </div>
                     ) : (
                       <>
                         <p className="font-outfit text-[15px] text-center mb-6" style={{ color: "rgba(255,255,255,0.5)" }}>
@@ -760,13 +858,13 @@ export default function Configurator() {
                             <span key={i} className="px-3 py-1 font-outfit text-[11px] border" style={{ borderColor: "rgba(201,168,76,0.2)", color: "#C9A84C", borderRadius: 12 }}>{tag}</span>
                           ))}
                         </div>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
+                          <button onClick={submitToFormspree} className={btnPrimary} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Submit &amp; Book Consultation</button>
+                          <button onClick={() => { setAiResult(null); changeStep(1, -1); }} className={btnSecondary} style={{ letterSpacing: "0.15em", borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.5)" }} data-cursor="pointer">Refine My Choices</button>
+                        </div>
                       </>
                     )}
 
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
-                      <button onClick={submitToFormspree} className={btnPrimary} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Submit &amp; Book Consultation</button>
-                      <button onClick={() => { setAiResult(null); changeStep(1, -1); }} className={btnSecondary} style={{ letterSpacing: "0.15em", borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.5)" }} data-cursor="pointer">Refine My Choices</button>
-                    </div>
                   </div>
                 )}
               </div>
