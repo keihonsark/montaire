@@ -270,12 +270,12 @@ export default function Configurator() {
 
       // Tags stagger
       if (tags.length > 0) {
-        tl.fromTo(tags, { opacity: 0, y: 10 }, { opacity: 1, y: 0, stagger: 0.1, duration: 0.3, ease: "power2.out" }, 2.2);
+        tl.fromTo(tags, { opacity: 0, y: 10 }, { opacity: 1, y: 0, stagger: 0.06, duration: 0.3, ease: "power2.out" }, 1.2);
       }
 
       // Buttons
       if (buttons.length > 0) {
-        tl.fromTo(buttons, { opacity: 0, y: 10 }, { opacity: 1, y: 0, stagger: 0.1, duration: 0.4, ease: "power2.out" }, 5.2);
+        tl.fromTo(buttons, { opacity: 0, y: 10 }, { opacity: 1, y: 0, stagger: 0.1, duration: 0.4, ease: "power2.out" }, 2.8);
       }
 
       return () => { sparkles.forEach((s) => s.remove()); };
@@ -284,21 +284,14 @@ export default function Configurator() {
     return () => ctx.revert();
   }, [step, aiResult, aiLoading, submitted]);
 
-  const changeStep = useCallback((targetStep: number, dir: 1 | -1) => {
+  const changeStep = useCallback((targetStep: number, _dir: 1 | -1) => {
     if (!contentRef.current) { setStep(targetStep); return; }
-    gsap.to(contentRef.current, {
-      opacity: 0, x: dir * -20, duration: 0.2, ease: "power2.in",
-      onComplete: () => {
-        setStep(targetStep);
-        setTimeout(() => {
-          if (!contentRef.current) return;
-          gsap.fromTo(contentRef.current,
-            { opacity: 0, x: dir * 20 },
-            { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" }
-          );
-        }, 50);
-      },
-    });
+    gsap.set(contentRef.current, { opacity: 0 });
+    setStep(targetStep);
+    setTimeout(() => {
+      if (!contentRef.current) return;
+      gsap.to(contentRef.current, { opacity: 1, duration: 0.3, ease: "power2.out" });
+    }, 50);
   }, []);
 
   const next = () => {
@@ -865,66 +858,53 @@ export default function Configurator() {
                 )}
 
                 {!aiLoading && !submitted && (
-                  <div ref={resultRef} className="relative max-w-[650px] mx-auto text-center">
+                  <div ref={resultRef} className="relative max-w-[750px] mx-auto text-center">
 
                     {aiResult ? (
-                      <div className="flex flex-col items-center gap-0">
-                        {/* Diamond accent */}
-                        <p data-reveal="0.0" data-reveal-y="0" className="text-[8px] mb-6" style={{ opacity: 0, color: "#C9A84C" }}>&#9670;</p>
+                      <div className="flex flex-col items-center">
+                        {/* TOP: Header */}
+                        <p data-reveal="0.0" data-reveal-y="0" className="text-[8px] mb-4" style={{ opacity: 0, color: "#C9A84C" }}>&#9670;</p>
+                        <p data-reveal="0.0" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-6" style={{ opacity: 0, letterSpacing: "0.2em", color: "#C9A84C" }}>Your Design Consultation</p>
+                        <p data-reveal="0.15" data-reveal-y="0" className="font-outfit text-[10px] uppercase mb-3" style={{ opacity: 0, letterSpacing: "0.3em", color: "rgba(201,168,76,0.2)" }}>Designed exclusively for {fullName ? capitalizeName(fullName) : "you"}</p>
+                        <p data-reveal="0.3" data-reveal-y="15" className="gradient-text font-bodoni text-[28px] md:text-[36px] font-normal mb-4" style={{ opacity: 0 }}>{aiResult.greeting}</p>
+                        <p data-reveal="0.5" data-reveal-y="10" className="font-outfit text-[14px] md:text-[16px] mb-8 max-w-[550px] mx-auto" style={{ opacity: 0, color: "rgba(255,255,255,0.5)", lineHeight: 1.7 }}>{aiResult.taste_compliment}</p>
 
-                        {/* Header label */}
-                        <p data-reveal="0.0" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-10" style={{ opacity: 0, letterSpacing: "0.2em", color: "#C9A84C" }}>Your Design Consultation</p>
-
-                        {/* Exclusive watermark */}
-                        <p data-reveal="0.3" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-4" style={{ opacity: 0, letterSpacing: "0.3em", color: "rgba(201,168,76,0.2)" }}>Designed exclusively for {fullName ? capitalizeName(fullName) : "you"}</p>
-
-                        {/* Greeting — hero text with shimmer */}
-                        <p data-reveal="0.5" data-reveal-y="20" className="gradient-text font-bodoni text-[36px] md:text-[48px] lg:text-[56px] font-normal mb-12 md:mb-16" style={{ opacity: 0 }}>{aiResult.greeting}</p>
-
-                        {/* Gold line 1 */}
-                        <div data-reveal="1.0" data-reveal-line="true" className="mx-auto mb-12 md:mb-16" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "#C9A84C", transformOrigin: "center" }} />
-
-                        {/* Taste compliment */}
-                        <p data-reveal="1.3" data-reveal-y="15" className="font-outfit text-[16px] md:text-[18px] mb-12 md:mb-16 max-w-[550px] mx-auto" style={{ opacity: 0, color: "rgba(255,255,255,0.6)", lineHeight: 1.8 }}>{aiResult.taste_compliment}</p>
-
-                        {/* Gold line 2 */}
-                        <div data-reveal="1.8" data-reveal-line="true" className="mx-auto mb-12 md:mb-16" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "#C9A84C", transformOrigin: "center" }} />
-
-                        {/* Your Piece label */}
-                        <p data-reveal="2.0" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-4" style={{ opacity: 0, letterSpacing: "0.15em", color: "#C9A84C" }}>Your Piece</p>
-
-                        {/* Tags */}
-                        <div className="flex flex-wrap gap-2 justify-center mb-6">
-                          {[sel.type, sel.metal, sel.stoneType, sel.stoneShape, sel.stoneSize, sel.settingStyle].filter(Boolean).map((tag, i) => (
-                            <span key={i} data-reveal-tag className="px-3 py-1 font-outfit text-[11px] border" style={{ opacity: 0, borderColor: "rgba(201,168,76,0.2)", color: "#C9A84C", borderRadius: 12 }}>{tag}</span>
-                          ))}
+                        {/* MIDDLE: Summary card */}
+                        <div data-reveal="0.8" data-reveal-y="15" className="w-full mb-8 p-6 md:p-8 text-left" style={{ opacity: 0, backgroundColor: "#0A0A0A", border: "1px solid rgba(201,168,76,0.1)", borderRadius: 4 }}>
+                          <div className="flex flex-col md:flex-row gap-8">
+                            {/* Left: Selections */}
+                            <div className="md:w-[40%] flex-shrink-0">
+                              <p className="font-outfit text-[10px] uppercase mb-4" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>Your Selections</p>
+                              <div className="flex flex-col gap-2">
+                                {[sel.type, sel.metal, sel.stoneType, sel.stoneShape, sel.stoneSize, sel.settingStyle].filter(Boolean).map((tag, i) => (
+                                  <span key={i} data-reveal-tag className="font-outfit text-[13px]" style={{ opacity: 0, color: "rgba(255,255,255,0.6)" }}>
+                                    <span style={{ color: "#C9A84C", marginRight: 8 }}>●</span>{tag}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                            {/* Right: Piece description + expert */}
+                            <div className="md:w-[60%]">
+                              <p className="font-outfit text-[10px] uppercase mb-4" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>Your Piece</p>
+                              <p className="font-outfit text-[14px] md:text-[15px] leading-[1.8] mb-6" style={{ color: "rgba(255,255,255,0.7)" }}>{aiResult.design_summary}</p>
+                              <div style={{ height: 1, backgroundColor: "rgba(201,168,76,0.1)", marginBottom: 16 }} />
+                              <p className="font-outfit text-[10px] uppercase mb-2" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>Expert Note</p>
+                              <p className="font-outfit text-[13px] italic leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>{aiResult.expert_recommendation}</p>
+                            </div>
+                          </div>
                         </div>
 
-                        {/* Design summary */}
-                        <p data-reveal="2.6" data-reveal-y="15" className="font-outfit text-[16px] md:text-[18px] mb-12 md:mb-16 text-left" style={{ opacity: 0, color: "rgba(255,255,255,0.8)", lineHeight: 1.8 }}>{aiResult.design_summary}</p>
+                        {/* BOTTOM: Investment + sign-off + buttons */}
+                        <div data-reveal="1.6" data-reveal-y="10" className="mb-3" style={{ opacity: 0 }}>
+                          <p className="font-outfit text-[10px] uppercase mb-2" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>Estimated Investment</p>
+                          <p className="font-bodoni text-[22px] md:text-[26px]" style={{ color: "#C9A84C" }}>{aiResult.estimated_range}</p>
+                          <p className="font-outfit text-[11px] italic mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>Final pricing confirmed during your personal consultation</p>
+                        </div>
 
-                        {/* Gold line 3 */}
-                        <div data-reveal="3.0" data-reveal-line="true" className="mx-auto mb-12 md:mb-16" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "#C9A84C", transformOrigin: "center" }} />
+                        <p data-reveal="2.0" data-reveal-y="10" className="font-outfit text-[13px] mb-4 mt-4" style={{ opacity: 0, color: "rgba(255,255,255,0.4)" }}>{aiResult.next_steps}</p>
 
-                        {/* Expert recommendation */}
-                        <p data-reveal="3.2" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-3" style={{ opacity: 0, letterSpacing: "0.15em", color: "#C9A84C" }}>Expert Recommendation</p>
-                        <p data-reveal="3.3" data-reveal-y="10" className="font-outfit text-[15px] md:text-[17px] italic leading-relaxed mb-12 md:mb-16" style={{ opacity: 0, color: "rgba(255,255,255,0.5)" }}>{aiResult.expert_recommendation}</p>
+                        <p data-reveal="2.2" data-reveal-y="10" className="font-bodoni text-[18px] md:text-[20px] italic mb-8" style={{ opacity: 0, color: "#C9A84C" }}>We can&apos;t wait to create this with you, {sel.firstName ? capitalizeName(sel.firstName) : "friend"}.</p>
 
-                        {/* Estimated investment */}
-                        <p data-reveal="3.6" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-3" style={{ opacity: 0, letterSpacing: "0.15em", color: "#C9A84C" }}>Estimated Investment</p>
-                        <p data-reveal="3.8" data-reveal-y="0" data-reveal-scale="0.95" className="font-bodoni text-[24px] md:text-[28px] mb-2" style={{ opacity: 0, color: "#C9A84C" }}>{aiResult.estimated_range}</p>
-                        <p data-reveal="3.9" data-reveal-y="0" className="font-outfit text-[11px] italic mb-12 md:mb-16" style={{ opacity: 0, color: "rgba(255,255,255,0.35)" }}>Final pricing confirmed during your personal consultation</p>
-
-                        {/* Gold line 4 */}
-                        <div data-reveal="4.2" data-reveal-line="true" className="mx-auto mb-12 md:mb-16" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "rgba(255,255,255,0.06)", transformOrigin: "center" }} />
-
-                        {/* Next steps */}
-                        <p data-reveal="4.4" data-reveal-y="10" className="font-outfit text-[14px] leading-relaxed mb-10" style={{ opacity: 0, color: "rgba(255,255,255,0.5)" }}>{aiResult.next_steps}</p>
-
-                        {/* Personal sign-off */}
-                        <p data-reveal="4.8" data-reveal-y="10" className="font-bodoni text-[20px] md:text-[24px] italic mb-12 md:mb-16" style={{ opacity: 0, color: "#C9A84C" }}>We can&apos;t wait to create this with you, {sel.firstName ? capitalizeName(sel.firstName) : "friend"}.</p>
-
-                        {/* Action buttons */}
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                           <button data-reveal-btn onClick={submitToFormspree} className={btnPrimary} style={{ opacity: 0, letterSpacing: "0.15em" }} data-cursor="pointer">Submit &amp; Book Consultation</button>
                           <button data-reveal-btn onClick={() => { setAiResult(null); changeStep(1, -1); }} className={btnSecondary} style={{ opacity: 0, letterSpacing: "0.15em", borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.5)" }} data-cursor="pointer">Refine My Choices</button>

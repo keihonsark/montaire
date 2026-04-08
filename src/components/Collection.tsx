@@ -258,79 +258,92 @@ export default function Collection() {
       </section>
 
       {/* Detail Modal */}
-      {detailItem !== null && openItem && (
-        <div
-          ref={detailRef}
-          data-lenis-prevent
-          className="fixed inset-0 z-[400] overflow-y-auto"
-          style={{ backgroundColor: "#000000", opacity: 0 }}
-        >
-          {/* Close button */}
-          <div className="fixed top-0 right-0 z-10 px-6 md:px-10 py-5">
-            <button
-              onClick={closeDetail}
-              className="font-outfit text-[12px] uppercase transition-colors duration-200 hover:text-white"
-              style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.15)", padding: "8px 16px" }}
-              data-cursor="pointer"
-            >
-              Close
-            </button>
-          </div>
-
-          {/* Content */}
-          <div className="min-h-screen flex flex-col items-center justify-center px-6 py-24">
-            <div className="max-w-[600px] w-full flex flex-col items-center text-center">
-              {/* Image */}
-              <div className="w-full mb-10" style={{ maxHeight: "50vh" }}>
+      {detailItem !== null && openItem && (() => {
+        // Parse specs string into table rows
+        const specParts = openItem.specs.split(" · ");
+        const metal = specParts.find(s => s.includes("Gold") || s.includes("Platinum")) || "18K Gold";
+        const stoneSpec = specParts.find(s => s.includes("ct")) || "";
+        const clarity = specParts.find(s => /VS|VVS|SI|IF/.test(s)) || "VS1 Clarity";
+        const specRows = [
+          { label: "Center Stone", value: stoneSpec || "Diamond" },
+          { label: "Metal", value: metal },
+          { label: "Clarity", value: clarity.replace(" Clarity", "") },
+          { label: "Color", value: "G–H" },
+          { label: "Band Width", value: "2.0mm" },
+          { label: "Certification", value: "GIA" },
+        ];
+        return (
+          <div
+            ref={detailRef}
+            data-lenis-prevent
+            className="fixed inset-0 z-[400] overflow-y-auto"
+            style={{ backgroundColor: "#000000", opacity: 0 }}
+          >
+            <div className="min-h-screen flex flex-col md:flex-row">
+              {/* Left: Image */}
+              <div className="md:w-1/2 flex items-center justify-center p-8 md:p-12" style={{ backgroundColor: "#000000" }}>
                 <img
                   src={openItem.image}
                   alt={openItem.name}
-                  className="mx-auto h-full object-contain"
-                  style={{ maxHeight: "50vh" }}
+                  className="max-w-full object-contain"
+                  style={{ maxHeight: "60vh" }}
                 />
               </div>
 
-              {/* Category */}
-              <p className="font-outfit text-[11px] uppercase mb-3" style={{ letterSpacing: "0.2em", color: "#C9A84C" }}>
-                {openItem.category}
-              </p>
+              {/* Right: Info */}
+              <div className="md:w-1/2 flex flex-col justify-center p-8 md:p-12 lg:p-16 relative">
+                {/* Close button */}
+                <button
+                  onClick={closeDetail}
+                  className="absolute top-5 right-5 md:top-8 md:right-8 font-outfit text-[12px] uppercase transition-colors duration-200 hover:text-white"
+                  style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.15)", padding: "8px 16px" }}
+                  data-cursor="pointer"
+                >
+                  Close
+                </button>
 
-              {/* Name */}
-              <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-4" style={{ color: "#F5F5F0" }}>
-                {openItem.name}
-              </h2>
+                <p className="font-outfit text-[11px] uppercase mb-3" style={{ letterSpacing: "0.2em", color: "#C9A84C" }}>
+                  {openItem.category}
+                </p>
+                <h2 className="font-bodoni text-[32px] md:text-[36px] font-normal mb-2" style={{ color: "#F5F5F0" }}>
+                  {openItem.name}
+                </h2>
+                <p className="font-bodoni text-[22px] mb-6" style={{ color: "#C9A84C" }}>
+                  {openItem.price}
+                </p>
 
-              {/* Gold line */}
-              <div className="mx-auto mb-6" style={{ width: 60, height: 1, backgroundColor: "rgba(201,168,76,0.3)" }} />
+                {/* Gold divider */}
+                <div className="mb-6" style={{ width: 50, height: 1, backgroundColor: "rgba(201,168,76,0.3)" }} />
 
-              {/* Description */}
-              <p className="font-outfit text-[15px] md:text-[16px] font-light leading-[1.7] mb-6 max-w-[500px]" style={{ color: "rgba(255,255,255,0.5)" }}>
-                {openItem.description}
-              </p>
+                {/* Specs table */}
+                <div className="mb-8">
+                  {specRows.map((row) => (
+                    <div key={row.label} className="flex justify-between py-2.5" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                      <span className="font-outfit text-[12px] uppercase" style={{ letterSpacing: "0.1em", color: "rgba(255,255,255,0.35)" }}>{row.label}</span>
+                      <span className="font-outfit text-[12px]" style={{ color: "rgba(255,255,255,0.6)" }}>{row.value}</span>
+                    </div>
+                  ))}
+                </div>
 
-              {/* Specs */}
-              <p className="font-outfit text-[12px] mb-4" style={{ color: "rgba(255,255,255,0.3)" }}>
-                {openItem.specs}
-              </p>
+                {/* CTA */}
+                <a
+                  href={`mailto:hello@montaire.com?subject=Inquiry about ${openItem.name}`}
+                  className="w-full py-4 font-outfit text-[12px] uppercase border border-montaire-gold text-montaire-gold bg-transparent transition-all duration-300 hover:bg-[rgba(201,168,76,0.1)] active:scale-[0.98] text-center block"
+                  style={{ letterSpacing: "0.15em" }}
+                  data-cursor="pointer"
+                >
+                  Inquire About This Piece
+                </a>
 
-              {/* Price */}
-              <p className="font-bodoni text-[24px] mb-10" style={{ color: "#C9A84C" }}>
-                {openItem.price}
-              </p>
-
-              {/* CTA */}
-              <a
-                href={`mailto:hello@montaire.com?subject=Inquiry about ${openItem.name}`}
-                className="px-10 py-4 font-outfit text-[12px] uppercase border border-montaire-gold text-montaire-gold bg-transparent transition-all duration-300 hover:bg-[rgba(201,168,76,0.1)] active:scale-[0.98]"
-                style={{ letterSpacing: "0.15em" }}
-                data-cursor="pointer"
-              >
-                Inquire About This Piece
-              </a>
+                {/* Description */}
+                <p className="font-outfit text-[13px] font-light italic leading-[1.7] mt-6" style={{ color: "rgba(255,255,255,0.35)" }}>
+                  {openItem.description}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </>
   );
 }
