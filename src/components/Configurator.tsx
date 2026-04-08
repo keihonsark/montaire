@@ -6,11 +6,11 @@ import BlueprintBackground from "./BlueprintBackground";
 
 const PIECE_TYPES = ["Ring", "Necklace", "Bracelet", "Earrings", "Other"];
 const PIECE_IMAGES: Record<string, string> = {
-  Ring: "/images/gallery/ring1.jpg",
-  Necklace: "/images/gallery/necklace1.jpg",
-  Bracelet: "/images/gallery/bracelet1.jpg",
-  Earrings: "/images/gallery/earrings1.jpg",
-  Other: "/images/gallery/jewelry1.jpg",
+  Ring: "/images/configurator/ring.png",
+  Necklace: "/images/configurator/necklace.png",
+  Bracelet: "/images/configurator/bracelet.png",
+  Earrings: "/images/configurator/earrings.png",
+  Other: "/images/configurator/other.png",
 };
 const METALS = [
   { name: "14K Yellow Gold", gradient: "linear-gradient(135deg, #D4A437, #C9963C)" },
@@ -22,6 +22,7 @@ const METALS = [
   { name: "Platinum", gradient: "linear-gradient(135deg, #A8A8B0, #D0D0D8)" },
 ];
 const STONE_SHAPES = ["Round", "Oval", "Emerald", "Cushion", "Pear", "Marquise", "Princess", "Radiant", "Asscher"];
+const STONE_TYPES = ["Diamond", "Lab Diamond", "Moissanite", "Sapphire", "Emerald", "Ruby", "Other"];
 const STONE_SIZES = ["0.5ct", "0.75ct", "1.0ct", "1.5ct", "2.0ct", "2.5ct", "3.0ct+"];
 const SETTINGS = ["Solitaire", "Halo", "Three Stone", "Pavé Band", "Cathedral", "Vintage / Milgrain", "Totally Custom"];
 const TIMELINES = ["No Rush — take your time", "1–2 Months", "I need it by..."];
@@ -29,6 +30,7 @@ const TIMELINES = ["No Rush — take your time", "1–2 Months", "I need it by..
 interface Selections {
   type: string;
   metal: string;
+  stoneType: string;
   stoneShape: string;
   stoneSize: string;
   settingStyle: string;
@@ -76,7 +78,7 @@ export default function Configurator() {
   const [submitted, setSubmitted] = useState(false);
 
   const [sel, setSel] = useState<Selections>({
-    type: "", metal: "", stoneShape: "", stoneSize: "", settingStyle: "",
+    type: "", metal: "", stoneType: "", stoneShape: "", stoneSize: "", settingStyle: "",
     ringSize: "", bandWidth: "Medium", engraving: "", specialRequests: "",
     files: [], links: [], budget: 5000, timeline: "", date: "",
     name: "", email: "", phone: "",
@@ -116,19 +118,19 @@ export default function Configurator() {
   }, []);
 
   const next = () => {
-    // Skip steps that don't apply
     let nextStep = step + 1;
-    if (step === 1 && sel.type === "Earrings") nextStep = 6; // skip metal/stone/setting/details
-    if (step === 1 && sel.type === "Other") nextStep = 6;
-    if (step === 2 && sel.type !== "Ring") nextStep = 6; // skip stone/setting/details for non-rings
+    if (step === 1 && (sel.type === "Earrings" || sel.type === "Other")) nextStep = 3;
+    if (step === 2 && sel.type !== "Ring") nextStep = 3;
+    if (step === 3 && sel.type !== "Ring") nextStep = 6;
     setStep(nextStep);
     animateStep(1);
   };
 
   const back = () => {
     let prevStep = step - 1;
-    if (step === 6 && (sel.type === "Earrings" || sel.type === "Other")) prevStep = 1;
-    if (step === 6 && sel.type !== "Ring" && sel.type !== "Earrings" && sel.type !== "Other") prevStep = 2;
+    if (step === 3 && (sel.type === "Earrings" || sel.type === "Other")) prevStep = 1;
+    if (step === 6 && sel.type !== "Ring") prevStep = 3;
+    if (step === 3 && (sel.type === "Necklace" || sel.type === "Bracelet")) prevStep = 2;
     if (prevStep < 1) prevStep = 1;
     setStep(prevStep);
     animateStep(-1);
@@ -145,6 +147,7 @@ Your tone should be: warm, flattering, knowledgeable, and make the client feel l
 Client selections:
 - Piece type: ${sel.type}
 - Metal: ${sel.metal || "Not specified"}
+- Stone type: ${sel.stoneType || "Not specified"}
 - Stone shape: ${sel.stoneShape || "Not specified"}
 - Stone size: ${sel.stoneSize || "Not specified"}
 - Setting style: ${sel.settingStyle || "Not specified"}
@@ -190,6 +193,7 @@ Respond ONLY in JSON format with no markdown or backticks:
       _source: "montaire-configurator",
       piece_type: sel.type,
       metal: sel.metal,
+      stone_type: sel.stoneType,
       stone_shape: sel.stoneShape,
       stone_size: sel.stoneSize,
       setting_style: sel.settingStyle,
@@ -352,6 +356,12 @@ Respond ONLY in JSON format with no markdown or backticks:
             {step === 3 && (
               <div className="text-center">
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-10" style={{ color: "#F5F5F0" }}>Select your stone</h2>
+                <p className="font-outfit text-[12px] uppercase mb-6" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Stone Type</p>
+                <div className="flex flex-wrap justify-center gap-4 mb-10">
+                  {STONE_TYPES.map((t) => (
+                    <button key={t} onClick={() => update("stoneType", t)} className="px-5 py-2.5 border rounded-full font-outfit text-[12px] transition-all duration-200" style={pill(sel.stoneType === t)} data-cursor="pointer">{t}</button>
+                  ))}
+                </div>
                 <p className="font-outfit text-[12px] uppercase mb-6" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Shape</p>
                 <div className="flex flex-wrap justify-center gap-4 mb-10">
                   {STONE_SHAPES.map((s) => (
@@ -584,7 +594,7 @@ Respond ONLY in JSON format with no markdown or backticks:
                         <p className="font-outfit text-[15px] leading-[1.7]" style={{ color: "rgba(255,255,255,0.8)" }}>{aiResult.design_summary}</p>
 
                         <div className="flex flex-wrap gap-2 mt-4">
-                          {[sel.type, sel.metal, sel.stoneShape, sel.stoneSize, sel.settingStyle].filter(Boolean).map((tag, i) => (
+                          {[sel.type, sel.metal, sel.stoneType, sel.stoneShape, sel.stoneSize, sel.settingStyle].filter(Boolean).map((tag, i) => (
                             <span key={i} className="px-3 py-1 font-outfit text-[11px] border" style={{ borderColor: "rgba(201,168,76,0.2)", color: "#C9A84C", borderRadius: 12 }}>{tag}</span>
                           ))}
                         </div>
@@ -605,7 +615,7 @@ Respond ONLY in JSON format with no markdown or backticks:
                           Our team will review your selections and reach out within 24 hours.
                         </p>
                         <div className="flex flex-wrap gap-2 justify-center">
-                          {[sel.type, sel.metal, sel.stoneShape, sel.stoneSize, sel.settingStyle, sel.bandWidth].filter(Boolean).map((tag, i) => (
+                          {[sel.type, sel.metal, sel.stoneType, sel.stoneShape, sel.stoneSize, sel.settingStyle, sel.bandWidth].filter(Boolean).map((tag, i) => (
                             <span key={i} className="px-3 py-1 font-outfit text-[11px] border" style={{ borderColor: "rgba(201,168,76,0.2)", color: "#C9A84C", borderRadius: 12 }}>{tag}</span>
                           ))}
                         </div>
