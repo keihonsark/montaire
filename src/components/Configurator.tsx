@@ -411,7 +411,7 @@ export default function Configurator() {
       {/* Inline placeholder so page scroll IDs still work */}
       <section id="custom" className="h-0" />
 
-      <div ref={overlayRef} className="fixed inset-0 z-[500] overflow-y-auto" style={{ backgroundColor: "#000000" }}>
+      <div ref={overlayRef} data-lenis-prevent className="fixed inset-0 z-[500] overflow-y-auto" style={{ backgroundColor: "#000000" }}>
         {/* Top bar */}
         <div className="fixed top-0 left-0 right-0 z-10 flex items-center justify-end px-6 md:px-10 py-5" style={{ backgroundColor: "#000000" }}>
           <button onClick={close} className="font-outfit text-[12px] uppercase transition-colors duration-200 hover:text-white" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.15)", padding: "8px 16px" }} data-cursor="pointer">
