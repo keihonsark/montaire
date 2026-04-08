@@ -6,13 +6,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const TRUST_SIGNALS = [
-  "GIA Certified Stones",
-  "Insured Shipping",
-  "Lifetime Warranty",
-  "Handcrafted in California",
-];
-
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
@@ -74,33 +67,20 @@ export default function Contact() {
 
   return (
     <section ref={sectionRef} id="contact">
-      {/* About section merged in */}
-      <div className="flex items-center justify-center px-6 py-24 md:py-32">
+      {/* About + CTA merged */}
+      <div className="flex items-center justify-center px-6 py-16 md:py-20">
         <div ref={aboutRef} className="text-center max-w-2xl flex flex-col items-center">
-          <p className="font-outfit text-[13px] md:text-[14px] uppercase" style={{ letterSpacing: "0.2em", color: "#C9A84C" }}>
-            Montaire was founded on a simple belief:
-          </p>
-          <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mt-4" style={{ color: "#F5F5F0" }}>
+          <h2 className="font-bodoni text-[28px] md:text-[36px] font-normal" style={{ color: "#F5F5F0" }}>
             Fine jewelry should be personal.
           </h2>
           <p className="font-outfit text-[15px] md:text-[16px] font-light leading-[1.7] mt-6 max-w-xl" style={{ color: "rgba(255,255,255,0.4)" }}>
             Every piece we create begins with a conversation and ends with something extraordinary. Based in California, we work with clients worldwide to design and craft jewelry that tells their story.
           </p>
-
-          {/* Trust signals */}
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 mt-12">
-            {TRUST_SIGNALS.map((signal) => (
-              <p key={signal} className="font-outfit text-[11px] md:text-[12px] uppercase" style={{ letterSpacing: "0.2em", color: "rgba(255,255,255,0.3)" }}>{signal}</p>
-            ))}
-          </div>
-
-          {/* Gold divider */}
-          <div className="mx-auto mt-16 mb-0" style={{ width: 80, height: 1, backgroundColor: "#C9A84C" }} />
         </div>
       </div>
 
-      {/* Contact CTA */}
-      <div className="flex flex-col items-center justify-center px-6 pb-16">
+      {/* CTA */}
+      <div className="flex flex-col items-center justify-center px-6 py-8">
         <div ref={ctaRef} className="text-center flex flex-col items-center">
           <h3 className="font-bodoni text-[32px] md:text-[40px] font-normal" style={{ color: "#F5F5F0" }}>
             Let&apos;s create something extraordinary.
@@ -146,11 +126,50 @@ export default function Contact() {
       )}
 
       {/* Footer */}
-      <footer className="py-16 text-center" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <p className="font-bodoni text-[18px] uppercase" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>MONTAIRE</p>
-        <div className="mx-auto mt-4 mb-4" style={{ width: 60, height: 1, backgroundColor: "rgba(201,168,76,0.3)" }} />
-        <p className="font-outfit text-[11px]" style={{ color: "rgba(255,255,255,0.25)" }}>&copy; 2026 Montaire. All rights reserved.</p>
-        <a href="#" className="font-outfit text-[11px] mt-2 inline-block hover:underline" style={{ color: "rgba(255,255,255,0.3)" }} data-cursor="pointer">Instagram</a>
+      <footer className="px-6 md:px-10 pt-16 pb-8" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+        {/* Three column layout */}
+        <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-12">
+          {/* Left */}
+          <div className="text-center md:text-left">
+            <p className="font-bodoni text-[16px] uppercase" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>MONTAIRE</p>
+            <p className="font-outfit text-[12px] mt-3" style={{ color: "rgba(255,255,255,0.3)" }}>Fine jewelry, made yours</p>
+            <p className="font-outfit text-[11px] mt-1" style={{ color: "rgba(255,255,255,0.25)" }}>Handcrafted in California</p>
+          </div>
+
+          {/* Center */}
+          <div className="text-center flex flex-col gap-2">
+            {[
+              { label: "Collection", href: "#collection" },
+              { label: "Build Your Own", href: "#custom" },
+              { label: "Diamonds", href: "#diamonds" },
+              { label: "Process", href: "#process" },
+              { label: "Contact", href: "#contact" },
+            ].map((link) => (
+              <a key={link.label} href={link.href} className="font-outfit text-[12px] uppercase transition-colors duration-200 hover:text-[#C9A84C]" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.3)" }} data-cursor="pointer">
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          {/* Right */}
+          <div className="text-center md:text-right flex flex-col gap-2">
+            <p className="font-outfit text-[12px] uppercase" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.35)" }}>Get in Touch</p>
+            <a href="mailto:hello@montaire.com" className="font-outfit text-[12px] transition-colors duration-200 hover:text-[#C9A84C]" style={{ color: "rgba(255,255,255,0.3)" }} data-cursor="pointer">hello@montaire.com</a>
+            <a href="#" className="font-outfit text-[12px] transition-colors duration-200 hover:text-[#C9A84C]" style={{ color: "rgba(255,255,255,0.3)" }} data-cursor="pointer">Instagram</a>
+            <p className="font-outfit text-[11px] mt-2" style={{ color: "rgba(255,255,255,0.2)" }}>By Appointment Only</p>
+            <p className="font-outfit text-[11px]" style={{ color: "rgba(255,255,255,0.2)" }}>Fresno, California</p>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="max-w-[1100px] mx-auto" style={{ height: 1, backgroundColor: "rgba(255,255,255,0.04)" }} />
+
+        {/* Bottom bar */}
+        <div className="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4 mt-8">
+          <p className="font-outfit text-[11px]" style={{ color: "rgba(255,255,255,0.25)" }}>&copy; 2026 Montaire. All rights reserved.</p>
+          <p className="font-outfit text-[10px] text-center" style={{ color: "rgba(255,255,255,0.2)" }}>GIA Certified · Ethically Sourced · Insured Shipping · Lifetime Warranty</p>
+          <a href="https://sark.agency" target="_blank" rel="noopener noreferrer" className="font-outfit text-[11px] transition-colors duration-200 hover:text-[#C9A84C]" style={{ color: "rgba(255,255,255,0.25)" }} data-cursor="pointer">Site by SARK Agency</a>
+        </div>
       </footer>
     </section>
   );

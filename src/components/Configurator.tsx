@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect, useCallback, type FormEvent } from "react";
 import gsap from "gsap";
-import BlueprintBackground from "./BlueprintBackground";
 
 const PIECE_TYPES = ["Ring", "Necklace", "Bracelet", "Earrings", "Other"];
 const PIECE_IMAGES: Record<string, string> = {
@@ -373,20 +372,12 @@ export default function Configurator() {
   });
 
   if (!isOpen) {
-    // Render the Build Your Own section inline
     return (
-      <section id="custom" className="relative min-h-screen flex flex-col items-center justify-center px-6 py-24 overflow-hidden">
-        {/* SVG blueprint background */}
-        <BlueprintBackground />
+      <section id="custom" className="relative flex flex-col items-center justify-center px-6 py-20 md:py-32 overflow-hidden">
+        {/* Subtle background image */}
+        <img src="/images/process/sketch.png" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none" style={{ opacity: 0.06 }} />
 
-        {/* Corner accents */}
-        <div className="absolute top-6 left-6 w-10 h-10 border-t border-l border-[#C9A84C]/15 pointer-events-none z-10" />
-        <div className="absolute top-6 right-6 w-10 h-10 border-t border-r border-[#C9A84C]/15 pointer-events-none z-10" />
-        <div className="absolute bottom-6 left-6 w-10 h-10 border-b border-l border-[#C9A84C]/15 pointer-events-none z-10" />
-        <div className="absolute bottom-6 right-6 w-10 h-10 border-b border-r border-[#C9A84C]/15 pointer-events-none z-10" />
-
-        {/* Content */}
-        <h2 className="relative z-10 font-bodoni text-[36px] md:text-[56px] font-normal text-center leading-tight" style={{ color: "#F5F5F0" }}>
+        <h2 className="relative z-10 font-bodoni text-[40px] md:text-[64px] font-normal text-center leading-tight" style={{ color: "#F5F5F0" }}>
           Your vision. Our craft.
         </h2>
         <p className="relative z-10 font-outfit text-[15px] md:text-[16px] font-light leading-relaxed mt-6 max-w-[500px] mx-auto text-center" style={{ color: "rgba(255,255,255,0.45)" }}>
@@ -400,9 +391,14 @@ export default function Configurator() {
         >
           Start Your Design
         </button>
-        <p className="relative z-10 font-outfit text-[13px] mt-4" style={{ color: "rgba(255,255,255,0.3)" }}>
-          Or call us at (559) 555-0100
-        </p>
+        <button
+          onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+          className="relative z-10 font-outfit text-[13px] mt-4 transition-colors duration-200 hover:text-[#C9A84C]"
+          style={{ color: "rgba(255,255,255,0.3)", background: "none", border: "none" }}
+          data-cursor="pointer"
+        >
+          Or reach out directly
+        </button>
       </section>
     );
   }

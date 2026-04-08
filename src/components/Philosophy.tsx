@@ -72,8 +72,7 @@ export default function Philosophy() {
   return (
     <section
       ref={sectionRef}
-      className="flex items-center justify-center px-6 py-16 md:py-24"
-      style={{ paddingTop: 60, paddingBottom: 60 }}
+      className="flex items-center justify-center px-6 py-12 md:py-16"
     >
       <div className="max-w-[800px] w-full text-center">
         <h2
