@@ -378,24 +378,84 @@ Respond ONLY in JSON format with no markdown or backticks:
             {step === 3 && (
               <div className="text-center">
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-10" style={{ color: "#F5F5F0" }}>Select your stone</h2>
+
+                {/* Stone Type */}
                 <p className="font-outfit text-[12px] uppercase mb-6" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Stone Type</p>
-                <div className="flex flex-wrap justify-center gap-4 mb-10">
+                <div className="flex flex-wrap justify-center gap-3 mb-10">
                   {STONE_TYPES.map((t) => (
-                    <button key={t} onClick={() => update("stoneType", t)} className="px-5 py-2.5 border rounded-full font-outfit text-[12px] transition-all duration-200" style={pill(sel.stoneType === t)} data-cursor="pointer">{t}</button>
+                    <button
+                      key={t}
+                      onClick={() => update("stoneType", t)}
+                      className="flex items-center justify-center font-outfit text-[12px] transition-all duration-300 hover:scale-[1.05]"
+                      style={{
+                        width: 110, height: 56,
+                        border: sel.stoneType === t ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
+                        backgroundColor: "transparent",
+                        boxShadow: sel.stoneType === t ? "0 0 20px rgba(201,168,76,0.12)" : "none",
+                        color: sel.stoneType === t ? "#C9A84C" : "rgba(255,255,255,0.5)",
+                      }}
+                      data-cursor="pointer"
+                    >{t}</button>
                   ))}
                 </div>
+
+                {/* Shape */}
                 <p className="font-outfit text-[12px] uppercase mb-6" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Shape</p>
-                <div className="flex flex-wrap justify-center gap-4 mb-10">
-                  {STONE_SHAPES.map((s) => (
-                    <button key={s} onClick={() => update("stoneShape", s)} className="px-5 py-2.5 border rounded-full font-outfit text-[12px] transition-all duration-200" style={pill(sel.stoneShape === s)} data-cursor="pointer">{s}</button>
-                  ))}
+                <div className="flex flex-wrap justify-center gap-3 mb-10">
+                  {STONE_SHAPES.map((s) => {
+                    const selected = sel.stoneShape === s;
+                    const strokeColor = selected ? "rgba(201,168,76,0.9)" : "rgba(201,168,76,0.5)";
+                    const svgMap: Record<string, React.ReactNode> = {
+                      Round: <circle cx="25" cy="25" r="20" stroke={strokeColor} strokeWidth="1.5" fill="none" />,
+                      Oval: <ellipse cx="25" cy="25" rx="14" ry="22" stroke={strokeColor} strokeWidth="1.5" fill="none" />,
+                      Emerald: <polygon points="10,5 40,5 45,15 45,35 40,45 10,45 5,35 5,15" stroke={strokeColor} strokeWidth="1.5" fill="none" />,
+                      Cushion: <rect x="5" y="5" width="40" height="40" rx="10" stroke={strokeColor} strokeWidth="1.5" fill="none" />,
+                      Pear: <path d="M25,3 C35,15 42,28 38,38 C34,46 16,46 12,38 C8,28 15,15 25,3Z" stroke={strokeColor} strokeWidth="1.5" fill="none" />,
+                      Marquise: <ellipse cx="25" cy="25" rx="12" ry="24" stroke={strokeColor} strokeWidth="1.5" fill="none" transform="rotate(0,25,25)" />,
+                      Princess: <><rect x="7" y="7" width="36" height="36" stroke={strokeColor} strokeWidth="1.5" fill="none" /><line x1="7" y1="7" x2="43" y2="43" stroke={strokeColor} strokeWidth="0.5" /><line x1="43" y1="7" x2="7" y2="43" stroke={strokeColor} strokeWidth="0.5" /></>,
+                      Radiant: <polygon points="12,3 38,3 45,12 45,38 38,47 12,47 5,38 5,12" stroke={strokeColor} strokeWidth="1.5" fill="none" />,
+                      Asscher: <><rect x="7" y="7" width="36" height="36" stroke={strokeColor} strokeWidth="1.5" fill="none" /><rect x="14" y="14" width="22" height="22" stroke={strokeColor} strokeWidth="0.5" fill="none" /><rect x="20" y="20" width="10" height="10" stroke={strokeColor} strokeWidth="0.5" fill="none" /></>,
+                    };
+                    return (
+                      <button
+                        key={s}
+                        onClick={() => update("stoneShape", s)}
+                        className="flex flex-col items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.05]"
+                        style={{
+                          width: 90, height: 110,
+                          border: selected ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
+                          backgroundColor: "transparent",
+                          boxShadow: selected ? "0 0 20px rgba(201,168,76,0.12)" : "none",
+                        }}
+                        data-cursor="pointer"
+                      >
+                        <svg width="50" height="50" viewBox="0 0 50 50">{svgMap[s]}</svg>
+                        <span className="font-outfit text-[10px]" style={{ color: selected ? "#C9A84C" : "rgba(255,255,255,0.5)" }}>{s}</span>
+                      </button>
+                    );
+                  })}
                 </div>
+
+                {/* Size */}
                 <p className="font-outfit text-[12px] uppercase mb-6" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Size</p>
                 <div className="flex flex-wrap justify-center gap-3 mb-10">
                   {STONE_SIZES.map((s) => (
-                    <button key={s} onClick={() => update("stoneSize", s)} className="px-5 py-2.5 border rounded-full font-outfit text-[12px] transition-all duration-200" style={pill(sel.stoneSize === s)} data-cursor="pointer">{s}</button>
+                    <button
+                      key={s}
+                      onClick={() => update("stoneSize", s)}
+                      className="flex items-center justify-center font-outfit text-[13px] transition-all duration-300 hover:scale-[1.05]"
+                      style={{
+                        width: 70, height: 70,
+                        border: sel.stoneSize === s ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
+                        backgroundColor: "transparent",
+                        boxShadow: sel.stoneSize === s ? "0 0 20px rgba(201,168,76,0.12)" : "none",
+                        color: sel.stoneSize === s ? "#C9A84C" : "rgba(255,255,255,0.5)",
+                      }}
+                      data-cursor="pointer"
+                    >{s}</button>
                   ))}
                 </div>
+
                 <button onClick={next} className={`${btnPrimary} mt-4`} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Continue</button>
               </div>
             )}
