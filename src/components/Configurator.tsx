@@ -52,7 +52,8 @@ interface Selections {
   budget: number;
   timeline: string;
   date: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
 }
@@ -66,7 +67,7 @@ interface AiResult {
   next_steps: string;
 }
 
-const TOTAL_STEPS = 9;
+const TOTAL_STEPS = 11;
 
 function pick<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)]; }
 
@@ -75,7 +76,7 @@ function capitalizeName(raw: string): string {
 }
 
 function getDesignResponse(sel: Selections): AiResult {
-  const name = sel.name ? capitalizeName(sel.name) : "friend";
+  const name = sel.firstName ? capitalizeName(sel.firstName) : "friend";
 
   // Greetings
   const greetings: Record<string, string[]> = {
@@ -195,7 +196,7 @@ export default function Configurator() {
     type: "", metal: "", stoneType: "", stoneShape: "", stoneSize: "", settingStyle: "",
     ringSize: "", bandWidth: "Medium", engraving: "", specialRequests: "",
     files: [], links: [], budget: 5000, timeline: "", date: "",
-    name: "", email: "", phone: "",
+    firstName: "", lastName: "", email: "", phone: "",
   });
 
   const update = (key: keyof Selections, value: string | number | File[] | string[]) => {
@@ -223,9 +224,9 @@ export default function Configurator() {
     return () => { delete (window as unknown as Record<string, unknown>).__openConfigurator; };
   }, [open]);
 
-  // Step 9 cinematic reveal animation
+  // Step 11 cinematic reveal animation
   useEffect(() => {
-    if (step !== 9 || !aiResult || aiLoading || submitted || !resultRef.current) return;
+    if (step !== 11 || !aiResult || aiLoading || submitted || !resultRef.current) return;
     const container = resultRef.current;
     const els = container.querySelectorAll("[data-reveal]");
     const tags = container.querySelectorAll("[data-reveal-tag]");
@@ -302,25 +303,27 @@ export default function Configurator() {
   }, []);
 
   const next = () => {
-    let nextStep = step + 1;
-    if (step === 1 && (sel.type === "Earrings" || sel.type === "Other")) nextStep = 3;
-    if (step === 2 && sel.type !== "Ring") nextStep = 3;
-    if (step === 3 && sel.type !== "Ring") nextStep = 6;
-    changeStep(nextStep, 1);
+    let n = step + 1;
+    // Earrings/Other skip metal (step 2) and setting (step 6)
+    if (step === 1 && (sel.type === "Earrings" || sel.type === "Other")) n = 3;
+    if (step === 5 && (sel.type === "Earrings" || sel.type === "Other")) n = 7;
+    if (step === 5 && (sel.type === "Necklace" || sel.type === "Bracelet")) n = 7;
+    // Ring goes through all steps including 6
+    changeStep(n, 1);
   };
 
   const back = () => {
-    let prevStep = step - 1;
-    if (step === 3 && (sel.type === "Earrings" || sel.type === "Other")) prevStep = 1;
-    if (step === 6 && sel.type !== "Ring") prevStep = 3;
-    if (step === 3 && (sel.type === "Necklace" || sel.type === "Bracelet")) prevStep = 2;
-    if (prevStep < 1) prevStep = 1;
-    changeStep(prevStep, -1);
+    let p = step - 1;
+    if (step === 3 && (sel.type === "Earrings" || sel.type === "Other")) p = 1;
+    if (step === 7 && (sel.type === "Earrings" || sel.type === "Other")) p = 5;
+    if (step === 7 && (sel.type === "Necklace" || sel.type === "Bracelet")) p = 5;
+    if (p < 1) p = 1;
+    changeStep(p, -1);
   };
 
   const generateDesignSummary = () => {
     setAiLoading(true);
-    changeStep(9, 1);
+    changeStep(11, 1);
     setTimeout(() => {
       const result = getDesignResponse(sel);
       setAiResult(result);
@@ -345,7 +348,8 @@ export default function Configurator() {
       timeline: sel.timeline,
       date: sel.date,
       inspiration_links: sel.links.join(", "),
-      name: sel.name,
+      first_name: sel.firstName,
+      last_name: sel.lastName,
       email: sel.email,
       phone: sel.phone,
     };
@@ -403,6 +407,8 @@ export default function Configurator() {
     );
   }
 
+  const fullName = `${sel.firstName} ${sel.lastName}`.trim();
+
   // Fullscreen configurator overlay
   return (
     <>
@@ -426,7 +432,7 @@ export default function Configurator() {
         <div ref={contentRef} className="min-h-screen flex items-center justify-center px-6 py-24">
           <div className="max-w-2xl w-full">
 
-            {/* STEP 1 */}
+            {/* STEP 1: What are we creating */}
             {step === 1 && (
               <div className="text-center">
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-12" style={{ color: "#F5F5F0" }}>What are we creating?</h2>
@@ -484,45 +490,49 @@ export default function Configurator() {
               <div className="text-center">
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-12" style={{ color: "#F5F5F0" }}>Choose your metal</h2>
                 <div className="flex flex-wrap justify-center gap-6">
-                  {METALS.map((m) => (
-                    <button
-                      key={m.name}
-                      onClick={() => update("metal", m.name)}
-                      className="flex flex-col items-center gap-3 transition-all duration-300"
-                      data-cursor="pointer"
-                    >
-                      <div
-                        className="w-16 h-16 rounded-full transition-all duration-300"
-                        style={{
-                          background: m.gradient,
-                          border: sel.metal === m.name ? "2px solid #C9A84C" : "2px solid transparent",
-                          boxShadow: sel.metal === m.name ? "0 0 12px rgba(201,168,76,0.3)" : "none",
-                        }}
-                      />
-                      <span className="font-outfit text-[11px]" style={{ color: sel.metal === m.name ? "#C9A84C" : "rgba(255,255,255,0.4)" }}>
-                        {m.name}
-                      </span>
-                    </button>
-                  ))}
+                  {METALS.map((m) => {
+                    const selected = sel.metal === m.name;
+                    return (
+                      <button
+                        key={m.name}
+                        onClick={() => update("metal", m.name)}
+                        className="flex flex-col items-center gap-3 transition-all duration-300"
+                        data-cursor="pointer"
+                      >
+                        <div
+                          className="w-16 h-16 rounded-full transition-all duration-300"
+                          style={{
+                            background: m.gradient,
+                            border: selected ? "3px solid #C9A84C" : "2px solid transparent",
+                            boxShadow: selected ? "0 0 20px rgba(201,168,76,0.4)" : "none",
+                          }}
+                        />
+                        <span className="font-outfit text-[11px]" style={{ color: selected ? "#C9A84C" : "rgba(255,255,255,0.4)" }}>
+                          {m.name}
+                        </span>
+                        {selected && (
+                          <span className="font-outfit text-[10px] uppercase" style={{ letterSpacing: "0.1em", color: "#C9A84C" }}>Selected</span>
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
+                <p className="font-outfit text-[13px] italic max-w-[500px] mx-auto text-center mt-4" style={{ color: "rgba(255,255,255,0.25)" }}>Each metal has its own character. Not sure? Our designers will help you decide.</p>
               </div>
             )}
 
-            {/* STEP 3: Stone */}
+            {/* STEP 3: Stone Type */}
             {step === 3 && (
               <div className="text-center">
-                <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-10" style={{ color: "#F5F5F0" }}>Select your stone</h2>
-
-                {/* Stone Type */}
-                <p className="font-outfit text-[12px] uppercase mb-6" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Stone Type</p>
-                <div className="flex flex-wrap justify-center gap-3 mb-10">
+                <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-10" style={{ color: "#F5F5F0" }}>What kind of stone?</h2>
+                <div className="flex flex-wrap justify-center gap-3 mb-6">
                   {STONE_TYPES.map((t) => (
                     <button
                       key={t}
                       onClick={() => update("stoneType", t)}
                       className="flex items-center justify-center font-outfit text-[12px] transition-all duration-300 hover:scale-[1.05]"
                       style={{
-                        width: 110, height: 56,
+                        width: 120, height: 70,
                         border: sel.stoneType === t ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
                         backgroundColor: "transparent",
                         boxShadow: sel.stoneType === t ? "0 0 20px rgba(201,168,76,0.12)" : "none",
@@ -532,10 +542,15 @@ export default function Configurator() {
                     >{t}</button>
                   ))}
                 </div>
+                <p className="font-outfit text-[13px] italic max-w-[500px] mx-auto text-center mt-4" style={{ color: "rgba(255,255,255,0.25)" }}>Every stone tells a different story. Lab diamonds and moissanite offer exceptional brilliance at a different price point.</p>
+              </div>
+            )}
 
-                {/* Shape */}
-                <p className="font-outfit text-[12px] uppercase mb-6" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Shape</p>
-                <div className="flex flex-wrap justify-center gap-3 mb-10">
+            {/* STEP 4: Stone Shape */}
+            {step === 4 && (
+              <div className="text-center">
+                <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-10" style={{ color: "#F5F5F0" }}>Choose your shape</h2>
+                <div className="flex flex-wrap justify-center gap-3 mb-6">
                   {STONE_SHAPES.map((s) => {
                     const selected = sel.stoneShape === s;
                     const strokeColor = selected ? "rgba(201,168,76,0.9)" : "rgba(201,168,76,0.5)";
@@ -569,10 +584,15 @@ export default function Configurator() {
                     );
                   })}
                 </div>
+                <p className="font-outfit text-[13px] italic max-w-[500px] mx-auto text-center mt-4" style={{ color: "rgba(255,255,255,0.25)" }}>The shape defines the personality of your piece. Round is timeless, emerald is architectural, pear is bold. There&apos;s no wrong answer.</p>
+              </div>
+            )}
 
-                {/* Size */}
-                <p className="font-outfit text-[12px] uppercase mb-6" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Size</p>
-                <div className="flex flex-wrap justify-center gap-3 mb-10">
+            {/* STEP 5: Stone Size */}
+            {step === 5 && (
+              <div className="text-center">
+                <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-10" style={{ color: "#F5F5F0" }}>How big are we going?</h2>
+                <div className="flex flex-wrap justify-center gap-3 mb-6">
                   {STONE_SIZES.map((s) => (
                     <button
                       key={s}
@@ -589,19 +609,18 @@ export default function Configurator() {
                     >{s}</button>
                   ))}
                 </div>
-                <p className="font-outfit text-[12px] italic mt-4" style={{ color: "rgba(255,255,255,0.25)" }}>Don&apos;t worry — these are starting points. We&apos;ll refine every detail together during your consultation.</p>
-
+                <p className="font-outfit text-[13px] italic max-w-[500px] mx-auto text-center mt-4" style={{ color: "rgba(255,255,255,0.25)" }}>This is a starting point — not a commitment. We&apos;ll walk you through exact carat options during your consultation.</p>
               </div>
             )}
 
-            {/* STEP 4: Setting */}
-            {step === 4 && (
+            {/* STEP 6: Setting */}
+            {step === 6 && (
               <div className="text-center">
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-12" style={{ color: "#F5F5F0" }}>Choose your setting</h2>
                 <div className="flex flex-col items-center gap-6 max-w-[900px] mx-auto">
-                  {/* Top row: 4 cards */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
-                    {SETTINGS.slice(0, 4).map((s) => (
+                  {/* Top row: 3 cards (Solitaire, Halo, Three Stone) */}
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-[680px]">
+                    {SETTINGS.slice(0, 3).map((s) => (
                       <button
                         key={s}
                         onClick={() => update("settingStyle", s)}
@@ -619,16 +638,36 @@ export default function Configurator() {
                       </button>
                     ))}
                   </div>
-                  {/* Bottom row: 3 cards centered */}
+                  {/* Middle row: 3 cards (Pavé Band, Cathedral, Vintage/Milgrain) */}
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-[680px]">
-                    {SETTINGS.slice(4).map((s) => (
+                    {SETTINGS.slice(3, 6).map((s) => (
                       <button
                         key={s}
                         onClick={() => update("settingStyle", s)}
                         className="flex flex-col items-center justify-end p-5 transition-all duration-300 hover:scale-[1.04]"
                         style={{
                           aspectRatio: "3/4",
-                          border: sel.settingStyle === s ? "1px solid #C9A84C" : s === "Totally Custom" ? "1px dashed rgba(201,168,76,0.3)" : "1px solid rgba(201,168,76,0.15)",
+                          border: sel.settingStyle === s ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
+                          backgroundColor: "transparent",
+                          boxShadow: sel.settingStyle === s ? "0 0 30px rgba(201,168,76,0.15)" : "none",
+                        }}
+                        data-cursor="pointer"
+                      >
+                        <img src={SETTING_IMAGES[s]} alt={s} className="w-full flex-1 object-contain" />
+                        <span className="font-outfit text-[12px] uppercase mt-3" style={{ letterSpacing: "0.15em", color: sel.settingStyle === s ? "#C9A84C" : "rgba(255,255,255,0.6)" }}>{s}</span>
+                      </button>
+                    ))}
+                  </div>
+                  {/* Bottom row: Totally Custom alone at wider width */}
+                  <div className="w-full max-w-[400px]">
+                    {SETTINGS.slice(6).map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => update("settingStyle", s)}
+                        className="flex flex-col items-center justify-end p-5 transition-all duration-300 hover:scale-[1.04] w-full"
+                        style={{
+                          aspectRatio: "3/4",
+                          border: sel.settingStyle === s ? "1px solid #C9A84C" : "1px dashed rgba(201,168,76,0.3)",
                           backgroundColor: "transparent",
                           boxShadow: sel.settingStyle === s ? "0 0 30px rgba(201,168,76,0.15)" : "none",
                         }}
@@ -643,41 +682,12 @@ export default function Configurator() {
               </div>
             )}
 
-            {/* STEP 5: Details */}
-            {step === 5 && (
-              <div>
-                <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-10 text-center" style={{ color: "#F5F5F0" }}>The details</h2>
-                <div className="flex flex-col gap-8 max-w-md mx-auto">
-                  <div>
-                    <label className="font-outfit text-[12px] uppercase block mb-2" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Ring Size</label>
-                    <input type="text" value={sel.ringSize} onChange={(e) => update("ringSize", e.target.value)} placeholder="e.g. 7, 5.25, 3.75" className={inputClass} />
-                    <p className="font-outfit text-[12px] italic mt-2" style={{ color: "rgba(255,255,255,0.25)" }}>Not sure? No problem — we&apos;ll help you find your perfect fit during your consultation.</p>
-                  </div>
-                  <div>
-                    <label className="font-outfit text-[12px] uppercase block mb-3" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Band Width</label>
-                    <div className="flex gap-3">
-                      {["Thin", "Medium", "Wide"].map((w) => (
-                        <button key={w} onClick={() => update("bandWidth", w)} className="px-5 py-2.5 border rounded-full font-outfit text-[12px] transition-all duration-200" style={pill(sel.bandWidth === w)} data-cursor="pointer">{w}</button>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <label className="font-outfit text-[12px] uppercase block mb-2" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Engraving (optional)</label>
-                    <input type="text" value={sel.engraving} onChange={(e) => update("engraving", e.target.value)} placeholder="Add a personal inscription" className={inputClass} />
-                  </div>
-                  <div>
-                    <label className="font-outfit text-[12px] uppercase block mb-2" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Special Requests</label>
-                    <textarea value={sel.specialRequests} onChange={(e) => update("specialRequests", e.target.value)} rows={3} placeholder="Anything else we should know?" className={`${inputClass} resize-none`} />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 6: Inspiration */}
-            {step === 6 && (
+            {/* STEP 7: Inspiration */}
+            {step === 7 && (
               <div>
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-10 text-center" style={{ color: "#F5F5F0" }}>Share your inspiration</h2>
                 <div className="max-w-md mx-auto flex flex-col gap-8">
+                  <p className="font-outfit text-[13px] italic max-w-[500px] mx-auto text-center" style={{ color: "rgba(255,255,255,0.25)" }}>This helps us understand your aesthetic. Pinterest boards, Instagram saves, even a napkin sketch — anything goes.</p>
                   <div
                     onDrop={(e) => { e.preventDefault(); if (e.dataTransfer.files) update("files", [...sel.files, ...Array.from(e.dataTransfer.files)]); }}
                     onDragOver={(e) => e.preventDefault()}
@@ -714,14 +724,42 @@ export default function Configurator() {
                     </div>
                   )}
                 </div>
-                <div className="text-center mt-6">
-                  <button onClick={next} className="font-outfit text-[12px]" style={{ color: "rgba(255,255,255,0.3)" }} data-cursor="pointer">Skip — my selections say it all</button>
+              </div>
+            )}
+
+            {/* STEP 8: Details */}
+            {step === 8 && (
+              <div>
+                <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-10 text-center" style={{ color: "#F5F5F0" }}>The details</h2>
+                <p className="font-outfit text-[13px] italic max-w-[500px] mx-auto text-center mb-8" style={{ color: "rgba(255,255,255,0.25)" }}>The more you share, the closer we get to perfection on the first try.</p>
+                <div className="flex flex-col gap-8 max-w-md mx-auto">
+                  <div>
+                    <label className="font-outfit text-[12px] uppercase block mb-2" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Ring Size</label>
+                    <input type="text" value={sel.ringSize} onChange={(e) => update("ringSize", e.target.value)} placeholder="e.g. 7, 5.25, 3.75" className={inputClass} />
+                    <p className="font-outfit text-[12px] italic mt-2" style={{ color: "rgba(255,255,255,0.25)" }}>Not sure? No problem — we&apos;ll help you find your perfect fit during your consultation.</p>
+                  </div>
+                  <div>
+                    <label className="font-outfit text-[12px] uppercase block mb-3" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Band Width</label>
+                    <div className="flex gap-3">
+                      {["Thin", "Medium", "Wide"].map((w) => (
+                        <button key={w} onClick={() => update("bandWidth", w)} className="px-5 py-2.5 border rounded-full font-outfit text-[12px] transition-all duration-200" style={pill(sel.bandWidth === w)} data-cursor="pointer">{w}</button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="font-outfit text-[12px] uppercase block mb-2" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Engraving (optional)</label>
+                    <input type="text" value={sel.engraving} onChange={(e) => update("engraving", e.target.value)} placeholder="Add a personal inscription" className={inputClass} />
+                  </div>
+                  <div>
+                    <label className="font-outfit text-[12px] uppercase block mb-2" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Describe Your Dream Piece</label>
+                    <textarea value={sel.specialRequests} onChange={(e) => update("specialRequests", e.target.value)} rows={3} placeholder="Paint us a picture — what does your perfect piece look like? Any details, feelings, or must-haves we should know about?" className={`${inputClass} resize-none`} />
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* STEP 7: Budget & Timeline */}
-            {step === 7 && (
+            {/* STEP 9: Budget & Timeline */}
+            {step === 9 && (
               <div>
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-10 text-center" style={{ color: "#F5F5F0" }}>Budget and timeline</h2>
                 <div className="max-w-md mx-auto flex flex-col gap-10">
@@ -736,6 +774,7 @@ export default function Configurator() {
                     <div className="flex justify-between font-outfit text-[11px] mt-1" style={{ color: "rgba(255,255,255,0.25)" }}>
                       <span>$500</span><span>$50,000+</span>
                     </div>
+                    <p className="font-outfit text-[13px] italic max-w-[500px] mx-auto text-center mt-4" style={{ color: "rgba(255,255,255,0.25)" }}>This helps us select the right stones and materials. Every budget gets our full creative attention.</p>
                   </div>
                   <div>
                     <p className="font-outfit text-[12px] uppercase mb-4" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Timeline</p>
@@ -762,12 +801,16 @@ export default function Configurator() {
               </div>
             )}
 
-            {/* STEP 8: Your Details */}
-            {step === 8 && (
+            {/* STEP 10: Your Details */}
+            {step === 10 && (
               <div>
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-10 text-center" style={{ color: "#F5F5F0" }}>Your details</h2>
+                <p className="font-outfit text-[13px] italic max-w-[500px] mx-auto text-center mb-8" style={{ color: "rgba(255,255,255,0.25)" }}>We&apos;ll only use this to discuss your design. No spam, ever.</p>
                 <div className="max-w-md mx-auto flex flex-col gap-6">
-                  <input type="text" value={sel.name} onChange={(e) => update("name", e.target.value)} placeholder="Name" required className={inputClass} />
+                  <div className="flex gap-4">
+                    <input type="text" value={sel.firstName} onChange={(e) => update("firstName", e.target.value)} placeholder="First Name" required className={inputClass} />
+                    <input type="text" value={sel.lastName} onChange={(e) => update("lastName", e.target.value)} placeholder="Last Name" required className={inputClass} />
+                  </div>
                   <input type="email" value={sel.email} onChange={(e) => update("email", e.target.value)} placeholder="Email" required className={inputClass} />
                   <input type="tel" value={sel.phone} onChange={(e) => update("phone", e.target.value)} placeholder="Phone" className={inputClass} />
                 </div>
@@ -779,22 +822,29 @@ export default function Configurator() {
                     style={{ letterSpacing: "0.15em" }}
                     data-cursor="pointer"
                   >
-                    Generate My Design Summary
+                    Reveal My Consultation
                   </button>
                 </div>
               </div>
             )}
 
-            {/* Shared bottom navigation for steps 2-7 */}
-            {step >= 2 && step <= 7 && !submitted && (
+            {/* Shared bottom navigation for steps 2-9 */}
+            {step >= 2 && step <= 9 && !submitted && (
               <div className="flex justify-center gap-4 mt-12">
                 <button onClick={back} className={btnSecondary} style={{ letterSpacing: "0.15em", borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.5)" }} data-cursor="pointer">Back</button>
-                <button onClick={next} className={btnPrimary} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Continue</button>
+                {step === 7 ? (
+                  <div className="flex gap-4">
+                    <button onClick={next} className={btnSecondary} style={{ letterSpacing: "0.15em", borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.5)" }} data-cursor="pointer">Skip</button>
+                    <button onClick={next} className={btnPrimary} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Continue</button>
+                  </div>
+                ) : (
+                  <button onClick={next} className={btnPrimary} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Continue</button>
+                )}
               </div>
             )}
 
-            {/* STEP 9: AI Result */}
-            {step === 9 && (
+            {/* STEP 11: AI Result */}
+            {step === 11 && (
               <div className="text-center">
                 {aiLoading && (
                   <div className="py-20">
@@ -810,8 +860,8 @@ export default function Configurator() {
 
                 {submitted && (
                   <div className="py-20">
-                    <h3 className="font-bodoni text-[32px] font-normal" style={{ color: "#F5F5F0" }}>Thank you.</h3>
-                    <p className="font-outfit text-[15px] mt-4" style={{ color: "rgba(255,255,255,0.5)" }}>We&apos;ll be in touch within 24 hours to discuss your vision.</p>
+                    <h3 className="font-bodoni text-[32px] font-normal" style={{ color: "#F5F5F0" }}>Thank you, {sel.firstName ? capitalizeName(sel.firstName) : "friend"}.</h3>
+                    <p className="font-outfit text-[15px] mt-4" style={{ color: "rgba(255,255,255,0.5)" }}>Your vision is in excellent hands. We&apos;ll be in touch within 24 hours — prepare to be impressed.</p>
                     <button onClick={close} className={`${btnPrimary} mt-8`} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Close</button>
                   </div>
                 )}
@@ -822,13 +872,13 @@ export default function Configurator() {
                     {aiResult ? (
                       <div className="flex flex-col items-center gap-0">
                         {/* Diamond accent */}
-                        <p data-reveal="0.0" data-reveal-y="0" className="text-[8px] mb-6" style={{ opacity: 0, color: "#C9A84C" }}>◆</p>
+                        <p data-reveal="0.0" data-reveal-y="0" className="text-[8px] mb-6" style={{ opacity: 0, color: "#C9A84C" }}>&#9670;</p>
 
                         {/* Header label */}
                         <p data-reveal="0.0" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-10" style={{ opacity: 0, letterSpacing: "0.2em", color: "#C9A84C" }}>Your Design Consultation</p>
 
                         {/* Exclusive watermark */}
-                        <p data-reveal="0.3" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-4" style={{ opacity: 0, letterSpacing: "0.3em", color: "rgba(201,168,76,0.2)" }}>Designed exclusively for {sel.name ? capitalizeName(sel.name) : "you"}</p>
+                        <p data-reveal="0.3" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-4" style={{ opacity: 0, letterSpacing: "0.3em", color: "rgba(201,168,76,0.2)" }}>Designed exclusively for {fullName ? capitalizeName(fullName) : "you"}</p>
 
                         {/* Greeting — hero text with shimmer */}
                         <p data-reveal="0.5" data-reveal-y="20" className="gradient-text font-bodoni text-[36px] md:text-[48px] lg:text-[56px] font-normal mb-12 md:mb-16" style={{ opacity: 0 }}>{aiResult.greeting}</p>
@@ -874,7 +924,7 @@ export default function Configurator() {
                         <p data-reveal="4.4" data-reveal-y="10" className="font-outfit text-[14px] leading-relaxed mb-10" style={{ opacity: 0, color: "rgba(255,255,255,0.5)" }}>{aiResult.next_steps}</p>
 
                         {/* Personal sign-off */}
-                        <p data-reveal="4.8" data-reveal-y="10" className="font-bodoni text-[20px] md:text-[24px] italic mb-12 md:mb-16" style={{ opacity: 0, color: "#C9A84C" }}>We can&apos;t wait to create this with you, {sel.name ? capitalizeName(sel.name) : "friend"}.</p>
+                        <p data-reveal="4.8" data-reveal-y="10" className="font-bodoni text-[20px] md:text-[24px] italic mb-12 md:mb-16" style={{ opacity: 0, color: "#C9A84C" }}>We can&apos;t wait to create this with you, {sel.firstName ? capitalizeName(sel.firstName) : "friend"}.</p>
 
                         {/* Action buttons */}
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">

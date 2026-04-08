@@ -29,7 +29,8 @@
       "Bash(powershell -Command \"Invoke-WebRequest -Uri 'https://images.unsplash.com/photo-1599459183200-59c7687a0275?w=800&auto=format&fit=crop&q=80' -OutFile 'public/images/gallery/necklace1.jpg'\")",
       "Bash(ls -la public/images/gallery/*.jpg)",
       "Bash(ls public/images/gallery/*.png)",
-      "Bash(ls public/images/gallery/*.jpg)"
+      "Bash(ls public/images/gallery/*.jpg)",
+      "Bash(npx tsc:*)"
     ],
     "additionalDirectories": [
       "C:\\Users\\SS\\Desktop\\clientwebsites\\jewelry\\montaire\\src\\components",
