@@ -373,9 +373,11 @@ export default function Configurator() {
 
   if (!isOpen) {
     return (
-      <section id="custom" className="relative flex flex-col items-center justify-center px-6 py-20 md:py-32 overflow-hidden">
+      <section id="custom" className="relative flex flex-col items-center justify-center px-6 pt-20 md:pt-32 pb-12 md:pb-16 overflow-hidden">
         {/* Subtle background image */}
         <img src="/images/process/sketch.png" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none" style={{ opacity: 0.06 }} />
+        {/* Bottom fade to black */}
+        <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ height: 150, background: "linear-gradient(to bottom, transparent, #000000)", zIndex: 1 }} />
 
         <h2 className="relative z-10 font-bodoni text-[40px] md:text-[64px] font-normal text-center leading-tight" style={{ color: "#F5F5F0" }}>
           Your vision. Our craft.

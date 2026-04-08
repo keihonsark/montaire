@@ -8,7 +8,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
-  const aboutRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const formSectionRef = useRef<HTMLDivElement>(null);
   const [showForm, setShowForm] = useState(false);
@@ -17,12 +16,8 @@ export default function Contact() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!aboutRef.current || !ctaRef.current) return;
+    if (!ctaRef.current) return;
     const ctx = gsap.context(() => {
-      gsap.fromTo(aboutRef.current!.children, { y: 30, opacity: 0 }, {
-        y: 0, opacity: 1, stagger: 0.12, duration: 0.7, ease: "power2.out",
-        scrollTrigger: { trigger: aboutRef.current, start: "top 75%", toggleActions: "play none none none" },
-      });
       gsap.fromTo(ctaRef.current!.children, { y: 30, opacity: 0 }, {
         y: 0, opacity: 1, stagger: 0.1, duration: 0.7, ease: "power2.out",
         scrollTrigger: { trigger: ctaRef.current, start: "top 80%", toggleActions: "play none none none" },
@@ -67,24 +62,18 @@ export default function Contact() {
 
   return (
     <section ref={sectionRef} id="contact">
-      {/* About + CTA merged */}
-      <div className="flex items-center justify-center px-6 py-16 md:py-20">
-        <div ref={aboutRef} className="text-center max-w-2xl flex flex-col items-center">
-          <h2 className="font-bodoni text-[28px] md:text-[36px] font-normal" style={{ color: "#F5F5F0" }}>
-            Fine jewelry should be personal.
-          </h2>
-          <p className="font-outfit text-[15px] md:text-[16px] font-light leading-[1.7] mt-6 max-w-xl" style={{ color: "rgba(255,255,255,0.4)" }}>
-            Every piece we create begins with a conversation and ends with something extraordinary. Based in California, we work with clients worldwide to design and craft jewelry that tells their story.
-          </p>
-        </div>
-      </div>
-
-      {/* CTA */}
-      <div className="flex flex-col items-center justify-center px-6 py-8">
+      {/* CTA Section */}
+      <div className="flex flex-col items-center justify-center px-6 py-20 md:py-28">
         <div ref={ctaRef} className="text-center flex flex-col items-center">
-          <h3 className="font-bodoni text-[32px] md:text-[40px] font-normal" style={{ color: "#F5F5F0" }}>
+          <p className="font-outfit text-[11px] uppercase mb-6" style={{ letterSpacing: "0.25em", color: "#C9A84C" }}>
+            Ready to begin?
+          </p>
+          <h2 className="font-bodoni text-[32px] md:text-[40px] font-normal" style={{ color: "#F5F5F0" }}>
             Let&apos;s create something extraordinary.
-          </h3>
+          </h2>
+          <p className="font-outfit text-[15px] font-light leading-[1.7] mt-6 max-w-xl" style={{ color: "rgba(255,255,255,0.45)" }}>
+            Every piece begins with a conversation. Tell us your vision — we&apos;ll handle the rest.
+          </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mt-10">
             <a href="mailto:hello@montaire.com" className={btnPrimary} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">

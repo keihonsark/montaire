@@ -150,7 +150,7 @@ export default function DiamondSearch() {
 
 
   return (
-    <div className="py-20 md:py-28 px-4 md:px-8" style={{ backgroundColor: "#000000" }}>
+    <div className="pt-8 md:pt-12 pb-20 md:pb-28 px-4 md:px-8" style={{ backgroundColor: "#000000" }}>
       <style jsx>{`
         .diamond-scroll::-webkit-scrollbar { display: none; }
         @keyframes loadSlide { 0% { transform:translateX(-100%); } 100% { transform:translateX(400%); } }
