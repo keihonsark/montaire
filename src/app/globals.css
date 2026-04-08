@@ -110,31 +110,23 @@ html {
   100% { background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 6px rgba(255, 255, 255, 0.3); }
 }
 
-/* Section ambient glow — slow drifting radial light */
-@keyframes ambientDrift {
-  0% { transform: translate(0%, 0%) scale(1); opacity: 0.03; }
-  33% { transform: translate(5%, -3%) scale(1.1); opacity: 0.05; }
-  66% { transform: translate(-3%, 5%) scale(0.95); opacity: 0.03; }
-  100% { transform: translate(0%, 0%) scale(1); opacity: 0.03; }
-}
-
+/* Section ambient glow — static radial light */
 .ambient-glow {
   position: absolute;
-  width: 800px;
-  height: 800px;
+  width: 1000px;
+  height: 1000px;
   border-radius: 50%;
   pointer-events: none;
-  filter: blur(120px);
-  animation: ambientDrift 20s ease-in-out infinite;
+  filter: blur(80px);
   z-index: 0;
 }
 
 .ambient-glow-gold {
-  background: radial-gradient(circle, rgba(201, 168, 76, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(201, 168, 76, 0.25) 0%, transparent 70%);
 }
 
 .ambient-glow-white {
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
 }
 
 /* Subtle noise texture overlay for depth */

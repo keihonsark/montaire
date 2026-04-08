@@ -73,8 +73,8 @@ export default function Contact() {
   const btnSecondary = "px-9 py-3.5 font-outfit text-[12px] uppercase border text-center transition-all duration-300 hover:border-montaire-gold hover:text-montaire-gold active:scale-[0.98]";
 
   return (
-    <section ref={sectionRef} id="contact" className="relative">
-      <div className="ambient-glow ambient-glow-gold" style={{ top: '30%', left: '50%', transform: 'translateX(-50%)' }} />
+    <section ref={sectionRef} id="contact" className="relative" style={{ overflow: 'visible' }}>
+      <div className="ambient-glow ambient-glow-gold" style={{ top: '30%', left: '50%', transform: 'translateX(-50%)', zIndex: 0 }} />
       {/* About section merged in */}
       <div className="min-h-screen flex items-center justify-center px-6 py-24">
         <div ref={aboutRef} className="text-center max-w-2xl flex flex-col items-center">

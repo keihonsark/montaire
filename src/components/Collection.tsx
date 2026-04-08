@@ -53,7 +53,7 @@ export default function Collection() {
       ScrollTrigger.create({
         trigger: pinRef.current,
         start: "top top",
-        end: () => "+=" + (totalWidth - window.innerWidth),
+        end: () => "+=" + (totalWidth - window.innerWidth * 1.15),
         pin: true,
         scrub: 1,
         animation: scrollTween,
@@ -101,7 +101,6 @@ export default function Collection() {
 
   return (
     <section ref={sectionRef} id="collection" className="relative" style={{ backgroundColor: "#000000" }}>
-      <div className="ambient-glow ambient-glow-white" style={{ top: '40%', left: '-5%' }} />
       {/* Title */}
       <div ref={titleRef} className="py-24 md:py-32 text-center" style={{ opacity: 0 }}>
         <p className="font-outfit text-[11px] uppercase mb-4" style={{ letterSpacing: "0.25em", color: "#C9A84C" }}>
