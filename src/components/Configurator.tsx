@@ -791,7 +791,7 @@ export default function Configurator() {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
                       <button onClick={submitToFormspree} className={btnPrimary} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Submit &amp; Book Consultation</button>
-                      <button onClick={() => { setStep(1); setAiResult(null); animateStep(-1); }} className={btnSecondary} style={{ letterSpacing: "0.15em", borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.5)" }} data-cursor="pointer">Refine My Choices</button>
+                      <button onClick={() => { setAiResult(null); changeStep(1, -1); }} className={btnSecondary} style={{ letterSpacing: "0.15em", borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.5)" }} data-cursor="pointer">Refine My Choices</button>
                     </div>
                   </div>
                 )}
