@@ -23,9 +23,7 @@ export default function Home() {
       </section>
 
       <Collection />
-      <section id="process">
-        <Process />
-      </section>
+      <Process />
       <section id="configure">
         <Configurator />
       </section>
