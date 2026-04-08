@@ -59,6 +59,107 @@ interface AiResult {
 
 const TOTAL_STEPS = 9;
 
+function pick<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function getDesignResponse(sel: Selections): AiResult {
+  const name = sel.name || "friend";
+
+  // Greetings
+  const greetings: Record<string, string[]> = {
+    Ring: [
+      `Oh, ${name}... you're about to make someone very, very speechless.`,
+      `${name}, darling — this ring is going to stop traffic.`,
+      `Well, ${name}, someone clearly has impeccable taste.`,
+    ],
+    Necklace: [
+      `${name}, this necklace is going to be the reason people forget how to make eye contact.`,
+      `Darling ${name}, you just designed something museum-worthy.`,
+      `${name} — necks were literally invented for pieces like this.`,
+    ],
+    Bracelet: [
+      `${name}, this bracelet is going to make every other wrist in the room feel underdressed.`,
+      `Oh ${name}... this is dangerously elegant.`,
+      `${name}, I hope you're ready for the compliments. They won't stop.`,
+    ],
+    Earrings: [
+      `${name}, these earrings are going to outshine chandeliers.`,
+      `Darling ${name}, people are going to lean in just to get a closer look.`,
+      `${name} — ears everywhere are jealous and they don't even know it yet.`,
+    ],
+  };
+  const defaultGreetings = [
+    `${name}, you're not designing jewelry — you're designing a legacy.`,
+    `Oh, ${name}... this is going to be talked about.`,
+    `${name}, I've seen a lot of custom work, and this? This is special.`,
+  ];
+  const greeting = pick(greetings[sel.type] || defaultGreetings);
+
+  // Taste compliment
+  const metalCompliments: Record<string, string> = {
+    Platinum: "Platinum — the metal of royalty and rocket ships. You clearly don't do things halfway.",
+    "Rose Gold": "Rose gold? You have that effortless European sensibility that most people spend years trying to fake.",
+    "Yellow Gold": "Classic yellow gold. You understand that real luxury doesn't chase trends — it sets them.",
+    "White Gold": "White gold — refined, understated, devastating. You clearly know the power of quiet confidence.",
+  };
+  let metalComp = "";
+  for (const [key, val] of Object.entries(metalCompliments)) {
+    if (sel.metal.includes(key)) { metalComp = val; break; }
+  }
+
+  const shapeCompliments: Record<string, string> = {
+    Round: "A round brilliant — the most light, the most fire, the most everything. Maximalist in the best possible way.",
+    Emerald: "An emerald cut. Hall-of-mirrors drama. You clearly appreciate architecture as much as sparkle.",
+    Oval: "An oval — elongated, elegant, and just a little bit unexpected. Like you, I suspect.",
+    Cushion: "A cushion cut — soft enough to be romantic, brilliant enough to blind. Perfect tension.",
+    Pear: "A pear shape — bold, unconventional, unforgettable. This isn't your grandmother's jewelry. Well, maybe if your grandmother was Audrey Hepburn.",
+    Marquise: "A marquise — the cut that literally means 'aristocrat.' You don't need me to tell you that.",
+    Princess: "A princess cut — geometric precision meets unbridled brilliance. Modern royalty, basically.",
+    Radiant: "A radiant cut — it's called 'radiant' for a reason. All the fire, all the time.",
+    Asscher: "An Asscher cut — Art Deco perfection. You have a vintage soul with contemporary confidence.",
+  };
+  const shapeComp = shapeCompliments[sel.stoneShape] || "";
+  const fallbackComp = "Your combination speaks volumes about your taste — bold where it matters, refined everywhere else.";
+  const taste_compliment = [metalComp, shapeComp].filter(Boolean).join(" ") || fallbackComp;
+
+  // Engraving note
+  const engraving_note = sel.engraving
+    ? `Engraved with '${sel.engraving}' — because the best details are the ones only you know about. `
+    : "";
+
+  // Design summary
+  const summaryTemplates: Record<string, string> = {
+    Ring: `Picture this: a ${sel.stoneSize || "stunning"} ${sel.stoneShape || "brilliant"} ${sel.stoneType || "diamond"} catching light from every conceivable angle, cradled in a ${sel.settingStyle || "custom"} setting, forged in ${sel.metal || "precious metal"}. The band — ${sel.bandWidth || "perfectly proportioned"} — sits perfectly, as if it was always meant to be there. ${engraving_note}This isn't just a ring. It's a declaration.`,
+    Necklace: `Imagine a ${sel.stoneType || "diamond"} pendant suspended on ${sel.metal || "precious metal"}, catching light with every breath. The kind of piece that makes a little black dress feel like couture. ${engraving_note}We're not making jewelry here — we're making a centerpiece for your life.`,
+    Bracelet: `A ${sel.metal || "precious metal"} bracelet designed to move with you — fluid, luminous, impossible to ignore. ${engraving_note}This is the piece that makes people ask, 'where did you get that?' — and the answer is better than they expect.`,
+    Earrings: `A pair of ${sel.stoneType || "diamond"} earrings set in ${sel.metal || "precious metal"}, designed to frame your face like a Renaissance painting that also happens to sparkle. ${engraving_note}Subtle? No. Stunning? Absolutely.`,
+  };
+  const design_summary = summaryTemplates[sel.type] ||
+    `A fully custom ${sel.metal || "precious metal"} piece, designed from scratch around your exact vision. ${engraving_note}No catalog. No template. Just you, our master jewelers, and something the world has never seen before.`;
+
+  // Expert recommendation
+  const expert_recommendation = sel.type === "Ring"
+    ? "Our master jeweler recommends scheduling a virtual consultation to dial in your exact proportions — it makes a world of difference in how the piece sits on the hand. We'll also walk you through stone options side-by-side."
+    : "Our design director suggests a brief consultation to explore finishing options and fine-tune proportions. The difference between great and extraordinary is always in the details we refine together.";
+
+  // Estimated range
+  let estimated_range: string;
+  if (sel.budget < 2000) estimated_range = "$1,500 – $3,000";
+  else if (sel.budget < 5000) estimated_range = "$3,000 – $7,500";
+  else if (sel.budget < 10000) estimated_range = "$7,500 – $15,000";
+  else if (sel.budget < 25000) estimated_range = "$12,000 – $30,000";
+  else if (sel.budget < 50000) estimated_range = "$25,000 – $60,000";
+  else estimated_range = "$50,000+";
+
+  // Next steps
+  const next_steps = pick([
+    "Our design director will personally review your selections and reach out within 24 hours. Prepare to be impressed.",
+    "A member of our atelier team will be in touch within 24 hours to begin bringing this to life. The fun part starts now.",
+    "We'll have a senior designer reach out within 24 hours. Consider this the beginning of something extraordinary.",
+  ]);
+
+  return { greeting, taste_compliment, design_summary, expert_recommendation, estimated_range, next_steps };
+}
+
 const btnPrimary =
   "px-9 py-3.5 font-outfit text-[12px] uppercase border border-montaire-gold text-montaire-gold bg-transparent transition-all duration-300 hover:bg-[rgba(201,168,76,0.1)] hover:border-montaire-gold-light active:scale-[0.98]";
 const btnSecondary =
