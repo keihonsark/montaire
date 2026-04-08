@@ -61,8 +61,12 @@ const TOTAL_STEPS = 9;
 
 function pick<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)]; }
 
+function capitalizeName(raw: string): string {
+  return raw.trim().split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ") || "friend";
+}
+
 function getDesignResponse(sel: Selections): AiResult {
-  const name = sel.name || "friend";
+  const name = sel.name ? capitalizeName(sel.name) : "friend";
 
   // Greetings
   const greetings: Record<string, string[]> = {
@@ -783,7 +787,7 @@ export default function Configurator() {
                 )}
 
                 {!aiLoading && !submitted && (
-                  <div ref={resultRef} className="relative max-w-[600px] mx-auto text-center">
+                  <div ref={resultRef} className="relative max-w-[650px] mx-auto text-center">
 
                     {aiResult ? (
                       <div className="flex flex-col items-center gap-0">
@@ -794,19 +798,19 @@ export default function Configurator() {
                         <p data-reveal="0.0" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-10" style={{ opacity: 0, letterSpacing: "0.2em", color: "#C9A84C" }}>Your Design Consultation</p>
 
                         {/* Exclusive watermark */}
-                        <p data-reveal="0.3" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-4" style={{ opacity: 0, letterSpacing: "0.3em", color: "rgba(201,168,76,0.2)" }}>Designed exclusively for {sel.name || "you"}</p>
+                        <p data-reveal="0.3" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-4" style={{ opacity: 0, letterSpacing: "0.3em", color: "rgba(201,168,76,0.2)" }}>Designed exclusively for {sel.name ? capitalizeName(sel.name) : "you"}</p>
 
                         {/* Greeting — hero text with shimmer */}
-                        <p data-reveal="0.5" data-reveal-y="20" className="gradient-text font-bodoni text-[28px] md:text-[36px] font-normal mb-12" style={{ opacity: 0 }}>{aiResult.greeting}</p>
+                        <p data-reveal="0.5" data-reveal-y="20" className="gradient-text font-bodoni text-[36px] md:text-[48px] lg:text-[56px] font-normal mb-12 md:mb-16" style={{ opacity: 0 }}>{aiResult.greeting}</p>
 
                         {/* Gold line 1 */}
-                        <div data-reveal="1.0" data-reveal-line="true" className="mx-auto mb-12" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "#C9A84C", transformOrigin: "center" }} />
+                        <div data-reveal="1.0" data-reveal-line="true" className="mx-auto mb-12 md:mb-16" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "#C9A84C", transformOrigin: "center" }} />
 
                         {/* Taste compliment */}
-                        <p data-reveal="1.3" data-reveal-y="15" className="font-outfit text-[15px] leading-relaxed mb-12" style={{ opacity: 0, color: "rgba(255,255,255,0.6)" }}>{aiResult.taste_compliment}</p>
+                        <p data-reveal="1.3" data-reveal-y="15" className="font-outfit text-[16px] md:text-[18px] mb-12 md:mb-16 max-w-[550px] mx-auto" style={{ opacity: 0, color: "rgba(255,255,255,0.6)", lineHeight: 1.8 }}>{aiResult.taste_compliment}</p>
 
                         {/* Gold line 2 */}
-                        <div data-reveal="1.8" data-reveal-line="true" className="mx-auto mb-12" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "#C9A84C", transformOrigin: "center" }} />
+                        <div data-reveal="1.8" data-reveal-line="true" className="mx-auto mb-12 md:mb-16" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "#C9A84C", transformOrigin: "center" }} />
 
                         {/* Your Piece label */}
                         <p data-reveal="2.0" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-4" style={{ opacity: 0, letterSpacing: "0.15em", color: "#C9A84C" }}>Your Piece</p>
@@ -819,28 +823,28 @@ export default function Configurator() {
                         </div>
 
                         {/* Design summary */}
-                        <p data-reveal="2.6" data-reveal-y="15" className="font-outfit text-[15px] leading-[1.7] mb-12 text-left" style={{ opacity: 0, color: "rgba(255,255,255,0.8)" }}>{aiResult.design_summary}</p>
+                        <p data-reveal="2.6" data-reveal-y="15" className="font-outfit text-[16px] md:text-[18px] mb-12 md:mb-16 text-left" style={{ opacity: 0, color: "rgba(255,255,255,0.8)", lineHeight: 1.8 }}>{aiResult.design_summary}</p>
 
                         {/* Gold line 3 */}
-                        <div data-reveal="3.0" data-reveal-line="true" className="mx-auto mb-12" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "#C9A84C", transformOrigin: "center" }} />
+                        <div data-reveal="3.0" data-reveal-line="true" className="mx-auto mb-12 md:mb-16" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "#C9A84C", transformOrigin: "center" }} />
 
                         {/* Expert recommendation */}
                         <p data-reveal="3.2" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-3" style={{ opacity: 0, letterSpacing: "0.15em", color: "#C9A84C" }}>Expert Recommendation</p>
-                        <p data-reveal="3.3" data-reveal-y="10" className="font-outfit text-[15px] italic leading-relaxed mb-12" style={{ opacity: 0, color: "rgba(255,255,255,0.5)" }}>{aiResult.expert_recommendation}</p>
+                        <p data-reveal="3.3" data-reveal-y="10" className="font-outfit text-[15px] md:text-[17px] italic leading-relaxed mb-12 md:mb-16" style={{ opacity: 0, color: "rgba(255,255,255,0.5)" }}>{aiResult.expert_recommendation}</p>
 
                         {/* Estimated investment */}
                         <p data-reveal="3.6" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-3" style={{ opacity: 0, letterSpacing: "0.15em", color: "#C9A84C" }}>Estimated Investment</p>
                         <p data-reveal="3.8" data-reveal-y="0" data-reveal-scale="0.95" className="font-bodoni text-[24px] md:text-[28px] mb-2" style={{ opacity: 0, color: "#C9A84C" }}>{aiResult.estimated_range}</p>
-                        <p data-reveal="3.9" data-reveal-y="0" className="font-outfit text-[11px] italic mb-12" style={{ opacity: 0, color: "rgba(255,255,255,0.2)" }}>Final pricing confirmed during your personal consultation</p>
+                        <p data-reveal="3.9" data-reveal-y="0" className="font-outfit text-[11px] italic mb-12 md:mb-16" style={{ opacity: 0, color: "rgba(255,255,255,0.35)" }}>Final pricing confirmed during your personal consultation</p>
 
                         {/* Gold line 4 */}
-                        <div data-reveal="4.2" data-reveal-line="true" className="mx-auto mb-12" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "rgba(255,255,255,0.06)", transformOrigin: "center" }} />
+                        <div data-reveal="4.2" data-reveal-line="true" className="mx-auto mb-12 md:mb-16" style={{ opacity: 1, width: 80, height: 1, backgroundColor: "rgba(255,255,255,0.06)", transformOrigin: "center" }} />
 
                         {/* Next steps */}
                         <p data-reveal="4.4" data-reveal-y="10" className="font-outfit text-[14px] leading-relaxed mb-10" style={{ opacity: 0, color: "rgba(255,255,255,0.5)" }}>{aiResult.next_steps}</p>
 
                         {/* Personal sign-off */}
-                        <p data-reveal="4.8" data-reveal-y="10" className="font-bodoni text-[18px] md:text-[22px] italic mb-12" style={{ opacity: 0, color: "#C9A84C" }}>We can&apos;t wait to create this with you, {sel.name || "friend"}.</p>
+                        <p data-reveal="4.8" data-reveal-y="10" className="font-bodoni text-[20px] md:text-[24px] italic mb-12 md:mb-16" style={{ opacity: 0, color: "#C9A84C" }}>We can&apos;t wait to create this with you, {sel.name ? capitalizeName(sel.name) : "friend"}.</p>
 
                         {/* Action buttons */}
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
