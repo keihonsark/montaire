@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import DiamondCaustics from "@/components/DiamondCaustics";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -74,11 +73,9 @@ export default function Contact() {
   const btnSecondary = "px-9 py-3.5 font-outfit text-[12px] uppercase border text-center transition-all duration-300 hover:border-montaire-gold hover:text-montaire-gold active:scale-[0.98]";
 
   return (
-    <section ref={sectionRef} id="contact" className="relative" style={{ overflow: 'visible' }}>
-      <div className="ambient-glow ambient-glow-gold" style={{ top: '30%', left: '50%', transform: 'translateX(-50%)', zIndex: 0 }} />
-      <DiamondCaustics variant="gold" />
+    <section ref={sectionRef} id="contact">
       {/* About section merged in */}
-      <div className="min-h-screen flex items-center justify-center px-6 py-24">
+      <div className="flex items-center justify-center px-6 py-24 md:py-32">
         <div ref={aboutRef} className="text-center max-w-2xl flex flex-col items-center">
           <p className="font-outfit text-[13px] md:text-[14px] uppercase" style={{ letterSpacing: "0.2em", color: "#C9A84C" }}>
             Montaire was founded on a simple belief:
@@ -98,12 +95,12 @@ export default function Contact() {
           </div>
 
           {/* Gold divider */}
-          <div className="mx-auto mt-16 mb-16" style={{ width: 80, height: 1, backgroundColor: "#C9A84C" }} />
+          <div className="mx-auto mt-16 mb-0" style={{ width: 80, height: 1, backgroundColor: "#C9A84C" }} />
         </div>
       </div>
 
       {/* Contact CTA */}
-      <div className="flex flex-col items-center justify-center px-6 pb-20">
+      <div className="flex flex-col items-center justify-center px-6 pb-16">
         <div ref={ctaRef} className="text-center flex flex-col items-center">
           <h3 className="font-bodoni text-[32px] md:text-[40px] font-normal" style={{ color: "#F5F5F0" }}>
             Let&apos;s create something extraordinary.

@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
-import DiamondCaustics from "@/components/DiamondCaustics";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -73,11 +72,9 @@ export default function Philosophy() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center px-6"
-      style={{ paddingTop: 100, paddingBottom: 100, background: 'linear-gradient(180deg, #0A0A0A 0%, #0E0E0E 30%, #0E0E0E 70%, #0A0A0A 100%)', overflow: 'visible' }}
+      className="flex items-center justify-center px-6 py-16 md:py-24"
+      style={{ paddingTop: 60, paddingBottom: 60 }}
     >
-      <div className="ambient-glow ambient-glow-white" style={{ top: '50%', right: '-10%', transform: 'translateY(-50%)', zIndex: 0 }} />
-      <DiamondCaustics variant="subtle" />
       <div className="max-w-[800px] w-full text-center">
         <h2
           ref={headlineRef}
