@@ -269,9 +269,9 @@ Respond ONLY in JSON format with no markdown or backticks:
       {/* Inline placeholder so page scroll IDs still work */}
       <section id="custom" className="h-0" />
 
-      <div ref={overlayRef} className="fixed inset-0 z-[500] overflow-y-auto" style={{ backgroundColor: "#0A0A0A" }}>
+      <div ref={overlayRef} className="fixed inset-0 z-[500] overflow-y-auto" style={{ backgroundColor: "#000000" }}>
         {/* Top bar */}
-        <div className="fixed top-0 left-0 right-0 z-10 flex items-center justify-between px-6 md:px-10 py-5" style={{ backgroundColor: "#0A0A0A" }}>
+        <div className="fixed top-0 left-0 right-0 z-10 flex items-center justify-between px-6 md:px-10 py-5" style={{ backgroundColor: "#000000" }}>
           {step > 1 && !submitted ? (
             <button onClick={back} className="font-outfit text-[12px] uppercase" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }} data-cursor="pointer">
               &larr; Back
@@ -295,29 +295,31 @@ Respond ONLY in JSON format with no markdown or backticks:
             {step === 1 && (
               <div className="text-center">
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-12" style={{ color: "#F5F5F0" }}>What are we creating?</h2>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div className="w-full max-w-[700px] mx-auto">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
                   {PIECE_TYPES.map((type) => (
                     <button
                       key={type}
                       onClick={() => { update("type", type); setTimeout(next, 400); }}
-                      className="relative flex flex-col items-center justify-end gap-3 p-6 border transition-all duration-300 hover:scale-[1.02] overflow-hidden"
+                      className="relative flex flex-col items-center justify-end gap-3 p-6 border transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_40px_rgba(255,255,255,0.04)] overflow-hidden"
                       style={{
-                        aspectRatio: "1/1.2",
-                        borderColor: sel.type === type ? "#C9A84C" : "rgba(255,255,255,0.06)",
-                        borderWidth: sel.type === type ? 2 : 0.5,
-                        backgroundColor: "#1A1A1A",
-                        boxShadow: sel.type === type ? "0 0 20px rgba(201,168,76,0.15)" : "none",
+                        aspectRatio: "1/1.4",
+                        borderColor: sel.type === type ? "#C9A84C" : "transparent",
+                        borderWidth: sel.type === type ? 2 : 1,
+                        backgroundColor: "#000000",
+                        boxShadow: sel.type === type ? "0 4px 30px rgba(201,168,76,0.2), 0 0 0 1px #C9A84C" : "0 0 0 0.5px rgba(255,255,255,0.08)",
                       }}
                       data-cursor="pointer"
                     >
                       <div className="absolute inset-0">
-                        <img src={PIECE_IMAGES[type]} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.3 }} />
+                        <img src={PIECE_IMAGES[type]} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.6 }} />
                       </div>
                       <span className="relative z-10 font-outfit text-[13px] uppercase" style={{ letterSpacing: "0.15em", color: sel.type === type ? "#C9A84C" : "rgba(255,255,255,0.5)" }}>
                         {type}
                       </span>
                     </button>
                   ))}
+                </div>
                 </div>
               </div>
             )}
