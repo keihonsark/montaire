@@ -295,26 +295,51 @@ Respond ONLY in JSON format with no markdown or backticks:
             {step === 1 && (
               <div className="text-center">
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-12" style={{ color: "#F5F5F0" }}>What are we creating?</h2>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-8 max-w-[1100px] mx-auto">
-                  {PIECE_TYPES.map((type) => (
-                    <button
-                      key={type}
-                      onClick={() => { update("type", type); setTimeout(next, 400); }}
-                      className="flex flex-col items-center justify-end p-5 transition-all duration-300 hover:scale-[1.04]"
-                      style={{
-                        aspectRatio: "3/5",
-                        border: sel.type === type ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
-                        backgroundColor: "transparent",
-                        boxShadow: sel.type === type ? "0 0 30px rgba(201,168,76,0.15)" : "none",
-                      }}
-                      data-cursor="pointer"
-                    >
-                      <img src={PIECE_IMAGES[type]} alt={type} className="w-full flex-1 object-contain" />
-                      <span className="font-outfit text-[12px] uppercase mt-3" style={{ letterSpacing: "0.15em", color: sel.type === type ? "#C9A84C" : "rgba(255,255,255,0.6)" }}>
-                        {type}
-                      </span>
-                    </button>
-                  ))}
+                <div className="flex flex-col items-center gap-6">
+                  {/* Top row: 3 cards */}
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-[800px]">
+                    {PIECE_TYPES.slice(0, 3).map((type) => (
+                      <button
+                        key={type}
+                        onClick={() => { update("type", type); setTimeout(next, 400); }}
+                        className="flex flex-col items-center justify-end p-6 transition-all duration-300 hover:scale-[1.04]"
+                        style={{
+                          aspectRatio: "3/4",
+                          border: sel.type === type ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
+                          backgroundColor: "transparent",
+                          boxShadow: sel.type === type ? "0 0 30px rgba(201,168,76,0.15)" : "none",
+                        }}
+                        data-cursor="pointer"
+                      >
+                        <img src={PIECE_IMAGES[type]} alt={type} className="w-full flex-1 object-contain" />
+                        <span className="font-outfit text-[13px] uppercase mt-4" style={{ letterSpacing: "0.15em", color: sel.type === type ? "#C9A84C" : "rgba(255,255,255,0.6)" }}>
+                          {type}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                  {/* Bottom row: 2 cards centered */}
+                  <div className="grid grid-cols-2 gap-6 w-full max-w-[540px]">
+                    {PIECE_TYPES.slice(3).map((type) => (
+                      <button
+                        key={type}
+                        onClick={() => { update("type", type); setTimeout(next, 400); }}
+                        className="flex flex-col items-center justify-end p-6 transition-all duration-300 hover:scale-[1.04]"
+                        style={{
+                          aspectRatio: "3/4",
+                          border: sel.type === type ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
+                          backgroundColor: "transparent",
+                          boxShadow: sel.type === type ? "0 0 30px rgba(201,168,76,0.15)" : "none",
+                        }}
+                        data-cursor="pointer"
+                      >
+                        <img src={PIECE_IMAGES[type]} alt={type} className="w-full flex-1 object-contain" />
+                        <span className="font-outfit text-[13px] uppercase mt-4" style={{ letterSpacing: "0.15em", color: sel.type === type ? "#C9A84C" : "rgba(255,255,255,0.6)" }}>
+                          {type}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
