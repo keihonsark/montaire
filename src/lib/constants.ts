@@ -1,6 +1,7 @@
 export const NAV_ITEMS = [
   { label: "Home", href: "#home" },
   { label: "Collection", href: "#collection" },
+  { label: "Process", href: "#process" },
   { label: "Build Your Own", href: "#custom" },
   { label: "Diamonds", href: "#diamonds" },
   { label: "Contact", href: "#contact" },
@@ -10,6 +11,7 @@ export const SCENE_IDS = [
   "home",
   "philosophy",
   "collection",
+  "process",
   "custom",
   "diamonds",
   "contact",

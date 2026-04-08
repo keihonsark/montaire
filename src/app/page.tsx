@@ -2,6 +2,7 @@ import Intro from "@/components/Intro";
 import Hero from "@/components/Hero";
 import Philosophy from "@/components/Philosophy";
 import Collection from "@/components/Collection";
+import Process from "@/components/Process";
 import Configurator from "@/components/Configurator";
 import DiamondSearch from "@/components/DiamondSearch";
 import Contact from "@/components/Contact";
@@ -22,6 +23,9 @@ export default function Home() {
       </section>
 
       <Collection />
+      <section id="process">
+        <Process />
+      </section>
       <section id="configure">
         <Configurator />
       </section>
