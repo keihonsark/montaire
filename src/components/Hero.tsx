@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import DiamondCaustics from "@/components/DiamondCaustics";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -72,6 +73,8 @@ export default function Hero() {
       />
 
       <div className="ambient-glow ambient-glow-gold" style={{ top: '20%', left: '50%', transform: 'translateX(-50%)', zIndex: 1 }} />
+
+      <DiamondCaustics variant="default" />
 
       {/* Content */}
       <div className="relative text-center" style={{ zIndex: 3 }}>

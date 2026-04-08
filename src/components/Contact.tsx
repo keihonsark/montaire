@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import DiamondCaustics from "@/components/DiamondCaustics";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -75,6 +76,7 @@ export default function Contact() {
   return (
     <section ref={sectionRef} id="contact" className="relative" style={{ overflow: 'visible' }}>
       <div className="ambient-glow ambient-glow-gold" style={{ top: '30%', left: '50%', transform: 'translateX(-50%)', zIndex: 0 }} />
+      <DiamondCaustics variant="gold" />
       {/* About section merged in */}
       <div className="min-h-screen flex items-center justify-center px-6 py-24">
         <div ref={aboutRef} className="text-center max-w-2xl flex flex-col items-center">
