@@ -72,9 +72,10 @@ export default function Philosophy() {
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen flex items-center justify-center px-6"
-      style={{ paddingTop: 100, paddingBottom: 100 }}
+      className="relative min-h-screen flex items-center justify-center px-6"
+      style={{ paddingTop: 100, paddingBottom: 100, background: 'linear-gradient(180deg, #0A0A0A 0%, #0E0E0E 30%, #0E0E0E 70%, #0A0A0A 100%)' }}
     >
+      <div className="ambient-glow ambient-glow-white" style={{ top: '50%', right: '-10%', transform: 'translateY(-50%)' }} />
       <div className="max-w-[800px] w-full text-center">
         <h2
           ref={headlineRef}

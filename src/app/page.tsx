@@ -22,8 +22,10 @@ export default function Home() {
       </section>
 
       <Collection />
-      <Configurator />
-      <section id="diamonds">
+      <section id="configure" style={{ background: 'linear-gradient(180deg, #0A0A0A 0%, #0D0D0D 50%, #0A0A0A 100%)' }}>
+        <Configurator />
+      </section>
+      <section id="diamonds" style={{ background: 'linear-gradient(180deg, #0A0A0A 0%, #111111 50%, #0A0A0A 100%)' }}>
         <DiamondSearch />
       </section>
       <Contact />

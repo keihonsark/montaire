@@ -71,6 +71,8 @@ export default function Hero() {
         }}
       />
 
+      <div className="ambient-glow ambient-glow-gold" style={{ top: '20%', left: '50%', transform: 'translateX(-50%)' }} />
+
       {/* Content */}
       <div className="relative text-center" style={{ zIndex: 3 }}>
         <h1
