@@ -270,12 +270,12 @@ export default function Configurator() {
 
       // Tags stagger
       if (tags.length > 0) {
-        tl.fromTo(tags, { opacity: 0, y: 10 }, { opacity: 1, y: 0, stagger: 0.06, duration: 0.3, ease: "power2.out" }, 1.2);
+        tl.fromTo(tags, { opacity: 0, y: 6 }, { opacity: 1, y: 0, stagger: 0.04, duration: 0.25, ease: "power2.out" }, 0.6);
       }
 
       // Buttons
       if (buttons.length > 0) {
-        tl.fromTo(buttons, { opacity: 0, y: 10 }, { opacity: 1, y: 0, stagger: 0.1, duration: 0.4, ease: "power2.out" }, 2.8);
+        tl.fromTo(buttons, { opacity: 0, y: 8 }, { opacity: 1, y: 0, stagger: 0.08, duration: 0.3, ease: "power2.out" }, 1.8);
       }
 
       return () => { sparkles.forEach((s) => s.remove()); };
@@ -856,56 +856,51 @@ export default function Configurator() {
                 )}
 
                 {!aiLoading && !submitted && (
-                  <div ref={resultRef} className="relative max-w-[750px] mx-auto text-center">
+                  <div ref={resultRef} className="relative max-w-[900px] mx-auto">
 
                     {aiResult ? (
-                      <div className="flex flex-col items-center">
-                        {/* TOP: Header */}
-                        <p data-reveal="0.0" data-reveal-y="0" className="text-[8px] mb-4" style={{ opacity: 0, color: "#C9A84C" }}>&#9670;</p>
-                        <p data-reveal="0.0" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-6" style={{ opacity: 0, letterSpacing: "0.2em", color: "#C9A84C" }}>Your Design Consultation</p>
-                        <p data-reveal="0.15" data-reveal-y="0" className="font-outfit text-[10px] uppercase mb-3" style={{ opacity: 0, letterSpacing: "0.3em", color: "rgba(201,168,76,0.2)" }}>Designed exclusively for {fullName ? capitalizeName(fullName) : "you"}</p>
-                        <p data-reveal="0.3" data-reveal-y="15" className="gradient-text font-bodoni text-[22px] md:text-[36px] font-normal mb-4" style={{ opacity: 0 }}>{aiResult.greeting}</p>
-                        <p data-reveal="0.5" data-reveal-y="10" className="font-outfit text-[14px] md:text-[16px] mb-8 max-w-[550px] mx-auto" style={{ opacity: 0, color: "rgba(255,255,255,0.5)", lineHeight: 1.7 }}>{aiResult.taste_compliment}</p>
+                      <div className="flex flex-col">
+                        {/* HEADER — centered */}
+                        <div className="text-center mb-4 md:mb-6">
+                          <p data-reveal="0.0" data-reveal-y="0" className="text-[8px] mb-1" style={{ opacity: 0, color: "#C9A84C" }}>&#9670;</p>
+                          <p data-reveal="0.0" data-reveal-y="0" className="font-outfit text-[10px] uppercase mb-1" style={{ opacity: 0, letterSpacing: "0.2em", color: "#C9A84C" }}>Your Design Consultation</p>
+                          <p data-reveal="0.1" data-reveal-y="0" className="font-outfit text-[10px] uppercase" style={{ opacity: 0, letterSpacing: "0.15em", color: "rgba(201,168,76,0.2)" }}>Designed exclusively for {fullName ? capitalizeName(fullName) : "you"}</p>
+                        </div>
 
-                        {/* MIDDLE: Summary card */}
-                        <div data-reveal="0.8" data-reveal-y="15" className="w-full mb-8 p-6 md:p-8 text-left" style={{ opacity: 0, backgroundColor: "#0A0A0A", border: "1px solid rgba(201,168,76,0.1)", borderRadius: 4 }}>
-                          <div className="flex flex-col md:flex-row gap-8">
-                            {/* Left: Selections */}
-                            <div className="md:w-[40%] flex-shrink-0">
-                              <p className="font-outfit text-[10px] uppercase mb-4" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>Your Selections</p>
-                              <div className="flex flex-col gap-2">
-                                {[sel.type, sel.metal, sel.stoneType, sel.stoneShape, sel.stoneSize, sel.settingStyle].filter(Boolean).map((tag, i) => (
-                                  <span key={i} data-reveal-tag className="font-outfit text-[13px]" style={{ opacity: 0, color: "rgba(255,255,255,0.6)" }}>
-                                    <span style={{ color: "#C9A84C", marginRight: 8 }}>●</span>{tag}
-                                  </span>
-                                ))}
-                              </div>
+                        {/* TWO COLUMNS */}
+                        <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+                          {/* LEFT COLUMN — greeting, compliment, investment */}
+                          <div className="md:w-[40%] flex-shrink-0">
+                            <p data-reveal="0.2" data-reveal-y="10" className="gradient-text font-bodoni text-[24px] md:text-[26px] font-normal" style={{ opacity: 0 }}>{aiResult.greeting}</p>
+                            <p data-reveal="0.4" data-reveal-y="8" className="font-outfit text-[13px] leading-[1.7] mt-3" style={{ opacity: 0, color: "rgba(255,255,255,0.5)" }}>{aiResult.taste_compliment}</p>
+                            <div data-reveal="0.6" data-reveal-line="true" className="mt-5 mb-4" style={{ opacity: 1, width: 40, height: 1, backgroundColor: "#C9A84C", transformOrigin: "left" }} />
+                            <p data-reveal="0.7" data-reveal-y="0" className="font-outfit text-[10px] uppercase" style={{ opacity: 0, letterSpacing: "0.15em", color: "#C9A84C" }}>Estimated Investment</p>
+                            <p data-reveal="0.8" data-reveal-y="0" className="font-bodoni text-[20px] mt-1" style={{ opacity: 0, color: "#C9A84C" }}>{aiResult.estimated_range}</p>
+                            <p data-reveal="0.85" data-reveal-y="0" className="font-outfit text-[11px] italic mt-1" style={{ opacity: 0, color: "rgba(255,255,255,0.2)" }}>Final pricing confirmed during your personal consultation</p>
+                          </div>
+
+                          {/* RIGHT COLUMN — selections card */}
+                          <div data-reveal="0.5" data-reveal-y="10" className="md:w-[60%] p-5 md:p-6 text-left" style={{ opacity: 0, border: "1px solid rgba(201,168,76,0.08)" }}>
+                            {/* Tags */}
+                            <div className="flex flex-wrap gap-2 mb-4">
+                              {[sel.type, sel.metal, sel.stoneType, sel.stoneShape, sel.stoneSize, sel.settingStyle].filter(Boolean).map((tag, i) => (
+                                <span key={i} data-reveal-tag className="px-2 py-0.5 font-outfit text-[10px] border" style={{ opacity: 0, borderColor: "rgba(201,168,76,0.2)", color: "#C9A84C", borderRadius: 10 }}>{tag}</span>
+                              ))}
                             </div>
-                            {/* Right: Piece description + expert */}
-                            <div className="md:w-[60%]">
-                              <p className="font-outfit text-[10px] uppercase mb-4" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>Your Piece</p>
-                              <p className="font-outfit text-[14px] md:text-[15px] leading-[1.8] mb-6" style={{ color: "rgba(255,255,255,0.7)" }}>{aiResult.design_summary}</p>
-                              <div style={{ height: 1, backgroundColor: "rgba(201,168,76,0.1)", marginBottom: 16 }} />
-                              <p className="font-outfit text-[10px] uppercase mb-2" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>Expert Note</p>
-                              <p className="font-outfit text-[13px] italic leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>{aiResult.expert_recommendation}</p>
-                            </div>
+                            <p className="font-outfit text-[10px] uppercase mb-2" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>Your Piece</p>
+                            <p className="font-outfit text-[13px] leading-[1.7] mb-4" style={{ color: "rgba(255,255,255,0.7)" }}>{aiResult.design_summary}</p>
+                            <p className="font-outfit text-[10px] uppercase mb-1" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>Expert Note</p>
+                            <p className="font-outfit text-[12px] italic leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>{aiResult.expert_recommendation}</p>
                           </div>
                         </div>
 
-                        {/* BOTTOM: Investment + sign-off + buttons */}
-                        <div data-reveal="1.6" data-reveal-y="10" className="mb-3" style={{ opacity: 0 }}>
-                          <p className="font-outfit text-[10px] uppercase mb-2" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>Estimated Investment</p>
-                          <p className="font-bodoni text-[22px] md:text-[26px]" style={{ color: "#C9A84C" }}>{aiResult.estimated_range}</p>
-                          <p className="font-outfit text-[11px] italic mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>Final pricing confirmed during your personal consultation</p>
-                        </div>
-
-                        <p data-reveal="2.0" data-reveal-y="10" className="font-outfit text-[13px] mb-4 mt-4" style={{ opacity: 0, color: "rgba(255,255,255,0.4)" }}>{aiResult.next_steps}</p>
-
-                        <p data-reveal="2.2" data-reveal-y="10" className="font-bodoni text-[18px] md:text-[20px] italic mb-8" style={{ opacity: 0, color: "#C9A84C" }}>We can&apos;t wait to create this with you, {sel.firstName ? capitalizeName(sel.firstName) : "friend"}.</p>
-
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                          <button data-reveal-btn onClick={submitToFormspree} className={btnPrimary} style={{ opacity: 0, letterSpacing: "0.15em" }} data-cursor="pointer">Submit &amp; Book Consultation</button>
-                          <button data-reveal-btn onClick={() => { setAiResult(null); changeStep(1, -1); }} className={btnSecondary} style={{ opacity: 0, letterSpacing: "0.15em", borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.5)" }} data-cursor="pointer">Refine My Choices</button>
+                        {/* BOTTOM — sign-off + buttons */}
+                        <div className="text-center mt-5 md:mt-6">
+                          <p data-reveal="1.2" data-reveal-y="6" className="font-bodoni text-[16px] italic mb-4" style={{ opacity: 0, color: "#C9A84C" }}>We can&apos;t wait to create this with you, {sel.firstName ? capitalizeName(sel.firstName) : "friend"}.</p>
+                          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                            <button data-reveal-btn onClick={submitToFormspree} className="px-6 py-3 font-outfit text-[11px] uppercase border border-montaire-gold text-montaire-gold bg-transparent transition-all duration-300 hover:bg-[rgba(201,168,76,0.1)] active:scale-[0.98]" style={{ opacity: 0, letterSpacing: "0.15em" }} data-cursor="pointer">Submit &amp; Book Consultation</button>
+                            <button data-reveal-btn onClick={() => { setAiResult(null); changeStep(1, -1); }} className="px-6 py-3 font-outfit text-[11px] uppercase border transition-all duration-300 active:scale-[0.98]" style={{ opacity: 0, letterSpacing: "0.15em", borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.5)" }} data-cursor="pointer">Refine My Choices</button>
+                          </div>
                         </div>
                       </div>
                     ) : (
