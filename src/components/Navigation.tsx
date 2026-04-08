@@ -104,7 +104,7 @@ export default function Navigation() {
         />
       </button>
 
-      <div ref={overlayRef} className="fixed inset-0 z-[200]" style={{ backgroundColor: "#0A0A0A" }}>
+      <div ref={overlayRef} data-lenis-prevent className="fixed inset-0 z-[200]" style={{ backgroundColor: "#000000" }}>
         <nav className="flex flex-col items-center justify-center h-full gap-8 md:gap-10">
           {NAV_ITEMS.map((item, i) => (
             <a
@@ -112,7 +112,7 @@ export default function Navigation() {
               ref={(el) => { itemsRef.current[i] = el; }}
               href={item.href}
               onClick={(e) => { e.preventDefault(); handleNavClick(item.href); }}
-              className="group relative font-bodoni text-4xl md:text-[56px] hover:text-montaire-gold transition-colors duration-300"
+              className="group relative font-bodoni text-3xl md:text-[56px] hover:text-montaire-gold transition-colors duration-300 min-h-[44px] flex items-center"
               data-cursor="pointer"
               style={{ color: "#F5F5F0", opacity: 0 }}
             >

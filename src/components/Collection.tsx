@@ -295,7 +295,7 @@ export default function Collection() {
                 {/* Close button */}
                 <button
                   onClick={closeDetail}
-                  className="absolute top-5 right-5 md:top-8 md:right-8 font-outfit text-[12px] uppercase transition-colors duration-200 hover:text-white"
+                  className="absolute top-5 right-5 md:top-8 md:right-8 font-outfit text-[12px] uppercase transition-colors duration-200 hover:text-white min-w-[44px] min-h-[44px] flex items-center justify-center"
                   style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.15)", padding: "8px 16px" }}
                   data-cursor="pointer"
                 >

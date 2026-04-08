@@ -117,7 +117,7 @@ export default function Contact() {
       {/* Footer */}
       <footer className="px-6 md:px-10 pt-16 pb-8" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
         {/* Three column layout */}
-        <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 mb-12">
+        <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {/* Left */}
           <div className="text-center md:text-left">
             <p className="font-bodoni text-[16px] uppercase" style={{ letterSpacing: "0.15em", color: "#C9A84C" }}>MONTAIRE</p>

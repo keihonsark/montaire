@@ -366,13 +366,13 @@ export default function Configurator() {
 
   if (!isOpen) {
     return (
-      <section id="custom" className="relative flex flex-col items-center justify-center px-6 pt-20 md:pt-32 pb-12 md:pb-16 overflow-hidden">
+      <section id="custom" className="relative flex flex-col items-center justify-center px-6 pt-16 md:pt-32 pb-12 md:pb-16 overflow-hidden">
         {/* Subtle background image */}
-        <img src="/images/process/sketch.png" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none" style={{ opacity: 0.06 }} />
+        <img src="/images/process/sketch.png" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none opacity-[0.08] md:opacity-[0.06]" />
         {/* Bottom fade to black */}
         <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ height: 150, background: "linear-gradient(to bottom, transparent, #000000)", zIndex: 1 }} />
 
-        <h2 className="relative z-10 font-bodoni text-[40px] md:text-[64px] font-normal text-center leading-tight" style={{ color: "#F5F5F0" }}>
+        <h2 className="relative z-10 font-bodoni text-[28px] md:text-[64px] font-normal text-center leading-tight" style={{ color: "#F5F5F0" }}>
           Your vision. Our craft.
         </h2>
         <p className="relative z-10 font-outfit text-[15px] md:text-[16px] font-light leading-relaxed mt-6 max-w-[500px] mx-auto text-center" style={{ color: "rgba(255,255,255,0.45)" }}>
@@ -434,9 +434,8 @@ export default function Configurator() {
                       <button
                         key={type}
                         onClick={() => { update("type", type); setTimeout(() => { const target = (type === "Earrings" || type === "Other") ? 3 : 2; changeStep(target, 1); }, 400); }}
-                        className="flex flex-col items-center justify-end p-6 transition-all duration-300 hover:scale-[1.04]"
+                        className="flex flex-col items-center justify-end p-4 md:p-6 transition-all duration-300 hover:scale-[1.04] aspect-square md:aspect-[3/4]"
                         style={{
-                          aspectRatio: "3/4",
                           border: sel.type === type ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
                           backgroundColor: "transparent",
                           boxShadow: sel.type === type ? "0 0 30px rgba(201,168,76,0.15)" : "none",
@@ -456,9 +455,8 @@ export default function Configurator() {
                       <button
                         key={type}
                         onClick={() => { update("type", type); setTimeout(() => { const target = (type === "Earrings" || type === "Other") ? 3 : 2; changeStep(target, 1); }, 400); }}
-                        className="flex flex-col items-center justify-end p-6 transition-all duration-300 hover:scale-[1.04]"
+                        className="flex flex-col items-center justify-end p-4 md:p-6 transition-all duration-300 hover:scale-[1.04] aspect-square md:aspect-[3/4]"
                         style={{
-                          aspectRatio: "3/4",
                           border: sel.type === type ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
                           backgroundColor: "transparent",
                           boxShadow: sel.type === type ? "0 0 30px rgba(201,168,76,0.15)" : "none",
@@ -798,7 +796,7 @@ export default function Configurator() {
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-10 text-center" style={{ color: "#F5F5F0" }}>Your details</h2>
                 <p className="font-outfit text-[13px] italic max-w-[500px] mx-auto text-center mb-8" style={{ color: "rgba(255,255,255,0.25)" }}>We&apos;ll only use this to discuss your design. No spam, ever.</p>
                 <div className="max-w-md mx-auto flex flex-col gap-6">
-                  <div className="flex gap-4">
+                  <div className="flex flex-col sm:flex-row gap-4">
                     <input type="text" value={sel.firstName} onChange={(e) => update("firstName", e.target.value)} placeholder="First Name" required className={inputClass} />
                     <input type="text" value={sel.lastName} onChange={(e) => update("lastName", e.target.value)} placeholder="Last Name" required className={inputClass} />
                   </div>
@@ -866,7 +864,7 @@ export default function Configurator() {
                         <p data-reveal="0.0" data-reveal-y="0" className="text-[8px] mb-4" style={{ opacity: 0, color: "#C9A84C" }}>&#9670;</p>
                         <p data-reveal="0.0" data-reveal-y="0" className="font-outfit text-[11px] uppercase mb-6" style={{ opacity: 0, letterSpacing: "0.2em", color: "#C9A84C" }}>Your Design Consultation</p>
                         <p data-reveal="0.15" data-reveal-y="0" className="font-outfit text-[10px] uppercase mb-3" style={{ opacity: 0, letterSpacing: "0.3em", color: "rgba(201,168,76,0.2)" }}>Designed exclusively for {fullName ? capitalizeName(fullName) : "you"}</p>
-                        <p data-reveal="0.3" data-reveal-y="15" className="gradient-text font-bodoni text-[28px] md:text-[36px] font-normal mb-4" style={{ opacity: 0 }}>{aiResult.greeting}</p>
+                        <p data-reveal="0.3" data-reveal-y="15" className="gradient-text font-bodoni text-[22px] md:text-[36px] font-normal mb-4" style={{ opacity: 0 }}>{aiResult.greeting}</p>
                         <p data-reveal="0.5" data-reveal-y="10" className="font-outfit text-[14px] md:text-[16px] mb-8 max-w-[550px] mx-auto" style={{ opacity: 0, color: "rgba(255,255,255,0.5)", lineHeight: 1.7 }}>{aiResult.taste_compliment}</p>
 
                         {/* MIDDLE: Summary card */}

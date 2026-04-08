@@ -62,7 +62,7 @@ export default function Hero() {
         <div ref={titleRef} className="flex flex-col items-center" style={{ opacity: 0 }}>
           {/* Main wordmark */}
           <h1
-            className="gradient-text font-bodoni text-[56px] md:text-[90px] lg:text-[120px] xl:text-[140px] font-normal uppercase select-none"
+            className="gradient-text font-bodoni text-[42px] md:text-[90px] lg:text-[120px] xl:text-[140px] font-normal uppercase select-none"
             style={{
               letterSpacing: "0.12em",
               lineHeight: 1,
@@ -83,15 +83,14 @@ export default function Hero() {
 
           {/* Reflection text */}
           <div
-            className="relative overflow-hidden select-none pointer-events-none"
+            className="relative overflow-hidden select-none pointer-events-none h-[40px] md:h-[80px]"
             aria-hidden="true"
             style={{
-              height: "80px",
               marginTop: "2px",
             }}
           >
             <p
-              className="font-bodoni text-[56px] md:text-[90px] lg:text-[120px] xl:text-[140px] font-normal uppercase"
+              className="font-bodoni text-[42px] md:text-[90px] lg:text-[120px] xl:text-[140px] font-normal uppercase"
               style={{
                 letterSpacing: "0.12em",
                 lineHeight: 1,
@@ -114,9 +113,9 @@ export default function Hero() {
         {/* Tagline */}
         <p
           ref={taglineRef}
-          className="font-outfit text-[11px] md:text-[13px] uppercase mt-10"
+          className="font-outfit text-[11px] md:text-[13px] uppercase mt-6 md:mt-10"
           style={{
-            letterSpacing: "0.3em",
+            letterSpacing: "0.15em",
             color: "var(--montaire-gold)",
             opacity: 0,
           }}
@@ -125,19 +124,19 @@ export default function Hero() {
         </p>
 
         {/* CTA Buttons */}
-        <div ref={btnsRef} className="flex gap-4 mt-8" style={{ opacity: 0 }}>
+        <div ref={btnsRef} className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 md:mt-8 w-full sm:w-auto px-6 sm:px-0" style={{ opacity: 0 }}>
           <button
             onClick={() => (window as unknown as Record<string, (() => void) | undefined>).__openConfigurator?.()}
-            className="font-outfit text-[11px] uppercase transition-all duration-300 hover:bg-[rgba(201,168,76,0.1)]"
-            style={{ letterSpacing: "0.2em", padding: "12px 32px", border: "1px solid #C9A84C", color: "#C9A84C", backgroundColor: "transparent" }}
+            className="font-outfit text-[11px] uppercase transition-all duration-300 hover:bg-[rgba(201,168,76,0.1)] w-full sm:w-auto"
+            style={{ letterSpacing: "0.15em", padding: "14px 32px", border: "1px solid #C9A84C", color: "#C9A84C", backgroundColor: "transparent" }}
             data-cursor="pointer"
           >
             Start Your Design
           </button>
           <button
             onClick={() => document.getElementById("collection")?.scrollIntoView({ behavior: "smooth" })}
-            className="font-outfit text-[11px] uppercase transition-all duration-300 hover:border-[#C9A84C] hover:text-[#C9A84C]"
-            style={{ letterSpacing: "0.2em", padding: "12px 32px", border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.5)", backgroundColor: "transparent" }}
+            className="font-outfit text-[11px] uppercase transition-all duration-300 hover:border-[#C9A84C] hover:text-[#C9A84C] w-full sm:w-auto"
+            style={{ letterSpacing: "0.15em", padding: "14px 32px", border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.5)", backgroundColor: "transparent" }}
             data-cursor="pointer"
           >
             View Collection

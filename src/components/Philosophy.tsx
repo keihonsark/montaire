@@ -72,12 +72,12 @@ export default function Philosophy() {
   return (
     <section
       ref={sectionRef}
-      className="flex items-center justify-center px-6 py-12 md:py-16"
+      className="flex items-center justify-center px-6 py-10 md:py-16"
     >
       <div className="max-w-[800px] w-full text-center">
         <h2
           ref={headlineRef}
-          className="font-bodoni text-[28px] md:text-[44px] font-normal leading-[1.2]"
+          className="font-bodoni text-[24px] md:text-[44px] font-normal leading-[1.2]"
           style={{
             color: "var(--montaire-white)",
             willChange: "transform, opacity, filter",
@@ -90,7 +90,7 @@ export default function Philosophy() {
 
         <p
           ref={bodyRef}
-          className="font-outfit text-[15px] md:text-[18px] font-light leading-[1.7]"
+          className="font-outfit text-[14px] md:text-[18px] font-light leading-[1.7]"
           style={{
             color: "rgba(255, 255, 255, 0.5)",
             opacity: 0,

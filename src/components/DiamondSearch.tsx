@@ -379,14 +379,14 @@ export default function DiamondSearch() {
 
       {/* Detail Modal */}
       {detail && (
-        <div className="fixed inset-0 z-[600] flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.85)" }}>
+        <div data-lenis-prevent className="fixed inset-0 z-[600] flex items-center justify-center p-4 overflow-y-auto" style={{ backgroundColor: "rgba(0,0,0,0.85)" }}>
           <div
             className="relative max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-10"
             style={{ backgroundColor: "#111", border: "0.5px solid rgba(255,255,255,0.08)" }}
           >
             <button
               onClick={() => setDetail(null)}
-              className="absolute top-4 right-4 font-outfit text-[12px] uppercase transition-colors hover:text-montaire-gold"
+              className="absolute top-4 right-4 font-outfit text-[12px] uppercase transition-colors hover:text-montaire-gold min-w-[44px] min-h-[44px] flex items-center justify-center"
               style={{ color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}
               data-cursor="pointer"
             >
