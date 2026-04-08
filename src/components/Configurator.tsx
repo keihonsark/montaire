@@ -12,6 +12,15 @@ const PIECE_IMAGES: Record<string, string> = {
   Earrings: "/images/configurator/earrings.png",
   Other: "/images/configurator/other.png",
 };
+const SETTING_IMAGES: Record<string, string> = {
+  "Solitaire": "/images/settings/solitaire.png",
+  "Halo": "/images/settings/halo.png",
+  "Three Stone": "/images/settings/three-stone.png",
+  "Pavé Band": "/images/settings/pave.png",
+  "Cathedral": "/images/settings/cathedral.png",
+  "Vintage / Milgrain": "/images/settings/vintage.png",
+  "Totally Custom": "/images/settings/custom.png",
+};
 const METALS = [
   { name: "14K Yellow Gold", gradient: "linear-gradient(135deg, #D4A437, #C9963C)" },
   { name: "18K Yellow Gold", gradient: "linear-gradient(135deg, #E8BF4A, #D4A437)" },
@@ -589,26 +598,47 @@ export default function Configurator() {
             {step === 4 && (
               <div className="text-center">
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-12" style={{ color: "#F5F5F0" }}>Choose your setting</h2>
-                <div className="flex flex-wrap justify-center gap-4 max-w-[700px] mx-auto">
-                  {SETTINGS.map((s) => {
-                    const selected = sel.settingStyle === s;
-                    return (
+                <div className="flex flex-col items-center gap-6 max-w-[900px] mx-auto">
+                  {/* Top row: 4 cards */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full">
+                    {SETTINGS.slice(0, 4).map((s) => (
                       <button
                         key={s}
                         onClick={() => update("settingStyle", s)}
-                        className="flex items-center justify-center transition-all duration-300 hover:scale-[1.05]"
+                        className="flex flex-col items-center justify-end p-5 transition-all duration-300 hover:scale-[1.04]"
                         style={{
-                          width: 130, height: 60,
-                          border: selected ? "1px solid #C9A84C" : s === "Totally Custom" ? "1px dashed rgba(201,168,76,0.3)" : "1px solid rgba(201,168,76,0.15)",
+                          aspectRatio: "3/4",
+                          border: sel.settingStyle === s ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
                           backgroundColor: "transparent",
-                          boxShadow: selected ? "0 0 20px rgba(201,168,76,0.12)" : "none",
+                          boxShadow: sel.settingStyle === s ? "0 0 30px rgba(201,168,76,0.15)" : "none",
                         }}
                         data-cursor="pointer"
                       >
-                        <span className="font-outfit text-[11px]" style={{ color: selected ? "#C9A84C" : "rgba(255,255,255,0.5)" }}>{s}</span>
+                        <img src={SETTING_IMAGES[s]} alt={s} className="w-full flex-1 object-contain" />
+                        <span className="font-outfit text-[12px] uppercase mt-3" style={{ letterSpacing: "0.15em", color: sel.settingStyle === s ? "#C9A84C" : "rgba(255,255,255,0.6)" }}>{s}</span>
                       </button>
-                    );
-                  })}
+                    ))}
+                  </div>
+                  {/* Bottom row: 3 cards centered */}
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-[680px]">
+                    {SETTINGS.slice(4).map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => update("settingStyle", s)}
+                        className="flex flex-col items-center justify-end p-5 transition-all duration-300 hover:scale-[1.04]"
+                        style={{
+                          aspectRatio: "3/4",
+                          border: sel.settingStyle === s ? "1px solid #C9A84C" : s === "Totally Custom" ? "1px dashed rgba(201,168,76,0.3)" : "1px solid rgba(201,168,76,0.15)",
+                          backgroundColor: "transparent",
+                          boxShadow: sel.settingStyle === s ? "0 0 30px rgba(201,168,76,0.15)" : "none",
+                        }}
+                        data-cursor="pointer"
+                      >
+                        <img src={SETTING_IMAGES[s]} alt={s} className="w-full flex-1 object-contain" />
+                        <span className="font-outfit text-[12px] uppercase mt-3" style={{ letterSpacing: "0.15em", color: sel.settingStyle === s ? "#C9A84C" : "rgba(255,255,255,0.6)" }}>{s}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
