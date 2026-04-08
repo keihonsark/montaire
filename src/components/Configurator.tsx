@@ -449,6 +449,7 @@ Respond ONLY in JSON format with no markdown or backticks:
                     >{s}</button>
                   ))}
                 </div>
+                <p className="font-outfit text-[12px] italic mt-4" style={{ color: "rgba(255,255,255,0.25)" }}>Don&apos;t worry — these are starting points. We&apos;ll refine every detail together during your consultation.</p>
 
               </div>
             )}
@@ -457,23 +458,37 @@ Respond ONLY in JSON format with no markdown or backticks:
             {step === 4 && (
               <div className="text-center">
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-12" style={{ color: "#F5F5F0" }}>Choose your setting</h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {SETTINGS.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => update("settingStyle", s)}
-                      className="p-5 border transition-all duration-300 hover:scale-[1.02]"
-                      style={{
-                        borderColor: sel.settingStyle === s ? "#C9A84C" : s === "Totally Custom" ? "rgba(201,168,76,0.3)" : "rgba(255,255,255,0.06)",
-                        borderWidth: sel.settingStyle === s ? 2 : s === "Totally Custom" ? 1 : 0.5,
-                        borderStyle: s === "Totally Custom" ? "dashed" : "solid",
-                        backgroundColor: "#1A1A1A",
-                      }}
-                      data-cursor="pointer"
-                    >
-                      <span className="font-outfit text-[12px]" style={{ color: sel.settingStyle === s ? "#C9A84C" : "rgba(255,255,255,0.5)" }}>{s}</span>
-                    </button>
-                  ))}
+                <div className="flex flex-wrap justify-center gap-4 max-w-[700px] mx-auto">
+                  {SETTINGS.map((s) => {
+                    const selected = sel.settingStyle === s;
+                    const sc = selected ? "#C9A84C" : "rgba(201,168,76,0.4)";
+                    const settingSvg: Record<string, React.ReactNode> = {
+                      "Solitaire": <><line x1="5" y1="35" x2="55" y2="35" stroke={sc} strokeWidth="1.5" /><line x1="22" y1="35" x2="26" y2="18" stroke={sc} strokeWidth="1" /><line x1="38" y1="35" x2="34" y2="18" stroke={sc} strokeWidth="1" /><polygon points="26,18 30,10 34,18" stroke={sc} strokeWidth="1.5" fill="none" /></>,
+                      "Halo": <><line x1="5" y1="35" x2="55" y2="35" stroke={sc} strokeWidth="1.5" /><line x1="22" y1="35" x2="26" y2="18" stroke={sc} strokeWidth="1" /><line x1="38" y1="35" x2="34" y2="18" stroke={sc} strokeWidth="1" /><polygon points="26,18 30,10 34,18" stroke={sc} strokeWidth="1.5" fill="none" /><circle cx="23" cy="19" r="2" stroke={sc} strokeWidth="0.8" fill="none" /><circle cx="37" cy="19" r="2" stroke={sc} strokeWidth="0.8" fill="none" /><circle cx="30" cy="8" r="2" stroke={sc} strokeWidth="0.8" fill="none" /></>,
+                      "Three Stone": <><line x1="5" y1="35" x2="55" y2="35" stroke={sc} strokeWidth="1.5" /><polygon points="27,18 30,10 33,18" stroke={sc} strokeWidth="1.5" fill="none" /><line x1="23" y1="35" x2="27" y2="18" stroke={sc} strokeWidth="1" /><line x1="37" y1="35" x2="33" y2="18" stroke={sc} strokeWidth="1" /><polygon points="14,24 17,18 20,24" stroke={sc} strokeWidth="1" fill="none" /><line x1="12" y1="35" x2="14" y2="24" stroke={sc} strokeWidth="0.8" /><line x1="22" y1="35" x2="20" y2="24" stroke={sc} strokeWidth="0.8" /><polygon points="40,24 43,18 46,24" stroke={sc} strokeWidth="1" fill="none" /><line x1="38" y1="35" x2="40" y2="24" stroke={sc} strokeWidth="0.8" /><line x1="48" y1="35" x2="46" y2="24" stroke={sc} strokeWidth="0.8" /></>,
+                      "Pavé Band": <><line x1="5" y1="35" x2="55" y2="35" stroke={sc} strokeWidth="1.5" />{[10,16,22,28,34,40,46].map((cx) => <circle key={cx} cx={cx} cy="33" r="1.5" stroke={sc} strokeWidth="0.8" fill="none" />)}</>,
+                      "Cathedral": <><line x1="5" y1="35" x2="55" y2="35" stroke={sc} strokeWidth="1.5" /><path d="M22,35 C22,22 26,16 30,14" stroke={sc} strokeWidth="1.2" fill="none" /><path d="M38,35 C38,22 34,16 30,14" stroke={sc} strokeWidth="1.2" fill="none" /><polygon points="27,16 30,8 33,16" stroke={sc} strokeWidth="1.5" fill="none" /></>,
+                      "Vintage / Milgrain": <><line x1="5" y1="35" x2="55" y2="35" stroke={sc} strokeWidth="1.5" />{[8,12,16,20,24,28,32,36,40,44,48,52].map((cx) => <circle key={cx} cx={cx} cy="37" r="0.8" fill={sc} />)}<polygon points="26,18 30,10 34,18" stroke={sc} strokeWidth="1.5" fill="none" /><line x1="22" y1="35" x2="26" y2="18" stroke={sc} strokeWidth="1" /><line x1="38" y1="35" x2="34" y2="18" stroke={sc} strokeWidth="1" /></>,
+                      "Totally Custom": <><polygon points="30,5 33,18 46,18 35,26 39,39 30,30 21,39 25,26 14,18 27,18" stroke={sc} strokeWidth="1.5" fill="none" /></>,
+                    };
+                    return (
+                      <button
+                        key={s}
+                        onClick={() => update("settingStyle", s)}
+                        className="flex flex-col items-center justify-center gap-3 transition-all duration-300 hover:scale-[1.05]"
+                        style={{
+                          width: 130, height: 110,
+                          border: selected ? "1px solid #C9A84C" : s === "Totally Custom" ? "1px dashed rgba(201,168,76,0.3)" : "1px solid rgba(201,168,76,0.15)",
+                          backgroundColor: "transparent",
+                          boxShadow: selected ? "0 0 20px rgba(201,168,76,0.12)" : "none",
+                        }}
+                        data-cursor="pointer"
+                      >
+                        <svg width="60" height="40" viewBox="0 0 60 40">{settingSvg[s]}</svg>
+                        <span className="font-outfit text-[10px]" style={{ color: selected ? "#C9A84C" : "rgba(255,255,255,0.5)" }}>{s}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -484,13 +499,24 @@ Respond ONLY in JSON format with no markdown or backticks:
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-10 text-center" style={{ color: "#F5F5F0" }}>The details</h2>
                 <div className="flex flex-col gap-8 max-w-md mx-auto">
                   <div>
-                    <label className="font-outfit text-[12px] uppercase block mb-2" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Ring Size</label>
-                    <select value={sel.ringSize} onChange={(e) => update("ringSize", e.target.value)} className={`${inputClass} appearance-none`} style={{ colorScheme: "dark" }}>
-                      <option value="">Select size</option>
-                      {Array.from({ length: 19 }, (_, i) => 4 + i * 0.5).map((s) => (
-                        <option key={s} value={s}>{s}</option>
+                    <label className="font-outfit text-[12px] uppercase block mb-3" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Ring Size</label>
+                    <div className="grid grid-cols-5 gap-2">
+                      {Array.from({ length: 19 }, (_, i) => String(4 + i * 0.5)).map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => update("ringSize", s)}
+                          className="flex items-center justify-center font-outfit text-[12px] transition-all duration-300 hover:scale-[1.05]"
+                          style={{
+                            width: 55, height: 55,
+                            border: sel.ringSize === s ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
+                            backgroundColor: "transparent",
+                            boxShadow: sel.ringSize === s ? "0 0 20px rgba(201,168,76,0.12)" : "none",
+                            color: sel.ringSize === s ? "#C9A84C" : "rgba(255,255,255,0.5)",
+                          }}
+                          data-cursor="pointer"
+                        >{s}</button>
                       ))}
-                    </select>
+                    </div>
                   </div>
                   <div>
                     <label className="font-outfit text-[12px] uppercase block mb-3" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Band Width</label>
