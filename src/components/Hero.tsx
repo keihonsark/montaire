@@ -61,7 +61,7 @@ export default function Hero() {
         {/* Wordmark */}
         <h1
           ref={titleRef}
-          className="gradient-text font-bodoni text-[48px] md:text-[72px] lg:text-[90px] font-normal uppercase"
+          className="gradient-text font-bodoni text-[40px] md:text-[64px] lg:text-[80px] font-normal uppercase"
           style={{
             letterSpacing: "0.12em",
             opacity: 0,
@@ -73,7 +73,7 @@ export default function Hero() {
         {/* Hero image */}
         <div
           ref={imageRef}
-          className="relative mt-8"
+          className="relative mt-4"
           style={{ opacity: 0 }}
         >
           <img
@@ -81,10 +81,11 @@ export default function Hero() {
             alt="Montaire fine jewelry"
             className="block mx-auto"
             style={{
-              maxHeight: "60vh",
+              maxHeight: "45vh",
               width: "auto",
-              maskImage: "radial-gradient(ellipse at center, black 50%, transparent 85%)",
-              WebkitMaskImage: "radial-gradient(ellipse at center, black 50%, transparent 85%)",
+              objectFit: "contain",
+              maskImage: "linear-gradient(to bottom, transparent 0%, black 8%, black 75%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 8%, black 75%, transparent 100%)",
             }}
           />
           {/* Reflection */}
@@ -94,12 +95,12 @@ export default function Hero() {
             aria-hidden="true"
             className="block mx-auto"
             style={{
-              maxHeight: "60vh",
+              maxHeight: "15vh",
               width: "auto",
               transform: "scaleY(-1)",
-              opacity: 0.08,
-              maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 40%)",
-              WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 40%)",
+              opacity: 0.12,
+              maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 60%)",
+              WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 60%)",
               marginTop: -2,
             }}
           />
@@ -108,7 +109,7 @@ export default function Hero() {
         {/* Tagline */}
         <p
           ref={taglineRef}
-          className="font-outfit text-[12px] uppercase mt-8"
+          className="font-outfit text-[12px] uppercase mt-4"
           style={{
             letterSpacing: "0.25em",
             color: "var(--montaire-gold)",
