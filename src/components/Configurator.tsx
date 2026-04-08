@@ -271,13 +271,8 @@ Respond ONLY in JSON format with no markdown or backticks:
 
       <div ref={overlayRef} className="fixed inset-0 z-[500] overflow-y-auto" style={{ backgroundColor: "#000000" }}>
         {/* Top bar */}
-        <div className="fixed top-0 left-0 right-0 z-10 flex items-center justify-between px-6 md:px-10 py-5" style={{ backgroundColor: "#000000" }}>
-          {step > 1 && !submitted ? (
-            <button onClick={back} className="font-outfit text-[12px] uppercase" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }} data-cursor="pointer">
-              &larr; Back
-            </button>
-          ) : <div />}
-          <button onClick={close} className="font-outfit text-[12px] uppercase" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }} data-cursor="pointer">
+        <div className="fixed top-0 left-0 right-0 z-10 flex items-center justify-end px-6 md:px-10 py-5" style={{ backgroundColor: "#000000" }}>
+          <button onClick={close} className="font-outfit text-[12px] uppercase transition-colors duration-200 hover:text-white" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.15)", padding: "8px 16px" }} data-cursor="pointer">
             Close
           </button>
         </div>
@@ -370,7 +365,6 @@ Respond ONLY in JSON format with no markdown or backticks:
                     </button>
                   ))}
                 </div>
-                <button onClick={next} className={`${btnPrimary} mt-12`} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Continue</button>
               </div>
             )}
 
@@ -456,7 +450,6 @@ Respond ONLY in JSON format with no markdown or backticks:
                   ))}
                 </div>
 
-                <button onClick={next} className={`${btnPrimary} mt-4`} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Continue</button>
               </div>
             )}
 
@@ -482,7 +475,6 @@ Respond ONLY in JSON format with no markdown or backticks:
                     </button>
                   ))}
                 </div>
-                <button onClick={next} className={`${btnPrimary} mt-12`} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Continue</button>
               </div>
             )}
 
@@ -516,9 +508,6 @@ Respond ONLY in JSON format with no markdown or backticks:
                     <label className="font-outfit text-[12px] uppercase block mb-2" style={{ letterSpacing: "0.15em", color: "rgba(255,255,255,0.4)" }}>Special Requests</label>
                     <textarea value={sel.specialRequests} onChange={(e) => update("specialRequests", e.target.value)} rows={3} placeholder="Anything else we should know?" className={`${inputClass} resize-none`} />
                   </div>
-                </div>
-                <div className="text-center mt-10">
-                  <button onClick={next} className={btnPrimary} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Continue</button>
                 </div>
               </div>
             )}
@@ -564,8 +553,7 @@ Respond ONLY in JSON format with no markdown or backticks:
                     </div>
                   )}
                 </div>
-                <div className="text-center mt-10 flex flex-col items-center gap-3">
-                  <button onClick={next} className={btnPrimary} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Continue</button>
+                <div className="text-center mt-6">
                   <button onClick={next} className="font-outfit text-[12px]" style={{ color: "rgba(255,255,255,0.3)" }} data-cursor="pointer">Skip — my selections say it all</button>
                 </div>
               </div>
@@ -610,9 +598,6 @@ Respond ONLY in JSON format with no markdown or backticks:
                     )}
                   </div>
                 </div>
-                <div className="text-center mt-10">
-                  <button onClick={next} className={btnPrimary} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Continue</button>
-                </div>
               </div>
             )}
 
@@ -625,7 +610,8 @@ Respond ONLY in JSON format with no markdown or backticks:
                   <input type="email" value={sel.email} onChange={(e) => update("email", e.target.value)} placeholder="Email" required className={inputClass} />
                   <input type="tel" value={sel.phone} onChange={(e) => update("phone", e.target.value)} placeholder="Phone" className={inputClass} />
                 </div>
-                <div className="text-center mt-10">
+                <div className="flex justify-center gap-4 mt-10">
+                  <button onClick={back} className={btnSecondary} style={{ letterSpacing: "0.15em", borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.5)" }} data-cursor="pointer">Back</button>
                   <button
                     onClick={generateAiSummary}
                     className={btnPrimary}
@@ -635,6 +621,14 @@ Respond ONLY in JSON format with no markdown or backticks:
                     Generate My Design Summary
                   </button>
                 </div>
+              </div>
+            )}
+
+            {/* Shared bottom navigation for steps 2-7 */}
+            {step >= 2 && step <= 7 && !submitted && (
+              <div className="flex justify-center gap-4 mt-12">
+                <button onClick={back} className={btnSecondary} style={{ letterSpacing: "0.15em", borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.5)" }} data-cursor="pointer">Back</button>
+                <button onClick={next} className={btnPrimary} style={{ letterSpacing: "0.15em" }} data-cursor="pointer">Continue</button>
               </div>
             )}
 
