@@ -47,7 +47,7 @@ export default function Diamonds() {
   };
 
   return (
-    <section ref={sectionRef} id="diamonds" className="relative min-h-screen flex items-center justify-center px-6">
+    <section ref={sectionRef} id="diamonds" className="relative flex items-center justify-center px-6" style={{ minHeight: "100dvh" }}>
       <div ref={contentRef} className="text-center max-w-lg relative" style={{ opacity: 0 }}>
         <h2 className="gradient-text font-bodoni text-[36px] md:text-[48px] font-normal">
           Your Perfect Stone

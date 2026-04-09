@@ -420,7 +420,7 @@ export default function Configurator() {
         </div>
 
         {/* Content */}
-        <div ref={contentRef} className="min-h-screen flex items-center justify-center px-6 py-24">
+        <div ref={contentRef} className="flex items-center justify-center px-6 py-24" style={{ minHeight: "100dvh" }}>
           <div className="max-w-2xl w-full">
 
             {/* STEP 1: What are we creating */}

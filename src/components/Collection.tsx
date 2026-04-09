@@ -172,7 +172,7 @@ export default function Collection() {
           </div>
         ) : (
           <div ref={pinRef} className="relative overflow-hidden" style={{ backgroundColor: "#000000" }}>
-            <div ref={trackRef} className="flex h-screen" style={{ width: `${COLLECTION_ITEMS.length * 100}vw` }}>
+            <div ref={trackRef} className="flex" style={{ width: `${COLLECTION_ITEMS.length * 100}vw`, height: "100dvh" }}>
               {COLLECTION_ITEMS.map((item, i) => (
                 <div
                   key={i}
@@ -279,7 +279,7 @@ export default function Collection() {
             className="fixed inset-0 z-[400] overflow-y-auto"
             style={{ backgroundColor: "#000000", opacity: 0 }}
           >
-            <div className="min-h-screen flex flex-col md:flex-row">
+            <div className="flex flex-col md:flex-row" style={{ minHeight: "100dvh" }}>
               {/* Left: Image */}
               <div className="md:w-1/2 flex items-center justify-center p-8 md:p-12" style={{ backgroundColor: "#000000" }}>
                 <img

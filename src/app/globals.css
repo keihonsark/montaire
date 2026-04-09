@@ -25,6 +25,10 @@
 }
 
 /* Base styles */
+html {
+  height: -webkit-fill-available;
+}
+
 body {
   background: var(--montaire-black);
   color: var(--montaire-white);
@@ -32,6 +36,10 @@ body {
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
   touch-action: pan-y;
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+  overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Selection */
@@ -79,6 +87,7 @@ body {
 html {
   scrollbar-width: thin;
   scrollbar-color: var(--montaire-gold) var(--montaire-black);
+  overscroll-behavior: none;
 }
 
 /* Scroll indicator animation */

@@ -122,7 +122,7 @@ export default function Process() {
           </div>
         </>
       ) : (
-        <div ref={pinRef} className="relative h-screen overflow-hidden" style={{ backgroundColor: "#000000" }}>
+        <div ref={pinRef} className="relative overflow-hidden" style={{ backgroundColor: "#000000", height: "100dvh" }}>
           {/* Pinned title — always visible at top */}
           <div className="absolute top-0 left-0 right-0 z-10 pt-12 pb-8 text-center" style={{ background: "linear-gradient(to bottom, #000000 0%, #000000 60%, transparent 100%)" }}>
             <p className="font-outfit text-[11px] uppercase mb-3" style={{ letterSpacing: "0.25em", color: "#C9A84C" }}>Our Process</p>
