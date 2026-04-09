@@ -156,6 +156,7 @@ export default function DiamondSearch() {
   const visibleDiamondsMobile = mobileShowAll ? diamonds : diamonds.slice(0, mobileLimit);
 
   return (
+    <>
     <div className="pt-8 md:pt-12 pb-12 md:pb-28 px-4 md:px-8" style={{ backgroundColor: "#000000" }}>
       <style jsx>{`
         .diamond-scroll::-webkit-scrollbar { display: none; }
@@ -453,10 +454,12 @@ export default function DiamondSearch() {
         )}
       </div>
 
-      {/* Detail Modal */}
-      {detail && (
-        <div data-lenis-prevent className="fixed inset-0 z-[600] overflow-y-auto" style={{ backgroundColor: "rgba(0,0,0,0.95)" }}>
-          <div className="relative max-w-2xl w-full mx-auto p-5 md:p-10" style={{ minHeight: "100dvh" }}>
+    </div>
+
+    {/* Detail Modal — rendered outside main container */}
+    {detail && (
+      <div data-lenis-prevent className="fixed inset-0 z-[500] overflow-y-auto" style={{ backgroundColor: "#000000" }}>
+        <div className="relative max-w-2xl w-full mx-auto px-4 md:px-10 py-5 md:py-10" style={{ minHeight: "100dvh" }}>
             <button
               onClick={() => setDetail(null)}
               className="absolute top-4 right-4 font-outfit text-[12px] uppercase transition-colors hover:text-montaire-gold min-w-[44px] min-h-[44px] flex items-center justify-center z-10"
@@ -537,6 +540,6 @@ export default function DiamondSearch() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
