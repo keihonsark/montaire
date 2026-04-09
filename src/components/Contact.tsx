@@ -63,7 +63,7 @@ export default function Contact() {
   return (
     <section ref={sectionRef} id="contact">
       {/* CTA Section */}
-      <div className="flex flex-col items-center justify-center px-6 py-20 md:py-28">
+      <div className="flex flex-col items-center justify-center px-6 py-14 md:py-28">
         <div ref={ctaRef} className="text-center flex flex-col items-center">
           <p className="font-outfit text-[11px] uppercase mb-6" style={{ letterSpacing: "0.25em", color: "#C9A84C" }}>
             Ready to begin?

@@ -100,14 +100,14 @@ export default function Process() {
     <section ref={sectionRef} id="process" style={{ backgroundColor: "#000000" }}>
       {isMobile ? (
         <>
-          <div className="pt-20 pb-12 text-center">
+          <div className="pt-12 pb-6 text-center">
             <p className="font-outfit text-[11px] uppercase mb-4" style={{ letterSpacing: "0.25em", color: "#C9A84C" }}>Our Process</p>
             <h2 className="font-bodoni text-[32px] font-normal" style={{ color: "#F5F5F0" }}>From vision to reality</h2>
           </div>
           <div className="overflow-x-auto pb-8" style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}>
             <div className="flex" style={{ width: `${STEPS.length * 100}vw` }}>
               {STEPS.map((step, i) => (
-                <div key={i} className="flex-shrink-0 w-screen px-6 py-12 flex flex-col gap-8" style={{ scrollSnapAlign: "start" }}>
+                <div key={i} className="flex-shrink-0 w-screen px-6 py-4 flex flex-col gap-6" style={{ scrollSnapAlign: "start" }}>
                   <div className="w-full overflow-hidden" style={{ aspectRatio: "4/3", backgroundColor: "#000000" }}>
                     <img src={step.image} alt={step.title} className="w-full h-full object-contain" />
                   </div>

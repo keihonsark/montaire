@@ -27,6 +27,7 @@
 /* Base styles */
 html {
   height: -webkit-fill-available;
+  overscroll-behavior: none;
 }
 
 body {
@@ -36,8 +37,8 @@ body {
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
   touch-action: pan-y;
-  min-height: 100dvh;
   min-height: -webkit-fill-available;
+  position: relative;
   overscroll-behavior-y: none;
   -webkit-overflow-scrolling: touch;
 }

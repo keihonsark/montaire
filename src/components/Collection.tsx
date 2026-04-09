@@ -144,10 +144,10 @@ export default function Collection() {
           >
             <div className="flex" style={{ width: `${COLLECTION_ITEMS.length * 100}vw` }}>
               {COLLECTION_ITEMS.map((item, i) => (
-                <div key={i} className="flex-shrink-0 w-screen px-6 py-12 flex flex-col gap-8" style={{ scrollSnapAlign: "start" }}>
+                <div key={i} className="flex-shrink-0 w-screen px-6 py-6 pb-10 flex flex-col gap-6" style={{ scrollSnapAlign: "start" }}>
                   <div
                     className="w-full overflow-hidden transition-transform duration-600 hover:scale-[1.02]"
-                    style={{ aspectRatio: "3/4", maxHeight: "50vh", backgroundColor: "transparent" }}
+                    style={{ aspectRatio: "1/1", maxHeight: "40vh", backgroundColor: "transparent" }}
                     onClick={() => setDetailItem(i)}
                     data-cursor="pointer"
                   >

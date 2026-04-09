@@ -150,7 +150,7 @@ export default function DiamondSearch() {
 
 
   return (
-    <div className="pt-8 md:pt-12 pb-20 md:pb-28 px-4 md:px-8" style={{ backgroundColor: "#000000" }}>
+    <div className="pt-8 md:pt-12 pb-12 md:pb-28 px-4 md:px-8" style={{ backgroundColor: "#000000" }}>
       <style jsx>{`
         .diamond-scroll::-webkit-scrollbar { display: none; }
         @keyframes loadSlide { 0% { transform:translateX(-100%); } 100% { transform:translateX(400%); } }
@@ -191,7 +191,7 @@ export default function DiamondSearch() {
         </div>
 
         {/* Shapes */}
-        <div className="flex flex-wrap justify-center gap-2 mb-6">
+        <div className="flex overflow-x-auto md:overflow-visible md:flex-wrap justify-start md:justify-center gap-2 mb-6 pb-2 -mx-4 px-4 md:mx-0 md:px-0" style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}>
           {SHAPES.map((shape) => {
             const active = filters.shapes.includes(shape);
             return (
@@ -306,7 +306,7 @@ export default function DiamondSearch() {
         {diamonds.length > 0 && (
           <div
             ref={gridRef}
-            className="diamond-scroll flex flex-row gap-4 overflow-x-auto transition-opacity duration-300"
+            className="diamond-scroll flex flex-col md:flex-row gap-4 md:overflow-x-auto transition-opacity duration-300"
             style={{ opacity: loading ? 0.4 : 1, scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
           >
             {diamonds.map((d) => {
@@ -314,8 +314,8 @@ export default function DiamondSearch() {
               return (
                 <div
                   key={d.id}
-                  className="diamond-card group flex flex-col border transition-all duration-300 hover:scale-[1.02] hover:border-[rgba(201,168,76,0.2)] flex-shrink-0"
-                  style={{ backgroundColor: "#111", borderColor: "rgba(255,255,255,0.04)", borderWidth: "0.5px", opacity: 0, width: 280 }}
+                  className="diamond-card group flex flex-col border transition-all duration-300 hover:scale-[1.02] hover:border-[rgba(201,168,76,0.2)] w-full md:w-[280px] md:flex-shrink-0"
+                  style={{ backgroundColor: "#111", borderColor: "rgba(255,255,255,0.04)", borderWidth: "0.5px", opacity: 0 }}
                 >
                   {/* Image */}
                   <div className="aspect-square overflow-hidden flex items-center justify-center" style={{ backgroundColor: "#0A0A0A" }}>

@@ -366,7 +366,7 @@ export default function Configurator() {
 
   if (!isOpen) {
     return (
-      <section id="custom" className="relative flex flex-col items-center justify-center px-6 pt-16 md:pt-32 pb-12 md:pb-16 overflow-hidden">
+      <section id="custom" className="relative flex flex-col items-center justify-center px-6 pt-12 md:pt-32 pb-10 md:pb-16 overflow-hidden">
         {/* Subtle background image */}
         <img src="/images/process/sketch.png" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover pointer-events-none opacity-[0.08] md:opacity-[0.06]" />
         {/* Bottom fade to black */}
@@ -427,14 +427,35 @@ export default function Configurator() {
             {step === 1 && (
               <div className="text-center">
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-12" style={{ color: "#F5F5F0" }}>What are we creating?</h2>
-                <div className="flex flex-col items-center gap-6">
-                  {/* Top row: 3 cards */}
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-[800px]">
+                {/* Mobile: single 2-col grid for all 5 items */}
+                <div className="grid grid-cols-2 gap-4 md:hidden w-full justify-items-center">
+                  {PIECE_TYPES.map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => { update("type", type); setTimeout(() => { const target = (type === "Earrings" || type === "Other") ? 3 : 2; changeStep(target, 1); }, 400); }}
+                      className="flex flex-col items-center justify-end p-4 transition-all duration-300 hover:scale-[1.04] aspect-square w-full"
+                      style={{
+                        border: sel.type === type ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
+                        backgroundColor: "transparent",
+                        boxShadow: sel.type === type ? "0 0 30px rgba(201,168,76,0.15)" : "none",
+                      }}
+                      data-cursor="pointer"
+                    >
+                      <img src={PIECE_IMAGES[type]} alt={type} className="w-full flex-1 object-contain" />
+                      <span className="font-outfit text-[12px] uppercase mt-3" style={{ letterSpacing: "0.15em", color: sel.type === type ? "#C9A84C" : "rgba(255,255,255,0.6)" }}>
+                        {type}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+                {/* Desktop: 3+2 split layout */}
+                <div className="hidden md:flex flex-col items-center gap-6">
+                  <div className="grid grid-cols-3 gap-6 w-full max-w-[800px]">
                     {PIECE_TYPES.slice(0, 3).map((type) => (
                       <button
                         key={type}
                         onClick={() => { update("type", type); setTimeout(() => { const target = (type === "Earrings" || type === "Other") ? 3 : 2; changeStep(target, 1); }, 400); }}
-                        className="flex flex-col items-center justify-end p-4 md:p-6 transition-all duration-300 hover:scale-[1.04] aspect-square md:aspect-[3/4]"
+                        className="flex flex-col items-center justify-end p-6 transition-all duration-300 hover:scale-[1.04] aspect-[3/4]"
                         style={{
                           border: sel.type === type ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
                           backgroundColor: "transparent",
@@ -449,13 +470,12 @@ export default function Configurator() {
                       </button>
                     ))}
                   </div>
-                  {/* Bottom row: 2 cards centered */}
                   <div className="grid grid-cols-2 gap-6 w-full max-w-[540px]">
                     {PIECE_TYPES.slice(3).map((type) => (
                       <button
                         key={type}
                         onClick={() => { update("type", type); setTimeout(() => { const target = (type === "Earrings" || type === "Other") ? 3 : 2; changeStep(target, 1); }, 400); }}
-                        className="flex flex-col items-center justify-end p-4 md:p-6 transition-all duration-300 hover:scale-[1.04] aspect-square md:aspect-[3/4]"
+                        className="flex flex-col items-center justify-end p-6 transition-all duration-300 hover:scale-[1.04] aspect-[3/4]"
                         style={{
                           border: sel.type === type ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
                           backgroundColor: "transparent",
@@ -606,62 +626,46 @@ export default function Configurator() {
             {step === 6 && (
               <div className="text-center">
                 <h2 className="font-bodoni text-[36px] md:text-[48px] font-normal mb-12" style={{ color: "#F5F5F0" }}>Choose your setting</h2>
-                <div className="flex flex-col items-center gap-6 max-w-[900px] mx-auto">
-                  {/* Top row: 3 cards (Solitaire, Halo, Three Stone) */}
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-[680px]">
+                {/* Mobile: single 2-col grid for all 7 settings */}
+                <div className="grid grid-cols-2 gap-4 md:hidden w-full justify-items-center">
+                  {SETTINGS.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => update("settingStyle", s)}
+                      className="flex flex-col items-center justify-end p-4 transition-all duration-300 hover:scale-[1.04] w-full aspect-square"
+                      style={{
+                        border: sel.settingStyle === s ? "1px solid #C9A84C" : s === "Totally Custom" ? "1px dashed rgba(201,168,76,0.3)" : "1px solid rgba(201,168,76,0.15)",
+                        backgroundColor: "transparent",
+                        boxShadow: sel.settingStyle === s ? "0 0 30px rgba(201,168,76,0.15)" : "none",
+                      }}
+                      data-cursor="pointer"
+                    >
+                      <img src={SETTING_IMAGES[s]} alt={s} className="w-full flex-1 object-contain" />
+                      <span className="font-outfit text-[11px] uppercase mt-2" style={{ letterSpacing: "0.12em", color: sel.settingStyle === s ? "#C9A84C" : "rgba(255,255,255,0.6)" }}>{s}</span>
+                    </button>
+                  ))}
+                </div>
+                {/* Desktop: 3+3+1 split layout */}
+                <div className="hidden md:flex flex-col items-center gap-6 max-w-[900px] mx-auto">
+                  <div className="grid grid-cols-3 gap-6 w-full max-w-[680px]">
                     {SETTINGS.slice(0, 3).map((s) => (
-                      <button
-                        key={s}
-                        onClick={() => update("settingStyle", s)}
-                        className="flex flex-col items-center justify-end p-5 transition-all duration-300 hover:scale-[1.04]"
-                        style={{
-                          aspectRatio: "3/4",
-                          border: sel.settingStyle === s ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
-                          backgroundColor: "transparent",
-                          boxShadow: sel.settingStyle === s ? "0 0 30px rgba(201,168,76,0.15)" : "none",
-                        }}
-                        data-cursor="pointer"
-                      >
+                      <button key={s} onClick={() => update("settingStyle", s)} className="flex flex-col items-center justify-end p-5 transition-all duration-300 hover:scale-[1.04]" style={{ aspectRatio: "3/4", border: sel.settingStyle === s ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)", backgroundColor: "transparent", boxShadow: sel.settingStyle === s ? "0 0 30px rgba(201,168,76,0.15)" : "none" }} data-cursor="pointer">
                         <img src={SETTING_IMAGES[s]} alt={s} className="w-full flex-1 object-contain" />
                         <span className="font-outfit text-[12px] uppercase mt-3" style={{ letterSpacing: "0.15em", color: sel.settingStyle === s ? "#C9A84C" : "rgba(255,255,255,0.6)" }}>{s}</span>
                       </button>
                     ))}
                   </div>
-                  {/* Middle row: 3 cards (Pavé Band, Cathedral, Vintage/Milgrain) */}
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-[680px]">
+                  <div className="grid grid-cols-3 gap-6 w-full max-w-[680px]">
                     {SETTINGS.slice(3, 6).map((s) => (
-                      <button
-                        key={s}
-                        onClick={() => update("settingStyle", s)}
-                        className="flex flex-col items-center justify-end p-5 transition-all duration-300 hover:scale-[1.04]"
-                        style={{
-                          aspectRatio: "3/4",
-                          border: sel.settingStyle === s ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)",
-                          backgroundColor: "transparent",
-                          boxShadow: sel.settingStyle === s ? "0 0 30px rgba(201,168,76,0.15)" : "none",
-                        }}
-                        data-cursor="pointer"
-                      >
+                      <button key={s} onClick={() => update("settingStyle", s)} className="flex flex-col items-center justify-end p-5 transition-all duration-300 hover:scale-[1.04]" style={{ aspectRatio: "3/4", border: sel.settingStyle === s ? "1px solid #C9A84C" : "1px solid rgba(201,168,76,0.15)", backgroundColor: "transparent", boxShadow: sel.settingStyle === s ? "0 0 30px rgba(201,168,76,0.15)" : "none" }} data-cursor="pointer">
                         <img src={SETTING_IMAGES[s]} alt={s} className="w-full flex-1 object-contain" />
                         <span className="font-outfit text-[12px] uppercase mt-3" style={{ letterSpacing: "0.15em", color: sel.settingStyle === s ? "#C9A84C" : "rgba(255,255,255,0.6)" }}>{s}</span>
                       </button>
                     ))}
                   </div>
-                  {/* Bottom row: Totally Custom alone at wider width */}
                   <div className="w-full max-w-[400px]">
                     {SETTINGS.slice(6).map((s) => (
-                      <button
-                        key={s}
-                        onClick={() => update("settingStyle", s)}
-                        className="flex flex-col items-center justify-end p-5 transition-all duration-300 hover:scale-[1.04] w-full"
-                        style={{
-                          aspectRatio: "3/4",
-                          border: sel.settingStyle === s ? "1px solid #C9A84C" : "1px dashed rgba(201,168,76,0.3)",
-                          backgroundColor: "transparent",
-                          boxShadow: sel.settingStyle === s ? "0 0 30px rgba(201,168,76,0.15)" : "none",
-                        }}
-                        data-cursor="pointer"
-                      >
+                      <button key={s} onClick={() => update("settingStyle", s)} className="flex flex-col items-center justify-end p-5 transition-all duration-300 hover:scale-[1.04] w-full" style={{ aspectRatio: "3/4", border: sel.settingStyle === s ? "1px solid #C9A84C" : "1px dashed rgba(201,168,76,0.3)", backgroundColor: "transparent", boxShadow: sel.settingStyle === s ? "0 0 30px rgba(201,168,76,0.15)" : "none" }} data-cursor="pointer">
                         <img src={SETTING_IMAGES[s]} alt={s} className="w-full flex-1 object-contain" />
                         <span className="font-outfit text-[12px] uppercase mt-3" style={{ letterSpacing: "0.15em", color: sel.settingStyle === s ? "#C9A84C" : "rgba(255,255,255,0.6)" }}>{s}</span>
                       </button>
